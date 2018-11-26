@@ -1,8 +1,18 @@
 body    {
-    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-family: 'Source Sans Pro' ,sans-serif;
     margin: 0px;
     font-size: 2em;
+    background: #f9f9f9;
+}
+
+p {
+    margin: 0;
+}
+
+#center {
+    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
