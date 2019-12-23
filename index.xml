@@ -31,5 +31,6 @@
 &lt;p>Once you have your &lt;code>kubeconfig&lt;/code> set up, you can access your cluster like you normally would. Maybe try running &lt;code>kubectl get pods --all-namespaces&lt;/code>. You should see the pods that make up &lt;code>kube-system&lt;/code>.&lt;/p></description></item><item><title>About</title><link>https://joshkasuboski.com/about/</link><pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate><guid>https://joshkasuboski.com/about/</guid><description>&lt;h1 id="hi-there">Hi there&lt;/h1>
 &lt;p>My name is Josh and I'm a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p>
 &lt;p>Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p>
+&lt;p>This involves making pipelines, eliminating boilerplate, and sending messages to make sure it's painless to deploy your code.&lt;/p>
 &lt;p>You can find me on &lt;a href="https://github.com/kasuboski">Github&lt;/a> or &lt;a href="https://www.linkedin.com/in/joshkasuboski/">LinkedIn&lt;/a>&lt;/p>
 &lt;p>Here is a &lt;a href="https://joshkasuboski.com/resume.html">resume&lt;/a>&lt;/p></description></item></channel></rss>
