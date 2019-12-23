@@ -1,79 +1,35 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Josh Kasuboski</title>
-    <link>https://joshkasuboski.com/</link>
-    <description>Recent content on Josh Kasuboski</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
-    <copyright>Copyright © 2019, Josh Kasuboski</copyright>
-    <lastBuildDate>Mon, 23 Dec 2019 00:00:00 +0000</lastBuildDate>
-    
-        <atom:link href="https://joshkasuboski.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Now</title>
-      <link>https://joshkasuboski.com/now/</link>
-      <pubDate>Mon, 23 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://joshkasuboski.com/now/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;A now page inspired by &lt;a href=&#34;https://sivers.org/nowff&#34;&gt;Derek Sivers&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Currently working on Developer Productivity Tools at PNC.&lt;/p&gt;
-&lt;p&gt;In my free time I try to continue learning about all things.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Cheap Managed Kubernetes with Terraform</title>
-      <link>https://joshkasuboski.com/posts/cheap-managed-kube/</link>
-      <pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate>
-      
-      <guid>https://joshkasuboski.com/posts/cheap-managed-kube/</guid>
-      <description>&lt;p&gt;Kubernetes is the way to deploy your services in a scalable and reliable way. However, it&#39;s a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p&gt;
-&lt;p&gt;We&#39;ll use &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/&#34;&gt;GKE&lt;/a&gt;, Google&#39;s managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p&gt;
-&lt;p&gt;We&#39;ll use &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; to make sure we have a repeatable deployment process.&lt;/p&gt;
-&lt;p&gt;If you just want to skip to the code it&#39;s on &lt;a href=&#34;https://github.com/kasuboski/cheap-managed-kubernetes&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;what-well-do&#34;&gt;What we&#39;ll do&lt;/h2&gt;
-&lt;p&gt;The resources we&#39;ll deploy use the Google Cloud &lt;a href=&#34;https://cloud.google.com/free/&#34;&gt;free-tier&lt;/a&gt; extensively. If you leave it running, it should cost a little over $5 a month.&lt;/p&gt;
-&lt;p&gt;If you&#39;re not familiar with Terraform or haven&#39;t used the Google Provider, you can get started &lt;a href=&#34;https://www.terraform.io/docs/providers/google/getting_started.html&#34;&gt;here&lt;/a&gt;. All of the resources it deploys will be in the free tier.&lt;/p&gt;
-&lt;p&gt;Terraform has a concept of remote backends which allow you to save the state of your deployments (not just on your machine). This is especially helpful if you have multiple team members.&lt;/p&gt;
-&lt;p&gt;Since we&#39;re already using Google Cloud we can use Google Cloud Storage to house our state. After changing some defaults we can run a few commands and have our cluster running.&lt;/p&gt;
-&lt;h2 id=&#34;actually-do-it&#34;&gt;Actually do it&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Create a Google Cloud Storage Bucket following these &lt;a href=&#34;https://cloud.google.com/storage/docs/creating-buckets&#34;&gt;instructions&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Clone the cheap-managed-kubernetes &lt;a href=&#34;https://github.com/kasuboski/cheap-managed-kubernetes&#34;&gt;repo&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Modify &lt;code&gt;terraform.tfvars.example&lt;/code&gt; with your gcp project and rename to &lt;code&gt;terraform.tfvars&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Modify &lt;code&gt;backend.hcl.example&lt;/code&gt; with the gcs bucket you created above and rename to &lt;code&gt;backend.hcl.example&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;You should now be set up to deploy with Terraform. We&#39;ll initialize Terraform with our remote backend and run a plan. This plan will output what will be created (or destroyed). You can verify the output of the plan is correct and then run the apply.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;terraform init -backend-config=backend.hcl&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;terraform plan&lt;/code&gt; This should say it will create a cluster and node pool.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;terraform apply&lt;/code&gt; This will actually create the cluster and node pool.&lt;/li&gt;
-&lt;li&gt;When you&#39;re done &lt;code&gt;terraform destroy&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;using-your-cluster&#34;&gt;Using your cluster&lt;/h2&gt;
-&lt;p&gt;The output of the apply will give you the info you need to create a &lt;code&gt;kubeconfig&lt;/code&gt; to be able to connect to your cluster. Since we&#39;re using GKE though, I find it easier to just use the &lt;code&gt;gcloud&lt;/code&gt; command that will set your &lt;code&gt;kubeconfig&lt;/code&gt; for you.&lt;/p&gt;
-&lt;p&gt;It should look something like &lt;code&gt;gcloud container clusters get-credentials my-poor-gke-cluster&lt;/code&gt; where &lt;code&gt;my-poor-gke-cluster&lt;/code&gt; is the name of the cluster resource in &lt;code&gt;main.tf&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Once you have your &lt;code&gt;kubeconfig&lt;/code&gt; set up, you can access your cluster like you normally would. Maybe try running &lt;code&gt;kubectl get pods --all-namespaces&lt;/code&gt;. You should see the pods that make up &lt;code&gt;kube-system&lt;/code&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://joshkasuboski.com/about/</link>
-      <pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://joshkasuboski.com/about/</guid>
-      <description>&lt;h1 id=&#34;hi-there&#34;&gt;Hi there&lt;/h1&gt;
-&lt;p&gt;My name is Josh and I&#39;m a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p&gt;
-&lt;p&gt;Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p&gt;
-&lt;p&gt;You can find me on &lt;a href=&#34;https://github.com/kasuboski&#34;&gt;Github&lt;/a&gt; or &lt;a href=&#34;https://www.linkedin.com/in/joshkasuboski/&#34;&gt;LinkedIn&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Here is a &lt;a href=&#34;https://joshkasuboski.com/resume.html&#34;&gt;resume&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-  </channel>
-</rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2019, Josh Kasuboski</copyright><lastBuildDate>Mon, 23 Dec 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Now</title><link>https://joshkasuboski.com/now/</link><pubDate>Mon, 23 Dec 2019 00:00:00 +0000</pubDate><guid>https://joshkasuboski.com/now/</guid><description>&lt;blockquote>
+&lt;p>A now page inspired by &lt;a href="https://sivers.org/nowff">Derek Sivers&amp;rsquo;&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>Currently working on Developer Productivity Tools at PNC.&lt;/p>
+&lt;p>In my free time I try to continue learning about all things.&lt;/p></description></item><item><title>Cheap Managed Kubernetes with Terraform</title><link>https://joshkasuboski.com/posts/cheap-managed-kube/</link><pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate><guid>https://joshkasuboski.com/posts/cheap-managed-kube/</guid><description>&lt;p>Kubernetes is the way to deploy your services in a scalable and reliable way. However, it's a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p>
+&lt;p>We'll use &lt;a href="https://cloud.google.com/kubernetes-engine/">GKE&lt;/a>, Google's managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p>
+&lt;p>We'll use &lt;a href="https://www.terraform.io/">Terraform&lt;/a> to make sure we have a repeatable deployment process.&lt;/p>
+&lt;p>If you just want to skip to the code it's on &lt;a href="https://github.com/kasuboski/cheap-managed-kubernetes">GitHub&lt;/a>.&lt;/p>
+&lt;h2 id="what-well-do">What we'll do&lt;/h2>
+&lt;p>The resources we'll deploy use the Google Cloud &lt;a href="https://cloud.google.com/free/">free-tier&lt;/a> extensively. If you leave it running, it should cost a little over $5 a month.&lt;/p>
+&lt;p>If you're not familiar with Terraform or haven't used the Google Provider, you can get started &lt;a href="https://www.terraform.io/docs/providers/google/getting_started.html">here&lt;/a>. All of the resources it deploys will be in the free tier.&lt;/p>
+&lt;p>Terraform has a concept of remote backends which allow you to save the state of your deployments (not just on your machine). This is especially helpful if you have multiple team members.&lt;/p>
+&lt;p>Since we're already using Google Cloud we can use Google Cloud Storage to house our state. After changing some defaults we can run a few commands and have our cluster running.&lt;/p>
+&lt;h2 id="actually-do-it">Actually do it&lt;/h2>
+&lt;ul>
+&lt;li>Create a Google Cloud Storage Bucket following these &lt;a href="https://cloud.google.com/storage/docs/creating-buckets">instructions&lt;/a>&lt;/li>
+&lt;li>Clone the cheap-managed-kubernetes &lt;a href="https://github.com/kasuboski/cheap-managed-kubernetes">repo&lt;/a>&lt;/li>
+&lt;li>Modify &lt;code>terraform.tfvars.example&lt;/code> with your gcp project and rename to &lt;code>terraform.tfvars&lt;/code>&lt;/li>
+&lt;li>Modify &lt;code>backend.hcl.example&lt;/code> with the gcs bucket you created above and rename to &lt;code>backend.hcl.example&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>You should now be set up to deploy with Terraform. We'll initialize Terraform with our remote backend and run a plan. This plan will output what will be created (or destroyed). You can verify the output of the plan is correct and then run the apply.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>terraform init -backend-config=backend.hcl&lt;/code>&lt;/li>
+&lt;li>&lt;code>terraform plan&lt;/code> This should say it will create a cluster and node pool.&lt;/li>
+&lt;li>&lt;code>terraform apply&lt;/code> This will actually create the cluster and node pool.&lt;/li>
+&lt;li>When you're done &lt;code>terraform destroy&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="using-your-cluster">Using your cluster&lt;/h2>
+&lt;p>The output of the apply will give you the info you need to create a &lt;code>kubeconfig&lt;/code> to be able to connect to your cluster. Since we're using GKE though, I find it easier to just use the &lt;code>gcloud&lt;/code> command that will set your &lt;code>kubeconfig&lt;/code> for you.&lt;/p>
+&lt;p>It should look something like &lt;code>gcloud container clusters get-credentials my-poor-gke-cluster&lt;/code> where &lt;code>my-poor-gke-cluster&lt;/code> is the name of the cluster resource in &lt;code>main.tf&lt;/code>&lt;/p>
+&lt;p>Once you have your &lt;code>kubeconfig&lt;/code> set up, you can access your cluster like you normally would. Maybe try running &lt;code>kubectl get pods --all-namespaces&lt;/code>. You should see the pods that make up &lt;code>kube-system&lt;/code>.&lt;/p></description></item><item><title>About</title><link>https://joshkasuboski.com/about/</link><pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate><guid>https://joshkasuboski.com/about/</guid><description>&lt;h1 id="hi-there">Hi there&lt;/h1>
+&lt;p>My name is Josh and I'm a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p>
+&lt;p>Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p>
+&lt;p>You can find me on &lt;a href="https://github.com/kasuboski">Github&lt;/a> or &lt;a href="https://www.linkedin.com/in/joshkasuboski/">LinkedIn&lt;/a>&lt;/p>
+&lt;p>Here is a &lt;a href="https://joshkasuboski.com/resume.html">resume&lt;/a>&lt;/p></description></item></channel></rss>
