@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/</loc>
+    <lastmod>2019-12-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/now/</loc>
+    <lastmod>2019-12-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/posts/cheap-managed-kube/</loc>
+    <lastmod>2019-04-18T14:15:59-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/posts/</loc>
+    <lastmod>2019-04-18T14:15:59-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/about/</loc>
+    <lastmod>2019-04-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://www.joshkasuboski.com/tags/</loc>
+  </url>
+  
+</urlset>
