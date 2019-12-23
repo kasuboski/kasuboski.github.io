@@ -1,22 +1,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Josh Kasuboski</title>
-    <link>https://www.joshkasuboski.com/</link>
+    <link>https://joshkasuboski.com/</link>
     <description>Recent content on Josh Kasuboski</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright © 2019, Josh Kasuboski</copyright>
     <lastBuildDate>Mon, 23 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-        <atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://joshkasuboski.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Now</title>
-      <link>https://www.joshkasuboski.com/now/</link>
+      <link>https://joshkasuboski.com/now/</link>
       <pubDate>Mon, 23 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://www.joshkasuboski.com/now/</guid>
+      <guid>https://joshkasuboski.com/now/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;A now page inspired by &lt;a href=&#34;https://sivers.org/nowff&#34;&gt;Derek Sivers&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -27,10 +27,10 @@
     
     <item>
       <title>Cheap Managed Kubernetes with Terraform</title>
-      <link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link>
+      <link>https://joshkasuboski.com/posts/cheap-managed-kube/</link>
       <pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate>
       
-      <guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid>
+      <guid>https://joshkasuboski.com/posts/cheap-managed-kube/</guid>
       <description>&lt;p&gt;Kubernetes is the way to deploy your services in a scalable and reliable way. However, it&#39;s a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p&gt;
 &lt;p&gt;We&#39;ll use &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/&#34;&gt;GKE&lt;/a&gt;, Google&#39;s managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p&gt;
 &lt;p&gt;We&#39;ll use &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; to make sure we have a repeatable deployment process.&lt;/p&gt;
@@ -63,15 +63,15 @@
     
     <item>
       <title>About</title>
-      <link>https://www.joshkasuboski.com/about/</link>
+      <link>https://joshkasuboski.com/about/</link>
       <pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://www.joshkasuboski.com/about/</guid>
+      <guid>https://joshkasuboski.com/about/</guid>
       <description>&lt;h1 id=&#34;hi-there&#34;&gt;Hi there&lt;/h1&gt;
 &lt;p&gt;My name is Josh and I&#39;m a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p&gt;
 &lt;p&gt;Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p&gt;
 &lt;p&gt;You can find me on &lt;a href=&#34;https://github.com/kasuboski&#34;&gt;Github&lt;/a&gt; or &lt;a href=&#34;https://www.linkedin.com/in/joshkasuboski/&#34;&gt;LinkedIn&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Here is a &lt;a href=&#34;https://www.joshkasuboski.com/resume.html&#34;&gt;resume&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href=&#34;https://joshkasuboski.com/resume.html&#34;&gt;resume&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

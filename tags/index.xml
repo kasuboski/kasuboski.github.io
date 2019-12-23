@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Josh Kasuboski</title>
-    <link>https://www.joshkasuboski.com/tags/</link>
+    <link>https://joshkasuboski.com/tags/</link>
     <description>Recent content in Tags on Josh Kasuboski</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright © 2019, Josh Kasuboski</copyright>
     
-	<atom:link href="https://www.joshkasuboski.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://joshkasuboski.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>
