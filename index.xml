@@ -37,11 +37,11 @@
 &lt;li>Decentralized Services&lt;/li>
 &lt;li>Self Hosting&lt;/li>
 &lt;li>Quantified Self&lt;/li>
-&lt;li>IndieWeb&lt;/li>
+&lt;li>&lt;a href="https://indieweb.org/">IndieWeb&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;p>My Tech Setup is:&lt;/p>
 &lt;ul>
-&lt;li>Pixel 3A&lt;/li>
+&lt;li>Pixel 3a&lt;/li>
 &lt;li>2012 Macbook Pro Retina&lt;/li>
 &lt;li>Custom Desktop (Ryzen 5 1600, 16gb, 1060)&lt;/li>
 &lt;/ul></description></item><item><title>Cheap Managed Kubernetes with Terraform</title><link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link><pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid><description>&lt;p>Kubernetes is a great way to deploy your services in a scalable and reliable way. However, it's a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p>
