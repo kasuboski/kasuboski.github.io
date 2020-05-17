@@ -12,6 +12,7 @@
 &lt;li>Build for linux/amd64,linux/arm/v7,linux/arm64&lt;/li>
 &lt;/ul>
 &lt;p>That last part includes the platforms I would care about (for now). amd64 is for your run of the mill computer, arm/v7 being what is on my Pi thanks to 32-bit Raspbian, and arm64 being a potential if I switch the OS on my Pi.&lt;/p>
+&lt;p>I did have to make a change to the repo other than just adding the workflow. The build step had the &lt;code>GOARCH&lt;/code> variable set to &lt;code>amd64&lt;/code>. This caused the build to always output an &lt;code>amd64&lt;/code> binary, unsurprisingly. I realized this after two 16 minute builds&amp;hellip;&lt;/p>
 &lt;p>The workflow works well, but every run so far was between 14mins and 30mins&amp;hellip; not exactly fast.&lt;/p>
 &lt;h2 id="moving-forward">Moving Forward&lt;/h2>
 &lt;p>There have been a number of images that aren't multi-arch that I want to run. I may look into forking and building those, but it would be nice to have a simpler solution with me not managing it.&lt;/p>
