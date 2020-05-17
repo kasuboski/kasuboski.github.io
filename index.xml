@@ -1,4 +1,21 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 10 May 2020 12:20:48 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Homelab Raspberry Pi Kubernetes Cluster Current State</title><link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</link><pubDate>Sun, 10 May 2020 12:20:48 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</guid><description>&lt;p>The cluster is alive and well and exposed to the internet 😱&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 17 May 2020 17:28:55 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Building Multiarch Images</title><link>https://www.joshkasuboski.com/posts/build-multiarch-image/</link><pubDate>Sun, 17 May 2020 17:28:55 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/build-multiarch-image/</guid><description>&lt;p>I wanted to use &lt;a href="https://github.com/usefathom/fathom">fathom&lt;/a> on my Raspberry Pi k3s cluster, but they didn't publish a compatible ARM image. Not to be deterred I forked the repo and built my own.&lt;/p>
+&lt;h2 id="how-does-one-build-for-multiple-architectures-easily">How does one build for multiple architectures easily&lt;/h2>
+&lt;p>Docker has a tool called buildx. It acts as a frontend to buildkit and allows building images for multiple platforms at once.&lt;/p>
+&lt;p>I followed &lt;a href="https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/">this&lt;/a> guide to create a GitHub Actions workflow to build it.&lt;/p>
+&lt;h2 id="github-actions-it-up">GitHub Actions it up&lt;/h2>
+&lt;p>You can skip ahead and look at my final workflow &lt;a href="https://github.com/kasuboski/fathom/blob/master/.github/workflows/docker.yml">here&lt;/a>.&lt;/p>
+&lt;p>There was already a buildx action. The workflow ends up seemingly simple.&lt;/p>
+&lt;ul>
+&lt;li>Checkout the repo&lt;/li>
+&lt;li>Set up buildx&lt;/li>
+&lt;li>Login to DockerHub&lt;/li>
+&lt;li>Build for linux/amd64,linux/arm/v7,linux/arm64&lt;/li>
+&lt;/ul>
+&lt;p>That last part includes the platforms I would care about (for now). amd64 is for your run of the mill computer, arm/v7 being what is on my Pi thanks to 32-bit Raspbian, and arm64 being a potential if I switch the OS on my Pi.&lt;/p>
+&lt;p>The workflow works well, but every run so far was between 14mins and 30mins&amp;hellip; not exactly fast.&lt;/p>
+&lt;h2 id="moving-forward">Moving Forward&lt;/h2>
+&lt;p>There have been a number of images that aren't multi-arch that I want to run. I may look into forking and building those, but it would be nice to have a simpler solution with me not managing it.&lt;/p>
+&lt;p>I could contribute to &lt;a href="https://github.com/raspbernetes/multi-arch-images">multi-arch-images&lt;/a> instead. They seem to be doing something similar but just copying the Dockerfiles needed.&lt;/p></description></item><item><title>Homelab Raspberry Pi Kubernetes Cluster Current State</title><link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</link><pubDate>Sun, 10 May 2020 12:20:48 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</guid><description>&lt;p>The cluster is alive and well and exposed to the internet 😱&lt;/p>
 &lt;p>In a previous &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/">post&lt;/a>, I put out my plan for the cluster. I mostly followed along, but did end up getting &lt;a href="https://www.amazon.com/gp/product/B00A128S24">this&lt;/a> switch and &lt;a href="https://www.amazon.com/gp/product/B003L1AET2">these&lt;/a> ethernet cables.&lt;/p>
 &lt;p>I ended up with this set-up which is described in more detail below.&lt;/p>
 &lt;figure>&lt;a href="traffic-diagram.svg">
