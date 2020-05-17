@@ -2,7 +2,7 @@
 &lt;p>In a previous &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/">post&lt;/a>, I put out my plan for the cluster. I mostly followed along, but did end up getting &lt;a href="https://www.amazon.com/gp/product/B00A128S24">this&lt;/a> switch and &lt;a href="https://www.amazon.com/gp/product/B003L1AET2">these&lt;/a> ethernet cables.&lt;/p>
 &lt;p>I ended up with this set-up which is described in more detail below.&lt;/p>
 &lt;figure>&lt;a href="traffic-diagram.svg">
-&lt;img src="traffic-diagram.svg"
+&lt;img src="traffic-diagram.png"
 alt="Traffic Diagram"/> &lt;/a>
 &lt;/figure>
 &lt;h2 id="hardware-and-monitoring">Hardware and Monitoring&lt;/h2>
