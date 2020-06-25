@@ -1,4 +1,99 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 24 May 2020 22:19:00 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubectl List All Resources With Label</title><link>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</link><pubDate>Sun, 24 May 2020 22:19:00 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</guid><description>&lt;p>I recently had to remove a long gone helm release that left behind a bunch of resources. This conflicted when reinstalling, so I needed to find them.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Tue, 23 Jun 2020 18:18:22 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Persistent Storage with OpenEBS</title><link>https://www.joshkasuboski.com/posts/openebs-homelab/</link><pubDate>Tue, 23 Jun 2020 18:18:22 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/openebs-homelab/</guid><description>&lt;p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.&lt;/p>
+&lt;p>I did have the &lt;a href="https://github.com/rancher/local-path-provisioner">local-path-provisioner&lt;/a> running, but I didn't feel great about using the SD card for general storage.&lt;/p>
+&lt;p>I bought 2 &lt;a href="https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;amp;psc=1">USB drives&lt;/a> to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.&lt;/p>
+&lt;p>I decided to go with &lt;a href="https://openebs.io/">OpenEBS&lt;/a>. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.&lt;/p>
+&lt;h2 id="prepare-the-cluster">Prepare the cluster&lt;/h2>
+&lt;p>I found the OpenEBS docs a little hard to follow, but this is what I ended up doing.&lt;/p>
+&lt;ul>
+&lt;li>Attach your USB drives to the workers (hopefully yours are labeled)&lt;/li>
+&lt;li>install iscsi on every node&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code>sudo apt-get update
+sudo apt-get install -y open-iscsi
+sudo systemctl enable --now iscsid
+&lt;/code>&lt;/pre>&lt;h2 id="install-openebs">Install OpenEBS&lt;/h2>
+&lt;p>I installed using the helm chart. The only changes with the values file below is basically changing all images to the arm64 version. It seems they don't have great support for a mixed architecture cluster.&lt;/p>
+&lt;pre>&lt;code>kubectl create ns openebs
+helm repo add openebs https://openebs.github.io/charts
+helm install openebs openebs/openebs --namespace openebs --version 1.11.1 -f openebs-values.yaml
+&lt;/code>&lt;/pre>&lt;pre>&lt;code>ndm:
+image: 'openebs/node-disk-manager-arm64'
+ndmOperator:
+image: 'openebs/node-disk-operator-arm64'
+webhook:
+image: 'openebs/admission-server-arm64'
+apiserver:
+image: 'openebs/m-apiserver-arm64'
+localprovisioner:
+image: 'openebs/provisioner-localpv-arm64'
+snapshotOperator:
+controller:
+image: 'openebs/snapshot-controller-arm64'
+provisioner:
+image: 'openebs/snapshot-provisioner-arm64'
+provisioner:
+image: 'openebs/openebs-k8s-provisioner-arm64'
+helper:
+image: 'openebs/linux-utils-arm64'
+cstor:
+pool:
+image: 'openebs/cstor-pool-arm64'
+poolMgmt:
+image: 'openebs/cstor-pool-mgmt-arm64'
+target:
+image: 'openebs/cstor-istgt-arm64'
+volumeMgmt:
+image: 'openebs/cstor-volume-mgmt-arm64'
+policies:
+monitoring:
+image: 'openebs/m-exporter-arm64'
+analytics:
+enabled: false
+&lt;/code>&lt;/pre>&lt;p>If all is well you should see the pods in the openebs namespace as healthy. My usb drives automatically showed up as block devices as well.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>kubectl get pods -n openebs&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get sc&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get blockdevice -n openebs&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;figure>&lt;a href="storage-class-block-devices.png">
+&lt;img src="storage-class-block-devices.png"
+alt="Block devices detected"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="configure-openebs">Configure OpenEBS&lt;/h2>
+&lt;p>I differed from the quickstart a little bit here. It was a little confusing to me what I should do with only 2 devices.&lt;/p>
+&lt;p>I eventually found this &lt;a href="https://github.com/openebs/openebs-docs/issues/486">issue&lt;/a> talking about configuring volumes with a single replica and made it use 2 pools instead of 1.&lt;/p>
+&lt;p>The below yaml will set up a StoragePoolClaim with a maxPools of 2 (which will just use both of my nodes with a drive) and a StorageClass configured to use a single replica. I went with striped because it seemed more flexible and since each node only has 1 disk right now it didn't seem too important.&lt;/p>
+&lt;pre>&lt;code>---
+apiVersion: openebs.io/v1alpha1
+kind: StoragePoolClaim
+metadata:
+name: cstor-disk
+spec:
+name: cstor-disk
+type: disk
+maxPools: 2
+poolSpec:
+poolType: striped
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+name: openebs-cstor-1-replica-disk
+annotations:
+openebs.io/cas-type: cstor
+cas.openebs.io/config: |
+- name: StoragePoolClaim
+value: &amp;quot;cstor-disk&amp;quot;
+- name: ReplicaCount
+value: &amp;quot;1&amp;quot;
+provisioner: openebs.io/provisioner-iscsi
+&lt;/code>&lt;/pre>&lt;p>After this is applied, you should be able to see the claims and corresponding pods.&lt;/p>
+&lt;figure>&lt;a href="claimed-storage-pool.png">
+&lt;img src="claimed-storage-pool.png"
+alt="Storage Pool"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="persistent-prometheus">Persistent Prometheus&lt;/h2>
+&lt;p>I used this StorageClass for my cluster Prometheus. It took awhile for the PersistentVolumeClaim pod to start so the initial mount timed out. After around 5 minutes, it sorted itself out. I was able to delete the Prometheus pod and still retained data.&lt;/p></description></item><item><title>Kubectl List All Resources With Label</title><link>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</link><pubDate>Sun, 24 May 2020 22:19:00 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</guid><description>&lt;p>I recently had to remove a long gone helm release that left behind a bunch of resources. This conflicted when reinstalling, so I needed to find them.&lt;/p>
 &lt;h2 id="a-magic-command">A magic command&lt;/h2>
 &lt;p>I'm mainly putting this here because it seemed non obvious to me.&lt;/p>
 &lt;pre>&lt;code>kubectl api-resources --verbs=list -o name | xargs -n 1 kubectl get -o name -l release=prometheus-operator
