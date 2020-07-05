@@ -1,4 +1,48 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Tue, 23 Jun 2020 18:18:22 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Persistent Storage with OpenEBS</title><link>https://www.joshkasuboski.com/posts/openebs-homelab/</link><pubDate>Tue, 23 Jun 2020 18:18:22 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/openebs-homelab/</guid><description>&lt;p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 05 Jul 2020 13:58:33 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Server Rack Beginnings</title><link>https://www.joshkasuboski.com/posts/server-rack-1/</link><pubDate>Sun, 05 Jul 2020 13:58:33 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-1/</guid><description>&lt;p>My network setup was starting to be a mess of a corner. The natural thing to do is to get a server rack to contain everything 😉&lt;/p>
+&lt;h2 id="the-mess">The Mess&lt;/h2>
+&lt;figure>&lt;a href="network-mess.jpg">
+&lt;img src="network-mess.jpg"
+alt="A Jumbled mess of cables" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>The network corner was already a mess, but adding my &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi cluster&lt;/a> definitely didn't help.&lt;/p>
+&lt;p>You can see the following items if you look closely:&lt;/p>
+&lt;ul>
+&lt;li>Linksys Router&lt;/li>
+&lt;li>5-port switch for the Raspberry Pi cluster&lt;/li>
+&lt;li>Raspberry Pi Cluster&lt;/li>
+&lt;li>Raspberry Pi 3B+&lt;/li>
+&lt;li>Hue Hub&lt;/li>
+&lt;/ul>
+&lt;p>Not pictured is my ISP modem and the USB power hub for the Pi cluster.&lt;/p>
+&lt;h2 id="solution">Solution?&lt;/h2>
+&lt;p>I have been following &lt;a href="https://www.reddit.com/r/selfhosted/">r/selfhosted&lt;/a> and &lt;a href="https://www.reddit.com/r/homelab/">r/homelab&lt;/a> for a while. It was perhaps a mistake.&lt;/p>
+&lt;p>I now aspire to the setups such as &lt;a href="https://hydn.dev/homelab/">this&lt;/a> and &lt;a href="https://tynick.com/blog/06-06-2019/my-humble-homelab-with-raspberry-pi-rack/">this&lt;/a>.&lt;/p>
+&lt;p>The first link has a nice monitor on top and the second has a rackmount Pi enclosure (which I have purchased the bracket for).&lt;/p>
+&lt;p>I bought a &lt;a href="https://www.ebay.com/itm/15U-4-Post-Open-Frame-Server-Rack-Enclosure-19-Adjustable-Depth/151584303195?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649">15U open enclosure rack&lt;/a>. It's maybe not the most efficient solution, but definitely feels &amp;hellip; cool.&lt;/p>
+&lt;h2 id="setting-up-the-rack">Setting up the Rack&lt;/h2>
+&lt;p>The rack arrived with some assembly required. It took me an hour to put it together with the help of a magnetic level.&lt;/p>
+&lt;figure>&lt;a href="rack-box.jpg">
+&lt;img src="rack-box.jpg"
+alt="The server rack some assembly required" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;figure>&lt;a href="assembled-rack.jpg">
+&lt;img src="assembled-rack.jpg"
+alt="Assembled rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>I got everything into a &lt;a href="https://www.ebay.com/itm/Cantilever-Server-Shelf-Vented-Black-Shelves-Rack-Mount-19-1U-12-300mm-Deep/152062041884?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649">shelf&lt;/a> and I'm not convinced it looks all that much better. The messy desk obviously isn't helping 😢.&lt;/p>
+&lt;figure>&lt;a href="completed-rack.jpg">
+&lt;img src="completed-rack.jpg"
+alt="Completed rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="moving-forward">Moving Forward&lt;/h2>
+&lt;p>The rack may not have immediately fixed my issues, but I'm planning to either replace or augment my set up to be rackmountable.&lt;/p>
+&lt;p>My first thing to rackmount is the Pi Cluster. I'm going to use something like &lt;a href="https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/">these 3D printed mounts&lt;/a> to put the Pis in the rack.&lt;/p>
+&lt;p>I'm also looking at getting a 4U case to transfer my desktop to and switching to a rackmounted switch and router.&lt;/p>
+&lt;p>In the meantime the Pi cluster is pretty photogenic.&lt;/p>
+&lt;figure>&lt;a href="artsy-pi.jpg">
+&lt;img src="artsy-pi.jpg"
+alt="Artsy Pi" width="400px"/> &lt;/a>
+&lt;/figure></description></item><item><title>Persistent Storage with OpenEBS</title><link>https://www.joshkasuboski.com/posts/openebs-homelab/</link><pubDate>Tue, 23 Jun 2020 18:18:22 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/openebs-homelab/</guid><description>&lt;p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.&lt;/p>
 &lt;p>I did have the &lt;a href="https://github.com/rancher/local-path-provisioner">local-path-provisioner&lt;/a> running, but I didn't feel great about using the SD card for general storage.&lt;/p>
 &lt;p>I bought 2 &lt;a href="https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;amp;psc=1">USB drives&lt;/a> to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.&lt;/p>
 &lt;p>I decided to go with &lt;a href="https://openebs.io/">OpenEBS&lt;/a>. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.&lt;/p>
