@@ -1,4 +1,53 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 05 Jul 2020 13:58:33 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Server Rack Beginnings</title><link>https://www.joshkasuboski.com/posts/server-rack-1/</link><pubDate>Sun, 05 Jul 2020 13:58:33 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-1/</guid><description>&lt;p>My network setup was starting to be a mess of a corner. The natural thing to do is to get a server rack to contain everything 😉&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Wed, 08 Jul 2020 18:50:17 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Automated Upgrades for k3s</title><link>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</link><pubDate>Wed, 08 Jul 2020 18:50:17 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</guid><description>&lt;p>My cluster was falling behind the latest k3s version. Time to upgrade.&lt;/p>
+&lt;h2 id="enter-the-system-upgrade-controller">Enter the System Upgrade Controller&lt;/h2>
+&lt;p>I basically just did the instructions linked &lt;a href="https://rancher.com/docs/k3s/latest/en/upgrades/automated/">here&lt;/a>.&lt;/p>
+&lt;p>It deploys the system upgrade controller into its own namespace where it won't do anything yet.&lt;/p>
+&lt;p>You have to give it some plans.&lt;/p>
+&lt;p>It will read Plans in that same namespace and run the specified image. I used the plan linked above. Instead of tying it to a specific version I set it to the latest channel.&lt;/p>
+&lt;pre>&lt;code># Server plan
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+name: server-plan
+namespace: system-upgrade
+spec:
+concurrency: 1
+cordon: true
+nodeSelector:
+matchExpressions:
+- key: node-role.kubernetes.io/master
+operator: In
+values:
+- &amp;quot;true&amp;quot;
+serviceAccountName: system-upgrade
+upgrade:
+image: rancher/k3s-upgrade
+channel: https://update.k3s.io/v1-release/channels/stable
+---
+# Agent plan
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+name: agent-plan
+namespace: system-upgrade
+spec:
+concurrency: 1
+cordon: true
+nodeSelector:
+matchExpressions:
+- key: node-role.kubernetes.io/master
+operator: DoesNotExist
+prepare:
+args:
+- prepare
+- server-plan
+image: rancher/k3s-upgrade:v1.17.4-k3s1
+serviceAccountName: system-upgrade
+upgrade:
+image: rancher/k3s-upgrade
+channel: https://update.k3s.io/v1-release/channels/stable
+&lt;/code>&lt;/pre>&lt;p>You'll notice there are actually 2 plans. One applied to the master nodes and the other the worker nodes. This lets you upgrade the master node to the new version before the workers.&lt;/p>
+&lt;p>The entire process took maybe 5 minutes for my 3 node cluster. I was able to &lt;code>kubectl get nodes&lt;/code> periodically and watch the progress.&lt;/p></description></item><item><title>Server Rack Beginnings</title><link>https://www.joshkasuboski.com/posts/server-rack-1/</link><pubDate>Sun, 05 Jul 2020 13:58:33 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-1/</guid><description>&lt;p>My network setup was starting to be a mess of a corner. The natural thing to do is to get a server rack to contain everything 😉&lt;/p>
 &lt;h2 id="the-mess">The Mess&lt;/h2>
 &lt;figure>&lt;a href="network-mess.jpg">
 &lt;img src="network-mess.jpg"
