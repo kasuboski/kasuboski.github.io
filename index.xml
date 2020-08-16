@@ -1,4 +1,32 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 26 Jul 2020 14:24:26 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Managing the Cluster with ArgoCD</title><link>https://www.joshkasuboski.com/posts/argocd-managed/</link><pubDate>Sun, 26 Jul 2020 14:24:26 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/argocd-managed/</guid><description>&lt;p>I had to manually apply changes to my cluster, but now a lot of it is controlled from git thanks to ArgoCD.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Sun, 16 Aug 2020 13:33:52 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>I Mounted My PC - Server Rack Update</title><link>https://www.joshkasuboski.com/posts/server-rack-2/</link><pubDate>Sun, 16 Aug 2020 13:33:52 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-2/</guid><description>&lt;p>I got my desktop mounted in the rack and added wheels. It's really moving 😏&lt;/p>
+&lt;p>You can see the previous server rack start &lt;a href="https://www.joshkasuboski.com/posts/server-rack-1/">here&lt;/a>, where I had just gotten it.&lt;/p>
+&lt;h2 id="making-it-mobile">Making it mobile&lt;/h2>
+&lt;p>Moving the rack back and forth was pretty rough. It was definitely scratching the concrete and since I was planning to put my desktop in, the rack was about to get much heavier.&lt;/p>
+&lt;p>The rack I purchased came with a piece of steel that sticks out and has 3/4&amp;rdquo; holes drilled in. I wanted to put casters there, but 3/4&amp;rdquo; stem casters don't seem to be a thing. I ended up getting 1/2&amp;rdquo; stem casters and some washers to make it fit the hole. It seems sturdy enough (I was able to stand on it without incident).&lt;/p>
+&lt;figure>&lt;a href="wheel-holes.jpg">
+&lt;img src="wheel-holes.jpg"
+alt="Steel piece to put the wheels" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;figure>&lt;a href="caster.jpg">
+&lt;img src="caster.jpg"
+alt="Wheel attached with washer" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>Now that the rack is able to be rolled out I wanted to make sure I wouldn't always have to disconnect the internet when moving it. I made sure to plug the modem and router into a power strip that has enough slack to move with the rack.&lt;/p>
+&lt;p>Everything else plugs into a rack mountable &lt;a href="https://www.amazon.com/gp/product/B0781WS2M5">power strip&lt;/a> so nothing needs to be unplugged when rolling it forward.&lt;/p>
+&lt;h2 id="adding-my-pc">Adding my PC&lt;/h2>
+&lt;p>I moved my PC from a normal desktop case to a &lt;a href="https://www.newegg.com/black-rosewill-rsv-r4000/p/N82E16811147154?Item=N82E16811147154">4U Rosewill Server Case&lt;/a>. I was able to fit everything in without issue, including my graphics card and Blu-Ray drive. I ended up replacing all of the fans since the included ones had molex connectors with the fans running at full speed all the time.&lt;/p>
+&lt;figure>&lt;a href="open-case.jpg">
+&lt;img src="open-case.jpg"
+alt="PC installed in server case" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>In the front, there are 8 tool-less hard drive bays. I am currently using none of them as I just have two SSDs sitting in there. I am planning to eventually add storage, but may get a separate enclosure.&lt;/p>
+&lt;p>I installed a rack mount &lt;a href="https://www.amazon.com/gp/product/B00XXDJASY">shelf rail&lt;/a> for the case to sit on. Unfortunately, that meant I had to take off the door of the Rosewill case since it didn't fit within the mount of the rails. I hope to be able to make something slimmer so it'll fit back on.&lt;/p>
+&lt;figure>&lt;a href="assembled-rack.jpg">
+&lt;img src="assembled-rack.jpg"
+alt="Assembled server rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>The final rack looks a little better and is certainly more functional. It freed up some space under my desk where I now have a 12TB external hard drive.&lt;/p>
+&lt;p>I still want to mount the &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi cluster&lt;/a> in the rack. I bought this &lt;a href="https://www.musicstore.de/de_DE/EUR/DAP-2-HE-Rackblende-f-Modulsystem-10-Segmente-MP-1/art-PAH0017160-000;pgid=WBtg67.syLdSRpoV6L_EAtys0000YDPT2oVh">bracket&lt;/a> in order to do something like these &lt;a href="https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/">mounts&lt;/a>, but it still hasn't arrived. I may have to call and see what happened (brushing up on my German I guess).&lt;/p></description></item><item><title>Managing the Cluster with ArgoCD</title><link>https://www.joshkasuboski.com/posts/argocd-managed/</link><pubDate>Sun, 26 Jul 2020 14:24:26 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/argocd-managed/</guid><description>&lt;p>I had to manually apply changes to my cluster, but now a lot of it is controlled from git thanks to ArgoCD.&lt;/p>
 &lt;h2 id="managed-with-a-cluster-repo">Managed with a cluster repo&lt;/h2>
 &lt;p>The cluster state is kept in &lt;a href="https://github.com/kasuboski/k8s-gitops">kasuboski/k8s-gitops&lt;/a>. Each folder is a different function for the cluster. The gitops folder is special. It has the &lt;a href="https://argoproj.github.io/projects/argo-cd">ArgoCD&lt;/a> manifests and the apps folder.&lt;/p>
 &lt;p>ArgoCD will sync manifests from a git repo to the cluster. It continuously watches to make sure the desired state (from git) matches the observed state (in the cluster). You configure ArgoCD using CRDs. Argo has Apps and Projects. A Project configures access for Apps and an App represents a repo that deploys Kubernetes objects.&lt;/p>
