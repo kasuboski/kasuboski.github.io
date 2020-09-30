@@ -474,7 +474,8 @@ git push origin master
 &lt;li>Pixel 3a&lt;/li>
 &lt;li>2012 Macbook Pro Retina&lt;/li>
 &lt;li>Custom Desktop (Ryzen 5 1600, 16gb, 1060)&lt;/li>
-&lt;/ul></description></item><item><title>Cheap Managed Kubernetes with Terraform</title><link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link><pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid><description>&lt;p>Kubernetes is a great way to deploy your services in a scalable and reliable way. However, it's a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p>
+&lt;/ul>
+&lt;p>You can find more on my &lt;a href="https://kit.co/kasuboski">kit.co profile&lt;/a>&lt;/p></description></item><item><title>Cheap Managed Kubernetes with Terraform</title><link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link><pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid><description>&lt;p>Kubernetes is a great way to deploy your services in a scalable and reliable way. However, it's a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p>
 &lt;p>We'll use &lt;a href="https://cloud.google.com/kubernetes-engine/">GKE&lt;/a>, Google's managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p>
 &lt;p>We'll use &lt;a href="https://www.terraform.io/">Terraform&lt;/a> to make sure we have a repeatable deployment process.&lt;/p>
 &lt;p>If you just want to skip to the code it's on &lt;a href="https://github.com/kasuboski/cheap-managed-kubernetes">GitHub&lt;/a>.&lt;/p>
