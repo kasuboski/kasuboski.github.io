@@ -1,4 +1,32 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Thu, 01 Oct 2020 11:29:05 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Scan Container Images Found in Files</title><link>https://www.joshkasuboski.com/posts/scan-images-in-files/</link><pubDate>Thu, 01 Oct 2020 11:29:05 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/scan-images-in-files/</guid><description>&lt;p>I previously had been scanning images ad-hoc using Trivy. Now I can scan everything in my GitOps repo.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Wed, 07 Oct 2020 16:08:40 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Test HTML in GitHub Actions</title><link>https://www.joshkasuboski.com/posts/htmltest-githubactions/</link><pubDate>Wed, 07 Oct 2020 16:08:40 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/htmltest-githubactions/</guid><description>&lt;p>I want to start adding tests for this site so that I don't break it 😢. &lt;code>htmltest&lt;/code> is first.&lt;/p>
+&lt;h2 id="setup-htmltest">Setup htmltest&lt;/h2>
+&lt;p>I went with &lt;a href="https://github.com/wjdp/htmltest">htmltest&lt;/a> mainly because it's just a go binary. I've seen other options in the past that required a Ruby environment and generally don't like dealing with that.&lt;/p>
+&lt;p>Installing &lt;code>htmltest&lt;/code> into the current directory can be as simple as &lt;code>curl https://htmltest.wjdp.uk | bash&lt;/code>. I installed it system-wide but 🤷‍♂️.&lt;/p>
+&lt;p>&lt;code>htmltest&lt;/code> operates on HTML files&amp;hellip;whereas my site is set up with &lt;a href="https://gohugo.io/">Hugo&lt;/a> so is largely Markdown. I have to generate my site first using &lt;code>hugo&lt;/code> and then run &lt;code>htmltest&lt;/code> on the &lt;code>public&lt;/code> folder. Fortunately, htmltest has a config file that lets you set the directory. This way testing my site (once it's rendered) is just a matter of running &lt;code>htmltest&lt;/code>.&lt;/p>
+&lt;p>The first time running htmltest my site had a number of issues. It found a broken link to an svg I had removed, my LinkedIn link was incorrect, and a number of missing &lt;code>alt&lt;/code> tags. There were also a couple other issues that I ended up having ignored. I have some &lt;a href="https://indieweb.org/">indieweb&lt;/a> tags that didn't respond kindly to a &lt;code>GET&lt;/code> request and one site I linked out to kept timing out in the test.&lt;/p>
+&lt;h2 id="add-to-github-actions">Add to GitHub Actions&lt;/h2>
+&lt;p>I installed htmltest in my pipeline using the magic &lt;code>curl&lt;/code> script. This way it always gets the latest version and I didn't have to write anything. htmltest will cache the results of the remote links check so the workflow will cache the &lt;code>tmp/.htmltest&lt;/code> folder to help keep it quick. Overall this adds six seconds to my pipeline.&lt;/p>
+&lt;p>This is all that was needed to add to the workflow yaml. It assumes htmltest is configured with &lt;code>.htmltest.yml&lt;/code>. You can find my &lt;a href="https://github.com/kasuboski/personal-site/blob/master/.htmltest.yml">config&lt;/a> in the repo.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-yaml" data-lang="yaml">- uses: actions/cache@v2
+with:
+path: tmp/.htmltest
+key: ${{ runner.os }}-htmltest
+- name: HTML Test
+run: &lt;span style="color:#e6db74">|
+&lt;/span>&lt;span style="color:#e6db74"> &lt;/span>&lt;span style="color:#e6db74"> &lt;/span>&lt;span style="color:#e6db74">curl https://htmltest.wjdp.uk | bash&lt;/span>
+bin/htmltest
+&lt;/code>&lt;/pre>&lt;/div>&lt;figure>&lt;a href="actions-run.png">
+&lt;img src="actions-run.png"
+alt="GitHub actions run"/> &lt;/a>
+&lt;/figure>
+&lt;p>I did have to configure it not to fail on external links as it was failing every so often. Every change to my site now gets tested to ensure the links are valid.&lt;/p>
+&lt;h2 id="next-steps-">Next Steps 🦶&lt;/h2>
+&lt;p>I want to add more tests. I think the first might be a spellchecker. I write these posts in VS Code which will highlight misspellings, but I don't always notice. I've used &lt;a href="https://github.com/errata-ai/vale">vale&lt;/a> before and it will even recommend some grammar changes.&lt;/p>
+&lt;p>I also want to test the Lighthouse score and make sure it doesn't get worse. This GitHub action seems nice &lt;a href="https://github.com/marketplace/actions/lighthouse-check">lighthouse-check&lt;/a>. It could generate an HTML report like below.&lt;/p>
+&lt;figure>&lt;a href="lighthouse-report.png">
+&lt;img src="lighthouse-report.png"
+alt="lighthouse report"/> &lt;/a>
+&lt;/figure></description></item><item><title>Scan Container Images Found in Files</title><link>https://www.joshkasuboski.com/posts/scan-images-in-files/</link><pubDate>Thu, 01 Oct 2020 11:29:05 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/scan-images-in-files/</guid><description>&lt;p>I previously had been scanning images ad-hoc using Trivy. Now I can scan everything in my GitOps repo.&lt;/p>
 &lt;p>The previous post about Trivy is &lt;a href="https://www.joshkasuboski.com/posts/image-scanning-trivy/">here&lt;/a>.&lt;/p>
 &lt;h2 id="finding-the-images-to-scan">Finding the Images to Scan&lt;/h2>
 &lt;p>Since I track all of my deployments in git at &lt;a href="https://github.com/kasuboski/k8s-gitops">kasuboski/k8s-gitops&lt;/a>, I can find all of the images from the files in that repo. For the simple case of just finding it from Kubernetes objects, I can use the command below which finds the images, removes quotes, and makes sure it's unique. Magic 🧙‍♂️.&lt;/p>
