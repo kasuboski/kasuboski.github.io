@@ -1,834 +1,561 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Josh Kasuboski</title>
-    <link>https://www.joshkasuboski.com/</link>
-    <description>Recent content on Josh Kasuboski</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
-    <copyright>Copyright © 2020, Josh Kasuboski</copyright>
-    <lastBuildDate>Wed, 07 Oct 2020 16:08:40 -0500</lastBuildDate>
-    
-        <atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Test HTML in GitHub Actions</title>
-      <link>https://www.joshkasuboski.com/posts/htmltest-githubactions/</link>
-      <pubDate>Wed, 07 Oct 2020 16:08:40 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/htmltest-githubactions/</guid>
-      <description>&lt;p&gt;I want to start adding tests for this site so that I don&#39;t break it 😢. &lt;code&gt;htmltest&lt;/code&gt; is first.&lt;/p&gt;
-&lt;h2 id=&#34;setup-htmltest&#34;&gt;Setup htmltest&lt;/h2&gt;
-&lt;p&gt;I went with &lt;a href=&#34;https://github.com/wjdp/htmltest&#34;&gt;htmltest&lt;/a&gt; mainly because it&#39;s just a go binary. I&#39;ve seen other options in the past that required a Ruby environment and generally don&#39;t like dealing with that.&lt;/p&gt;
-&lt;p&gt;Installing &lt;code&gt;htmltest&lt;/code&gt; into the current directory can be as simple as &lt;code&gt;curl https://htmltest.wjdp.uk | bash&lt;/code&gt;. I installed it system-wide but 🤷‍♂️.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;htmltest&lt;/code&gt; operates on HTML files&amp;hellip;whereas my site is set up with &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; so is largely Markdown. I have to generate my site first using &lt;code&gt;hugo&lt;/code&gt; and then run &lt;code&gt;htmltest&lt;/code&gt; on the &lt;code&gt;public&lt;/code&gt; folder. Fortunately, htmltest has a config file that lets you set the directory. This way testing my site (once it&#39;s rendered) is just a matter of running &lt;code&gt;htmltest&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The first time running htmltest my site had a number of issues. It found a broken link to an svg I had removed, my LinkedIn link was incorrect, and a number of missing &lt;code&gt;alt&lt;/code&gt; tags. There were also a couple other issues that I ended up having ignored. I have some &lt;a href=&#34;https://indieweb.org/&#34;&gt;indieweb&lt;/a&gt; tags that didn&#39;t respond kindly to a &lt;code&gt;GET&lt;/code&gt; request and one site I linked out to kept timing out in the test.&lt;/p&gt;
-&lt;h2 id=&#34;add-to-github-actions&#34;&gt;Add to GitHub Actions&lt;/h2&gt;
-&lt;p&gt;I installed htmltest in my pipeline using the magic &lt;code&gt;curl&lt;/code&gt; script. This way it always gets the latest version and I didn&#39;t have to write anything. htmltest will cache the results of the remote links check so the workflow will cache the &lt;code&gt;tmp/.htmltest&lt;/code&gt; folder to help keep it quick. Overall this adds six seconds to my pipeline.&lt;/p&gt;
-&lt;p&gt;This is all that was needed to add to the workflow yaml. It assumes htmltest is configured with &lt;code&gt;.htmltest.yml&lt;/code&gt;. You can find my &lt;a href=&#34;https://github.com/kasuboski/personal-site/blob/master/.htmltest.yml&#34;&gt;config&lt;/a&gt; in the repo.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;- uses: actions/cache@v2
-  with:
-    path: tmp/.htmltest
-    key: ${{ runner.os }}-htmltest
-
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Wed, 07 Oct 2020 16:08:40 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Test HTML in GitHub Actions</title><link>https://www.joshkasuboski.com/posts/htmltest-githubactions/</link><pubDate>Wed, 07 Oct 2020 16:08:40 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/htmltest-githubactions/</guid><description>&lt;p>I want to start adding tests for this site so that I don't break it 😢. &lt;code>htmltest&lt;/code> is first.&lt;/p>
+&lt;h2 id="setup-htmltest">Setup htmltest&lt;/h2>
+&lt;p>I went with &lt;a href="https://github.com/wjdp/htmltest">htmltest&lt;/a> mainly because it's just a go binary. I've seen other options in the past that required a Ruby environment and generally don't like dealing with that.&lt;/p>
+&lt;p>Installing &lt;code>htmltest&lt;/code> into the current directory can be as simple as &lt;code>curl https://htmltest.wjdp.uk | bash&lt;/code>. I installed it system-wide but 🤷‍♂️.&lt;/p>
+&lt;p>&lt;code>htmltest&lt;/code> operates on HTML files&amp;hellip;whereas my site is set up with &lt;a href="https://gohugo.io/">Hugo&lt;/a> so is largely Markdown. I have to generate my site first using &lt;code>hugo&lt;/code> and then run &lt;code>htmltest&lt;/code> on the &lt;code>public&lt;/code> folder. Fortunately, htmltest has a config file that lets you set the directory. This way testing my site (once it's rendered) is just a matter of running &lt;code>htmltest&lt;/code>.&lt;/p>
+&lt;p>The first time running htmltest my site had a number of issues. It found a broken link to an svg I had removed, my LinkedIn link was incorrect, and a number of missing &lt;code>alt&lt;/code> tags. There were also a couple other issues that I ended up having ignored. I have some &lt;a href="https://indieweb.org/">indieweb&lt;/a> tags that didn't respond kindly to a &lt;code>GET&lt;/code> request and one site I linked out to kept timing out in the test.&lt;/p>
+&lt;h2 id="add-to-github-actions">Add to GitHub Actions&lt;/h2>
+&lt;p>I installed htmltest in my pipeline using the magic &lt;code>curl&lt;/code> script. This way it always gets the latest version and I didn't have to write anything. htmltest will cache the results of the remote links check so the workflow will cache the &lt;code>tmp/.htmltest&lt;/code> folder to help keep it quick. Overall this adds six seconds to my pipeline.&lt;/p>
+&lt;p>This is all that was needed to add to the workflow yaml. It assumes htmltest is configured with &lt;code>.htmltest.yml&lt;/code>. You can find my &lt;a href="https://github.com/kasuboski/personal-site/blob/master/.htmltest.yml">config&lt;/a> in the repo.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-yaml" data-lang="yaml">- uses: actions/cache@v2
+with:
+path: tmp/.htmltest
+key: ${{ runner.os }}-htmltest
 - name: HTML Test
-  run: &lt;span style=&#34;color:#e6db74&#34;&gt;|
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;   &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;curl https://htmltest.wjdp.uk | bash&lt;/span&gt;
-    bin/htmltest
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;&lt;a href=&#34;actions-run.png&#34;&gt;
-    &lt;img src=&#34;actions-run.png&#34;
-         alt=&#34;GitHub actions run&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;I did have to configure it not to fail on external links as it was failing every so often. Every change to my site now gets tested to ensure the links are valid.&lt;/p&gt;
-&lt;h2 id=&#34;next-steps-&#34;&gt;Next Steps 🦶&lt;/h2&gt;
-&lt;p&gt;I want to add more tests. I think the first might be a spellchecker. I write these posts in VS Code which will highlight misspellings, but I don&#39;t always notice. I&#39;ve used &lt;a href=&#34;https://github.com/errata-ai/vale&#34;&gt;vale&lt;/a&gt; before and it will even recommend some grammar changes.&lt;/p&gt;
-&lt;p&gt;I also want to test the Lighthouse score and make sure it doesn&#39;t get worse. This GitHub action seems nice &lt;a href=&#34;https://github.com/marketplace/actions/lighthouse-check&#34;&gt;lighthouse-check&lt;/a&gt;. It could generate an HTML report like below.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;lighthouse-report.png&#34;&gt;
-    &lt;img src=&#34;lighthouse-report.png&#34;
-         alt=&#34;lighthouse report&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;</description>
-    </item>
-    
-    <item>
-      <title>Scan Container Images Found in Files</title>
-      <link>https://www.joshkasuboski.com/posts/scan-images-in-files/</link>
-      <pubDate>Thu, 01 Oct 2020 11:29:05 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/scan-images-in-files/</guid>
-      <description>&lt;p&gt;I previously had been scanning images ad-hoc using Trivy. Now I can scan everything in my GitOps repo.&lt;/p&gt;
-&lt;p&gt;The previous post about Trivy is &lt;a href=&#34;https://www.joshkasuboski.com/posts/image-scanning-trivy/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;finding-the-images-to-scan&#34;&gt;Finding the Images to Scan&lt;/h2&gt;
-&lt;p&gt;Since I track all of my deployments in git at &lt;a href=&#34;https://github.com/kasuboski/k8s-gitops&#34;&gt;kasuboski/k8s-gitops&lt;/a&gt;, I can find all of the images from the files in that repo. For the simple case of just finding it from Kubernetes objects, I can use the command below which finds the images, removes quotes, and makes sure it&#39;s unique. Magic 🧙‍♂️.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ack --type yaml &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;image: (.*)&amp;#39;&lt;/span&gt; --output &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$1&amp;#39;&lt;/span&gt; -h --nobreak | tr -d &lt;span style=&#34;color:#ae81ff&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\&amp;#39;&lt;/span&gt; | sort -u
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This outputs everything coming after &amp;ldquo;image: &amp;ldquo;. This works for Kubernetes resources and it also picked up some values in a helm values file. I render manifests using kustomize, which can change images and pull remotely. This means I should really be running this command on the rendered manifests.&lt;/p&gt;
-&lt;p&gt;I&#39;ve been considering rendering everything in git instead of only on the cluster (in ArgoCD). This would capture the exact yaml that was applied and make this analysis easier.&lt;/p&gt;
-&lt;h2 id=&#34;scanning-with-trivy&#34;&gt;Scanning with Trivy&lt;/h2&gt;
-&lt;p&gt;You can use &lt;code&gt;xargs&lt;/code&gt; to run a scan for each image. I did this initially just piping to &lt;code&gt;trivy image&lt;/code&gt;, but immediately hit the GitHub rate-limit. I thought trivy would reuse the database cache, but that didn&#39;t seem to be happening. They do let you pass a &lt;a href=&#34;https://github.com/aquasecurity/trivy#github-rate-limiting&#34;&gt;GitHub Token&lt;/a&gt; to increase the limit, but that seemed like more effort.&lt;/p&gt;
-&lt;p&gt;Instead, I decided to use the client server mode of trivy. This let&#39;s you run a server that executes the scans and your client communicates with it.&lt;/p&gt;
-&lt;p&gt;To start the server:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;trivy server
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then (in another terminal) run a &lt;code&gt;trivy client&lt;/code&gt; for each image:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ack --type yaml &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;image: (.*)&amp;#39;&lt;/span&gt; --output &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$1&amp;#39;&lt;/span&gt; -h --nobreak | tr -d &lt;span style=&#34;color:#ae81ff&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\&amp;#39;&lt;/span&gt; | sort -u | xargs -L1 trivy client --severity HIGH,CRITICAL --ignore-unfixed
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives output like below:
-&lt;figure&gt;&lt;a href=&#34;results.png&#34;&gt;
-    &lt;img src=&#34;results.png&#34;
-         alt=&#34;Trivy Results&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-&lt;/p&gt;
-&lt;p&gt;It did fail to analyze an image that only had an ARM manifest (I ran this on my amd64 desktop)&lt;/p&gt;
-&lt;h2 id=&#34;next-steps-&#34;&gt;Next Steps 🦶&lt;/h2&gt;
-&lt;p&gt;I would like to run this repeatedly as a GitHub Action on the repo itself. It might be easier to just use a GitHub Token for the rate-limit in that case. I also want to analyze the rendered manifests.&lt;/p&gt;
-&lt;p&gt;I have been considering setting up my own registry to mirror my images such as &lt;a href=&#34;https://goharbor.io/&#34;&gt;Harbor&lt;/a&gt;. Harbor can run periodic Trivy scans by itself and make the results available. There is also a an experimental &lt;a href=&#34;https://github.com/aquasecurity/trivy-enforcer&#34;&gt;trivy-enforcer&lt;/a&gt; project that runs in the cluster and can enforce that all images running in your cluster are secure.&lt;/p&gt;
-&lt;p&gt;This combination of static analysis and runtime enforcement should make it pretty tough to have a known bad image running.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Container Image Scanning with Trivy</title>
-      <link>https://www.joshkasuboski.com/posts/image-scanning-trivy/</link>
-      <pubDate>Fri, 25 Sep 2020 11:01:50 -0600</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/image-scanning-trivy/</guid>
-      <description>&lt;p&gt;I wanted to have some peace of mind when running random container images. Trivy let&#39;s me scan them for common vulnerabilities.&lt;/p&gt;
-&lt;h2 id=&#34;installing-trivy&#34;&gt;Installing Trivy&lt;/h2&gt;
-&lt;p&gt;You can find the Trivy repo on GitHub at &lt;a href=&#34;https://github.com/aquasecurity/trivy&#34;&gt;aquasecurity/trivy&lt;/a&gt;. Installing with Homebrew is just &lt;code&gt;brew install aquasecurity/trivy/trivy&lt;/code&gt;. Trivy is written in Golang so you just need to get the binary. They also have a magic script you can use&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Once you have &lt;code&gt;trivy&lt;/code&gt; in your &lt;code&gt;$PATH&lt;/code&gt;, you can run &lt;code&gt;trivy&lt;/code&gt; and see the options. Trivy can do a number of scans: a remote image, local filesystem, or a remote repository.&lt;/p&gt;
-&lt;p&gt;The various options make it easy to scan code repos, images before they are pushed, and third-party images you want to use.&lt;/p&gt;
-&lt;h2 id=&#34;scanning-an-image&#34;&gt;Scanning an image&lt;/h2&gt;
-&lt;p&gt;I use &lt;a href=&#34;https://argoproj.github.io/projects/argo-cd&#34;&gt;ArgoCD&lt;/a&gt; and had to use an image other than the official one since I wanted multi-arch support. This saved me from having to build it myself which I&#39;ve done in the &lt;a href=&#34;https://www.joshkasuboski.com/posts/build-multiarch-image/&#34;&gt;past&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I wanted to scan this image for vulnerabilities (the build is open source, but you never really know). With Trivy this is as easy as &lt;code&gt;trivy image alinbalutoiu/argocd:v1.7.1&lt;/code&gt;. It will download (and cache) the vulnerability database and then pull and scan the image. It then outputs a nice table of vulnerabilities as seen below. You can also filter by severity and ignore unfixed.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;trivy-results.png&#34;&gt;
-    &lt;img src=&#34;trivy-results.png&#34;
-         alt=&#34;Trivy Results&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;next-stop-ci&#34;&gt;Next Stop CI&lt;/h2&gt;
-&lt;p&gt;This is great for testing an image ad-hoc, but I want to add this to my &lt;a href=&#34;https://github.com/kasuboski/k8s-gitops&#34;&gt;gitops repo&lt;/a&gt; so that all images are scanned periodically. There is already a Trivy GitHub Action, but I think it&#39;s intended more for images you are building.&lt;/p&gt;
-&lt;p&gt;I also want to run something in my cluster that will periodically check all images that are running. Something like &lt;a href=&#34;https://github.com/aquasecurity/starboard&#34;&gt;starboard&lt;/a&gt; could be the beginning of that.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Serve a JSON API with GitHub</title>
-      <link>https://www.joshkasuboski.com/posts/stats-from-github-file/</link>
-      <pubDate>Thu, 17 Sep 2020 13:18:28 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/stats-from-github-file/</guid>
-      <description>&lt;p&gt;I wanted to add stats to a site, but I already capture them in a GitHub Repo. Let&#39;s just pull from there.&lt;/p&gt;
-&lt;h2 id=&#34;the-stats-repo&#34;&gt;The Stats Repo&lt;/h2&gt;
-&lt;p&gt;I made a repo that pulls in stats (&lt;a href=&#34;https://github.com/kasuboski/stats&#34;&gt;kasuboski/stats&lt;/a&gt;). It uses a GitHub Action I made for a &lt;a href=&#34;https://dev.to/kasuboski/dev-to-article-stats-github-action-30n4&#34;&gt;Dev.to&lt;/a&gt; Hackathon that pulls post stats from Dev.to.&lt;/p&gt;
-&lt;p&gt;The repo gets periodically updated with a &lt;code&gt;stats/dev-to.json&lt;/code&gt; file. GitHub lets you browse the contents of files at &lt;code&gt;raw.githubusercontent.com&lt;/code&gt;. In my case, this file is at &lt;a href=&#34;https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json&#34;&gt;https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;fetching-the-data&#34;&gt;Fetching the data&lt;/h2&gt;
-&lt;p&gt;I have a &lt;a href=&#34;https://joshcorp.co&#34;&gt;landing page&lt;/a&gt; served from my &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/&#34;&gt;Raspberry Pi Cluster&lt;/a&gt;. It was a placeholder with a link to my &lt;a href=&#34;https://www.joshkasuboski.com&#34;&gt;personal site&lt;/a&gt;. Now it also shows stats from my &lt;a href=&#34;https://dev.to/kasuboski&#34;&gt;Dev.to posts&lt;/a&gt;.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;landing-page-stats.png&#34;&gt;
-    &lt;img src=&#34;landing-page-stats.png&#34;
-         alt=&#34;Stats on the landing page&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;The landing page itself is just vanilla HTML/CSS/JS. It uses &lt;a href=&#34;https://andybrewer.github.io/mvp/&#34;&gt;mvp.css&lt;/a&gt; to get quick styles. The repo is &lt;a href=&#34;https://github.com/kasuboski/joshcorp-site&#34;&gt;kasuboski/joshcorp-site&lt;/a&gt;. The javascript needed to add the stats is below. It&#39;s just in a &lt;code&gt;script&lt;/code&gt; tag in the body.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getStats&lt;/span&gt;() {
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;stats&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; document.&lt;span style=&#34;color:#a6e22e&#34;&gt;querySelector&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#stats&amp;#39;&lt;/span&gt;);
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reactions&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; document.&lt;span style=&#34;color:#a6e22e&#34;&gt;querySelector&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#reactions-value&amp;#39;&lt;/span&gt;);
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;views&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; document.&lt;span style=&#34;color:#a6e22e&#34;&gt;querySelector&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#views-value&amp;#39;&lt;/span&gt;);
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json&amp;#39;&lt;/span&gt;;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;fetch&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt;)
-    .&lt;span style=&#34;color:#a6e22e&#34;&gt;then&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;json&lt;/span&gt;())
-    .&lt;span style=&#34;color:#a6e22e&#34;&gt;then&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt; =&amp;gt; {
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;);
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;reactions&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;innerText&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;public_reactions_count&lt;/span&gt;;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;views&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;innerText&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;page_views_count&lt;/span&gt;;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;stats&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;style&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;display&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;block&amp;#34;&lt;/span&gt;;
-    })
-    .&lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; =&amp;gt; {
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Error fetching stats: &amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;);
-    })
+run: &lt;span style="color:#e6db74">|
+&lt;/span>&lt;span style="color:#e6db74"> &lt;/span>&lt;span style="color:#e6db74"> &lt;/span>&lt;span style="color:#e6db74">curl https://htmltest.wjdp.uk | bash&lt;/span>
+bin/htmltest
+&lt;/code>&lt;/pre>&lt;/div>&lt;figure>&lt;a href="actions-run.png">
+&lt;img src="actions-run.png"
+alt="GitHub actions run"/> &lt;/a>
+&lt;/figure>
+&lt;p>I did have to configure it not to fail on external links as it was failing every so often. Every change to my site now gets tested to ensure the links are valid.&lt;/p>
+&lt;h2 id="next-steps-">Next Steps 🦶&lt;/h2>
+&lt;p>I want to add more tests. I think the first might be a spellchecker. I write these posts in VS Code which will highlight misspellings, but I don't always notice. I've used &lt;a href="https://github.com/errata-ai/vale">vale&lt;/a> before and it will even recommend some grammar changes.&lt;/p>
+&lt;p>I also want to test the Lighthouse score and make sure it doesn't get worse. This GitHub action seems nice &lt;a href="https://github.com/marketplace/actions/lighthouse-check">lighthouse-check&lt;/a>. It could generate an HTML report like below.&lt;/p>
+&lt;figure>&lt;a href="lighthouse-report.png">
+&lt;img src="lighthouse-report.png"
+alt="lighthouse report"/> &lt;/a>
+&lt;/figure></description></item><item><title>Scan Container Images Found in Files</title><link>https://www.joshkasuboski.com/posts/scan-images-in-files/</link><pubDate>Thu, 01 Oct 2020 11:29:05 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/scan-images-in-files/</guid><description>&lt;p>I previously had been scanning images ad-hoc using Trivy. Now I can scan everything in my GitOps repo.&lt;/p>
+&lt;p>The previous post about Trivy is &lt;a href="https://www.joshkasuboski.com/posts/image-scanning-trivy/">here&lt;/a>.&lt;/p>
+&lt;h2 id="finding-the-images-to-scan">Finding the Images to Scan&lt;/h2>
+&lt;p>Since I track all of my deployments in git at &lt;a href="https://github.com/kasuboski/k8s-gitops">kasuboski/k8s-gitops&lt;/a>, I can find all of the images from the files in that repo. For the simple case of just finding it from Kubernetes objects, I can use the command below which finds the images, removes quotes, and makes sure it's unique. Magic 🧙‍♂️.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-bash" data-lang="bash">ack --type yaml &lt;span style="color:#e6db74">&amp;#39;image: (.*)&amp;#39;&lt;/span> --output &lt;span style="color:#e6db74">&amp;#39;$1&amp;#39;&lt;/span> -h --nobreak | tr -d &lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#ae81ff">\&amp;#39;&lt;/span> | sort -u
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>This outputs everything coming after &amp;ldquo;image: &amp;ldquo;. This works for Kubernetes resources and it also picked up some values in a helm values file. I render manifests using kustomize, which can change images and pull remotely. This means I should really be running this command on the rendered manifests.&lt;/p>
+&lt;p>I've been considering rendering everything in git instead of only on the cluster (in ArgoCD). This would capture the exact yaml that was applied and make this analysis easier.&lt;/p>
+&lt;h2 id="scanning-with-trivy">Scanning with Trivy&lt;/h2>
+&lt;p>You can use &lt;code>xargs&lt;/code> to run a scan for each image. I did this initially just piping to &lt;code>trivy image&lt;/code>, but immediately hit the GitHub rate-limit. I thought trivy would reuse the database cache, but that didn't seem to be happening. They do let you pass a &lt;a href="https://github.com/aquasecurity/trivy#github-rate-limiting">GitHub Token&lt;/a> to increase the limit, but that seemed like more effort.&lt;/p>
+&lt;p>Instead, I decided to use the client server mode of trivy. This let's you run a server that executes the scans and your client communicates with it.&lt;/p>
+&lt;p>To start the server:&lt;/p>
+&lt;pre>&lt;code>trivy server
+&lt;/code>&lt;/pre>&lt;p>Then (in another terminal) run a &lt;code>trivy client&lt;/code> for each image:&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-bash" data-lang="bash">ack --type yaml &lt;span style="color:#e6db74">&amp;#39;image: (.*)&amp;#39;&lt;/span> --output &lt;span style="color:#e6db74">&amp;#39;$1&amp;#39;&lt;/span> -h --nobreak | tr -d &lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#ae81ff">\&amp;#39;&lt;/span> | sort -u | xargs -L1 trivy client --severity HIGH,CRITICAL --ignore-unfixed
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>This gives output like below:
+&lt;figure>&lt;a href="results.png">
+&lt;img src="results.png"
+alt="Trivy Results"/> &lt;/a>
+&lt;/figure>
+&lt;/p>
+&lt;p>It did fail to analyze an image that only had an ARM manifest (I ran this on my amd64 desktop)&lt;/p>
+&lt;h2 id="next-steps-">Next Steps 🦶&lt;/h2>
+&lt;p>I would like to run this repeatedly as a GitHub Action on the repo itself. It might be easier to just use a GitHub Token for the rate-limit in that case. I also want to analyze the rendered manifests.&lt;/p>
+&lt;p>I have been considering setting up my own registry to mirror my images such as &lt;a href="https://goharbor.io/">Harbor&lt;/a>. Harbor can run periodic Trivy scans by itself and make the results available. There is also a an experimental &lt;a href="https://github.com/aquasecurity/trivy-enforcer">trivy-enforcer&lt;/a> project that runs in the cluster and can enforce that all images running in your cluster are secure.&lt;/p>
+&lt;p>This combination of static analysis and runtime enforcement should make it pretty tough to have a known bad image running.&lt;/p></description></item><item><title>Container Image Scanning with Trivy</title><link>https://www.joshkasuboski.com/posts/image-scanning-trivy/</link><pubDate>Fri, 25 Sep 2020 11:01:50 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/image-scanning-trivy/</guid><description>&lt;p>I wanted to have some peace of mind when running random container images. Trivy let's me scan them for common vulnerabilities.&lt;/p>
+&lt;h2 id="installing-trivy">Installing Trivy&lt;/h2>
+&lt;p>You can find the Trivy repo on GitHub at &lt;a href="https://github.com/aquasecurity/trivy">aquasecurity/trivy&lt;/a>. Installing with Homebrew is just &lt;code>brew install aquasecurity/trivy/trivy&lt;/code>. Trivy is written in Golang so you just need to get the binary. They also have a magic script you can use&lt;/p>
+&lt;p>&lt;code>curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin&lt;/code>&lt;/p>
+&lt;p>Once you have &lt;code>trivy&lt;/code> in your &lt;code>$PATH&lt;/code>, you can run &lt;code>trivy&lt;/code> and see the options. Trivy can do a number of scans: a remote image, local filesystem, or a remote repository.&lt;/p>
+&lt;p>The various options make it easy to scan code repos, images before they are pushed, and third-party images you want to use.&lt;/p>
+&lt;h2 id="scanning-an-image">Scanning an image&lt;/h2>
+&lt;p>I use &lt;a href="https://argoproj.github.io/projects/argo-cd">ArgoCD&lt;/a> and had to use an image other than the official one since I wanted multi-arch support. This saved me from having to build it myself which I've done in the &lt;a href="https://www.joshkasuboski.com/posts/build-multiarch-image/">past&lt;/a>.&lt;/p>
+&lt;p>I wanted to scan this image for vulnerabilities (the build is open source, but you never really know). With Trivy this is as easy as &lt;code>trivy image alinbalutoiu/argocd:v1.7.1&lt;/code>. It will download (and cache) the vulnerability database and then pull and scan the image. It then outputs a nice table of vulnerabilities as seen below. You can also filter by severity and ignore unfixed.&lt;/p>
+&lt;figure>&lt;a href="trivy-results.png">
+&lt;img src="trivy-results.png"
+alt="Trivy Results"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="next-stop-ci">Next Stop CI&lt;/h2>
+&lt;p>This is great for testing an image ad-hoc, but I want to add this to my &lt;a href="https://github.com/kasuboski/k8s-gitops">gitops repo&lt;/a> so that all images are scanned periodically. There is already a Trivy GitHub Action, but I think it's intended more for images you are building.&lt;/p>
+&lt;p>I also want to run something in my cluster that will periodically check all images that are running. Something like &lt;a href="https://github.com/aquasecurity/starboard">starboard&lt;/a> could be the beginning of that.&lt;/p></description></item><item><title>Serve a JSON API with GitHub</title><link>https://www.joshkasuboski.com/posts/stats-from-github-file/</link><pubDate>Thu, 17 Sep 2020 13:18:28 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/stats-from-github-file/</guid><description>&lt;p>I wanted to add stats to a site, but I already capture them in a GitHub Repo. Let's just pull from there.&lt;/p>
+&lt;h2 id="the-stats-repo">The Stats Repo&lt;/h2>
+&lt;p>I made a repo that pulls in stats (&lt;a href="https://github.com/kasuboski/stats">kasuboski/stats&lt;/a>). It uses a GitHub Action I made for a &lt;a href="https://dev.to/kasuboski/dev-to-article-stats-github-action-30n4">Dev.to&lt;/a> Hackathon that pulls post stats from Dev.to.&lt;/p>
+&lt;p>The repo gets periodically updated with a &lt;code>stats/dev-to.json&lt;/code> file. GitHub lets you browse the contents of files at &lt;code>raw.githubusercontent.com&lt;/code>. In my case, this file is at &lt;a href="https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json">https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json&lt;/a>.&lt;/p>
+&lt;h2 id="fetching-the-data">Fetching the data&lt;/h2>
+&lt;p>I have a &lt;a href="https://joshcorp.co">landing page&lt;/a> served from my &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi Cluster&lt;/a>. It was a placeholder with a link to my &lt;a href="https://www.joshkasuboski.com">personal site&lt;/a>. Now it also shows stats from my &lt;a href="https://dev.to/kasuboski">Dev.to posts&lt;/a>.&lt;/p>
+&lt;figure>&lt;a href="landing-page-stats.png">
+&lt;img src="landing-page-stats.png"
+alt="Stats on the landing page"/> &lt;/a>
+&lt;/figure>
+&lt;p>The landing page itself is just vanilla HTML/CSS/JS. It uses &lt;a href="https://andybrewer.github.io/mvp/">mvp.css&lt;/a> to get quick styles. The repo is &lt;a href="https://github.com/kasuboski/joshcorp-site">kasuboski/joshcorp-site&lt;/a>. The javascript needed to add the stats is below. It's just in a &lt;code>script&lt;/code> tag in the body.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-javascript" data-lang="javascript">&lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">getStats&lt;/span>() {
+&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#a6e22e">stats&lt;/span> &lt;span style="color:#f92672">=&lt;/span> document.&lt;span style="color:#a6e22e">querySelector&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;#stats&amp;#39;&lt;/span>);
+&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#a6e22e">reactions&lt;/span> &lt;span style="color:#f92672">=&lt;/span> document.&lt;span style="color:#a6e22e">querySelector&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;#reactions-value&amp;#39;&lt;/span>);
+&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#a6e22e">views&lt;/span> &lt;span style="color:#f92672">=&lt;/span> document.&lt;span style="color:#a6e22e">querySelector&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;#views-value&amp;#39;&lt;/span>);
+&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#a6e22e">url&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;https://raw.githubusercontent.com/kasuboski/stats/main/stats/dev-to.json&amp;#39;&lt;/span>;
+&lt;span style="color:#a6e22e">fetch&lt;/span>(&lt;span style="color:#a6e22e">url&lt;/span>)
+.&lt;span style="color:#a6e22e">then&lt;/span>(&lt;span style="color:#a6e22e">res&lt;/span> =&amp;gt; &lt;span style="color:#a6e22e">res&lt;/span>.&lt;span style="color:#a6e22e">json&lt;/span>())
+.&lt;span style="color:#a6e22e">then&lt;/span>(&lt;span style="color:#a6e22e">data&lt;/span> =&amp;gt; {
+&lt;span style="color:#a6e22e">console&lt;/span>.&lt;span style="color:#a6e22e">log&lt;/span>(&lt;span style="color:#a6e22e">data&lt;/span>);
+&lt;span style="color:#a6e22e">reactions&lt;/span>.&lt;span style="color:#a6e22e">innerText&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">data&lt;/span>.&lt;span style="color:#a6e22e">public_reactions_count&lt;/span>;
+&lt;span style="color:#a6e22e">views&lt;/span>.&lt;span style="color:#a6e22e">innerText&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">data&lt;/span>.&lt;span style="color:#a6e22e">page_views_count&lt;/span>;
+&lt;span style="color:#a6e22e">stats&lt;/span>.&lt;span style="color:#a6e22e">style&lt;/span>.&lt;span style="color:#a6e22e">display&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;block&amp;#34;&lt;/span>;
+})
+.&lt;span style="color:#66d9ef">catch&lt;/span>(&lt;span style="color:#a6e22e">err&lt;/span> =&amp;gt; {
+&lt;span style="color:#a6e22e">console&lt;/span>.&lt;span style="color:#a6e22e">error&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;Error fetching stats: &amp;#39;&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span>);
+})
 }
-
-window.&lt;span style=&#34;color:#a6e22e&#34;&gt;onload&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getStats&lt;/span&gt;;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I&#39;m sure this probably isn&#39;t something GitHub exactly recommends&amp;hellip; but as long as you don&#39;t have too much traffic it should be fine.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Getting Push Notifications for Everything with Pushover</title>
-      <link>https://www.joshkasuboski.com/posts/pushover-notifications/</link>
-      <pubDate>Thu, 10 Sep 2020 13:52:17 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/pushover-notifications/</guid>
-      <description>&lt;p&gt;I wanted to know when my personal site was deployed and decided to get push notifications.&lt;/p&gt;
-&lt;p&gt;I make changes to my site locally and then push to GitHub so it is automatically deployed using GitHub Pages. I went over that in &lt;a href=&#34;https://www.joshkasuboski.com/posts/deploy-site-github-actions/&#34;&gt;Deploying this site with GitHub Actions&lt;/a&gt;. After I pushed though, I would often have to keep checking to see when it should be available. Now I get notified.&lt;/p&gt;
-&lt;h2 id=&#34;setting-up-pushover&#34;&gt;Setting up Pushover&lt;/h2&gt;
-&lt;p&gt;In order to get push notifications from multiple apps, I signed up for &lt;a href=&#34;https://pushover.net/&#34;&gt;Pushover&lt;/a&gt;. This lets me install just the Pushover app and all notifications will come through there.&lt;/p&gt;
-&lt;p&gt;I signed up for an account and downloaded the app. I was immediately able to manually send notifications. My original intention was to set this up for GitHub Actions though.&lt;/p&gt;
-&lt;p&gt;I created a Pushover app to get an API Token. Using this token and your user key, you can send notifications with an API call.&lt;/p&gt;
-&lt;h2 id=&#34;adding-to-github-actions&#34;&gt;Adding to GitHub Actions&lt;/h2&gt;
-&lt;p&gt;To get the status of my &lt;a href=&#34;https://github.com/kasuboski/personal-site/blob/master/.github/workflows/gh-pages.yaml&#34;&gt;personal-site workflow&lt;/a&gt;, I just need to curl the endpoint with my token and user key.&lt;/p&gt;
-&lt;p&gt;I added both to my repo secrets and then could add the below step at the end of my workflow.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;- name: Notify
-  if: always()
-  uses: wei/curl@v1
-  with:
-    args: -X POST -F &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;token=${{ secrets.PUSHOVER_TOKEN }}&amp;#39;&lt;/span&gt; -F &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;user=${{ secrets.PUSHOVER_USER }}&amp;#39;&lt;/span&gt; -F &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;message=Personal Site Pipeline ${{ job.status }}&amp;#39;&lt;/span&gt; https://api.pushover.net/&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;/messages.json
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;and-more&#34;&gt;And more&lt;/h2&gt;
-&lt;p&gt;Pushover has a number of &lt;a href=&#34;https://pushover.net/apps&#34;&gt;integrations&lt;/a&gt;. I have it setup to send me &lt;a href=&#34;https://uptimerobot.com/&#34;&gt;UptimeRobot&lt;/a&gt; alerts and also use it for Radarr. UptimeRobot just required me to add my user key and I immediately got a test message.&lt;/p&gt;
-&lt;p&gt;No longer will I be checking the status of anything 😉.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Connect Your Home to the Cloud with Tailscale</title>
-      <link>https://www.joshkasuboski.com/posts/connect-home-cloud-tailscale/</link>
-      <pubDate>Mon, 24 Aug 2020 11:05:17 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/connect-home-cloud-tailscale/</guid>
-      <description>&lt;p&gt;I set up my Raspberry Pi cluster to be accessible from the internet without configuring a port-forward on my router.&lt;/p&gt;
-&lt;h2 id=&#34;tailscale&#34;&gt;Tailscale&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://tailscale.com/&#34;&gt;Tailscale&lt;/a&gt; will create a private network using &lt;a href=&#34;https://www.wireguard.com/&#34;&gt;Wireguard&lt;/a&gt;. Wireguard isn&#39;t really that difficult to configure on its own, but you do have to manually generate and distribute keys. Tailscale will take care of that for you and they also have some &lt;a href=&#34;https://tailscale.com/blog/how-nat-traversal-works/&#34;&gt;fallbacks&lt;/a&gt; for difficult networks. It doesn&#39;t look like any of my nodes are using a fallback option based on the dashboard.&lt;/p&gt;
-&lt;p&gt;Setting up Tailscale is as easy as installing it and running &lt;code&gt;tailscale up&lt;/code&gt;. Until recently, this required you to login interactively. Tailscale now supports &lt;a href=&#34;https://tailscale.com/kb/1068/acl-tags#pre-authenticated-keys&#34;&gt;pre-authenticated&lt;/a&gt; keys which means you can automate the setup.&lt;/p&gt;
-&lt;h2 id=&#34;installing-on-raspberry-pis&#34;&gt;Installing on Raspberry PIs&lt;/h2&gt;
-&lt;p&gt;I made &lt;a href=&#34;https://github.com/kasuboski/tailscale-install&#34;&gt;kasuboski/tailscale-install&lt;/a&gt; to automate the installation and start of Tailscale on Raspberry PIs. I plan to expand it to work on more varied platforms in the future.&lt;/p&gt;
-&lt;p&gt;It&#39;s a &lt;a href=&#34;https://pyinfra.com/&#34;&gt;PyInfra deploy&lt;/a&gt; that basically just adds the package and runs &lt;code&gt;tailscale up&lt;/code&gt; with a key sourced from the environment. I was able to add my Raspberry Pi cluster to the network in around 5 minutes, using this.&lt;/p&gt;
-&lt;h2 id=&#34;exposing-to-the-internet&#34;&gt;Exposing to the internet&lt;/h2&gt;
-&lt;p&gt;My cluster ingress is now slightly different than described &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/&#34;&gt;here&lt;/a&gt;. Traffic from the Linode now goes directly to the Kubernetes nodes on the port exposed by the nginx-ingress controller. This just removes the extra hop that was initially an internal haproxy running on a different Raspberry Pi.&lt;/p&gt;
-&lt;figure&gt;
-    &lt;img src=&#34;tailscale-diagram.png&#34;
-         alt=&#34;Network Diagram&#34;/&gt; 
-&lt;/figure&gt;</description>
-    </item>
-    
-    <item>
-      <title>Generate Your Resume with GitHub Actions</title>
-      <link>https://www.joshkasuboski.com/posts/generate-resume-gh-actions/</link>
-      <pubDate>Tue, 18 Aug 2020 10:39:19 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/generate-resume-gh-actions/</guid>
-      <description>&lt;p&gt;I got tired of editing my resume in HTML and then printing a PDF from Chrome. I now use GitHub Actions and a json resume to generate both formats.&lt;/p&gt;
-&lt;h2 id=&#34;defining-a-json-resume&#34;&gt;Defining a JSON Resume&lt;/h2&gt;
-&lt;p&gt;There&#39;s a jsonresume project that defines a &lt;a href=&#34;https://json-schema.org/&#34;&gt;JSON Schema&lt;/a&gt; for a resume. You can find the schema repo &lt;a href=&#34;https://github.com/jsonresume/resume-schema&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I wanted to define my resume like this so I could easily generate multiple formats of it. My file can be found &lt;a href=&#34;https://github.com/kasuboski/resume/blob/master/resume.json&#34;&gt;here&lt;/a&gt;. I used to use the &lt;a href=&#34;https://github.com/jsonresume/resume-cli&#34;&gt;resume-cli&lt;/a&gt; project to generate the html and pdf version of my resume, but it stopped working for me awhile ago.&lt;/p&gt;
-&lt;p&gt;I decided to convert the theme I was using to a Go template instead. That template is &lt;a href=&#34;https://github.com/kasuboski/resume/blob/master/hack/resume.html.tmpl&#34;&gt;here&lt;/a&gt;. It treats &lt;code&gt;resume.json&lt;/code&gt; as a map so the template just directly accesses the properties.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// hack/template.go
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;tmpl&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;template&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Must&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;template&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ParseFiles&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hack/resume.html.tmpl&amp;#34;&lt;/span&gt;))
-&lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ioutil&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ReadFile&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;resume.json&amp;#34;&lt;/span&gt;)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatalf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;couldn&amp;#39;t read resume.json: %v&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+window.&lt;span style="color:#a6e22e">onload&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">getStats&lt;/span>;
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>I'm sure this probably isn't something GitHub exactly recommends&amp;hellip; but as long as you don't have too much traffic it should be fine.&lt;/p></description></item><item><title>Getting Push Notifications for Everything with Pushover</title><link>https://www.joshkasuboski.com/posts/pushover-notifications/</link><pubDate>Thu, 10 Sep 2020 13:52:17 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/pushover-notifications/</guid><description>&lt;p>I wanted to know when my personal site was deployed and decided to get push notifications.&lt;/p>
+&lt;p>I make changes to my site locally and then push to GitHub so it is automatically deployed using GitHub Pages. I went over that in &lt;a href="https://www.joshkasuboski.com/posts/deploy-site-github-actions/">Deploying this site with GitHub Actions&lt;/a>. After I pushed though, I would often have to keep checking to see when it should be available. Now I get notified.&lt;/p>
+&lt;h2 id="setting-up-pushover">Setting up Pushover&lt;/h2>
+&lt;p>In order to get push notifications from multiple apps, I signed up for &lt;a href="https://pushover.net/">Pushover&lt;/a>. This lets me install just the Pushover app and all notifications will come through there.&lt;/p>
+&lt;p>I signed up for an account and downloaded the app. I was immediately able to manually send notifications. My original intention was to set this up for GitHub Actions though.&lt;/p>
+&lt;p>I created a Pushover app to get an API Token. Using this token and your user key, you can send notifications with an API call.&lt;/p>
+&lt;h2 id="adding-to-github-actions">Adding to GitHub Actions&lt;/h2>
+&lt;p>To get the status of my &lt;a href="https://github.com/kasuboski/personal-site/blob/master/.github/workflows/gh-pages.yaml">personal-site workflow&lt;/a>, I just need to curl the endpoint with my token and user key.&lt;/p>
+&lt;p>I added both to my repo secrets and then could add the below step at the end of my workflow.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-yaml" data-lang="yaml">- name: Notify
+if: always()
+uses: wei/curl@v1
+with:
+args: -X POST -F &lt;span style="color:#e6db74">&amp;#39;token=${{ secrets.PUSHOVER_TOKEN }}&amp;#39;&lt;/span> -F &lt;span style="color:#e6db74">&amp;#39;user=${{ secrets.PUSHOVER_USER }}&amp;#39;&lt;/span> -F &lt;span style="color:#e6db74">&amp;#39;message=Personal Site Pipeline ${{ job.status }}&amp;#39;&lt;/span> https://api.pushover.net/&lt;span style="color:#ae81ff">1&lt;/span>/messages.json
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="and-more">And more&lt;/h2>
+&lt;p>Pushover has a number of &lt;a href="https://pushover.net/apps">integrations&lt;/a>. I have it setup to send me &lt;a href="https://uptimerobot.com/">UptimeRobot&lt;/a> alerts and also use it for Radarr. UptimeRobot just required me to add my user key and I immediately got a test message.&lt;/p>
+&lt;p>No longer will I be checking the status of anything 😉.&lt;/p></description></item><item><title>Connect Your Home to the Cloud with Tailscale</title><link>https://www.joshkasuboski.com/posts/connect-home-cloud-tailscale/</link><pubDate>Mon, 24 Aug 2020 11:05:17 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/connect-home-cloud-tailscale/</guid><description>&lt;p>I set up my Raspberry Pi cluster to be accessible from the internet without configuring a port-forward on my router.&lt;/p>
+&lt;h2 id="tailscale">Tailscale&lt;/h2>
+&lt;p>&lt;a href="https://tailscale.com/">Tailscale&lt;/a> will create a private network using &lt;a href="https://www.wireguard.com/">Wireguard&lt;/a>. Wireguard isn't really that difficult to configure on its own, but you do have to manually generate and distribute keys. Tailscale will take care of that for you and they also have some &lt;a href="https://tailscale.com/blog/how-nat-traversal-works/">fallbacks&lt;/a> for difficult networks. It doesn't look like any of my nodes are using a fallback option based on the dashboard.&lt;/p>
+&lt;p>Setting up Tailscale is as easy as installing it and running &lt;code>tailscale up&lt;/code>. Until recently, this required you to login interactively. Tailscale now supports &lt;a href="https://tailscale.com/kb/1068/acl-tags#pre-authenticated-keys">pre-authenticated&lt;/a> keys which means you can automate the setup.&lt;/p>
+&lt;h2 id="installing-on-raspberry-pis">Installing on Raspberry PIs&lt;/h2>
+&lt;p>I made &lt;a href="https://github.com/kasuboski/tailscale-install">kasuboski/tailscale-install&lt;/a> to automate the installation and start of Tailscale on Raspberry PIs. I plan to expand it to work on more varied platforms in the future.&lt;/p>
+&lt;p>It's a &lt;a href="https://pyinfra.com/">PyInfra deploy&lt;/a> that basically just adds the package and runs &lt;code>tailscale up&lt;/code> with a key sourced from the environment. I was able to add my Raspberry Pi cluster to the network in around 5 minutes, using this.&lt;/p>
+&lt;h2 id="exposing-to-the-internet">Exposing to the internet&lt;/h2>
+&lt;p>My cluster ingress is now slightly different than described &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">here&lt;/a>. Traffic from the Linode now goes directly to the Kubernetes nodes on the port exposed by the nginx-ingress controller. This just removes the extra hop that was initially an internal haproxy running on a different Raspberry Pi.&lt;/p>
+&lt;figure>
+&lt;img src="tailscale-diagram.png"
+alt="Network Diagram"/>
+&lt;/figure></description></item><item><title>Generate Your Resume with GitHub Actions</title><link>https://www.joshkasuboski.com/posts/generate-resume-gh-actions/</link><pubDate>Tue, 18 Aug 2020 10:39:19 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/generate-resume-gh-actions/</guid><description>&lt;p>I got tired of editing my resume in HTML and then printing a PDF from Chrome. I now use GitHub Actions and a json resume to generate both formats.&lt;/p>
+&lt;h2 id="defining-a-json-resume">Defining a JSON Resume&lt;/h2>
+&lt;p>There's a jsonresume project that defines a &lt;a href="https://json-schema.org/">JSON Schema&lt;/a> for a resume. You can find the schema repo &lt;a href="https://github.com/jsonresume/resume-schema">here&lt;/a>.&lt;/p>
+&lt;p>I wanted to define my resume like this so I could easily generate multiple formats of it. My file can be found &lt;a href="https://github.com/kasuboski/resume/blob/master/resume.json">here&lt;/a>. I used to use the &lt;a href="https://github.com/jsonresume/resume-cli">resume-cli&lt;/a> project to generate the html and pdf version of my resume, but it stopped working for me awhile ago.&lt;/p>
+&lt;p>I decided to convert the theme I was using to a Go template instead. That template is &lt;a href="https://github.com/kasuboski/resume/blob/master/hack/resume.html.tmpl">here&lt;/a>. It treats &lt;code>resume.json&lt;/code> as a map so the template just directly accesses the properties.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-golang" data-lang="golang">&lt;span style="color:#75715e">// hack/template.go
+&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">tmpl&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#a6e22e">template&lt;/span>.&lt;span style="color:#a6e22e">Must&lt;/span>(&lt;span style="color:#a6e22e">template&lt;/span>.&lt;span style="color:#a6e22e">ParseFiles&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;hack/resume.html.tmpl&amp;#34;&lt;/span>))
+&lt;span style="color:#a6e22e">bs&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#a6e22e">ioutil&lt;/span>.&lt;span style="color:#a6e22e">ReadFile&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;resume.json&amp;#34;&lt;/span>)
+&lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#a6e22e">err&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#66d9ef">nil&lt;/span> {
+&lt;span style="color:#a6e22e">log&lt;/span>.&lt;span style="color:#a6e22e">Fatalf&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;couldn&amp;#39;t read resume.json: %v&amp;#34;&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span>)
 }
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Create&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;resume.html&amp;#34;&lt;/span&gt;)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatalf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;couldn&amp;#39;t open out.html: %v&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+&lt;span style="color:#a6e22e">f&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#a6e22e">os&lt;/span>.&lt;span style="color:#a6e22e">Create&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;resume.html&amp;#34;&lt;/span>)
+&lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#a6e22e">err&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#66d9ef">nil&lt;/span> {
+&lt;span style="color:#a6e22e">log&lt;/span>.&lt;span style="color:#a6e22e">Fatalf&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;couldn&amp;#39;t open out.html: %v&amp;#34;&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span>)
 }
-&lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;params&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{}
-&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;json&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Unmarshal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;params&lt;/span&gt;)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatalf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;unable to unmarshal json: %v&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+&lt;span style="color:#66d9ef">defer&lt;/span> &lt;span style="color:#a6e22e">f&lt;/span>.&lt;span style="color:#a6e22e">Close&lt;/span>()
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">params&lt;/span> &lt;span style="color:#66d9ef">map&lt;/span>[&lt;span style="color:#66d9ef">string&lt;/span>]&lt;span style="color:#66d9ef">interface&lt;/span>{}
+&lt;span style="color:#a6e22e">err&lt;/span> = &lt;span style="color:#a6e22e">json&lt;/span>.&lt;span style="color:#a6e22e">Unmarshal&lt;/span>(&lt;span style="color:#a6e22e">bs&lt;/span>, &lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#a6e22e">params&lt;/span>)
+&lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#a6e22e">err&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#66d9ef">nil&lt;/span> {
+&lt;span style="color:#a6e22e">log&lt;/span>.&lt;span style="color:#a6e22e">Fatalf&lt;/span>(&lt;span style="color:#e6db74">&amp;#34;unable to unmarshal json: %v&amp;#34;&lt;/span>, &lt;span style="color:#a6e22e">err&lt;/span>)
 }
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;tmpl&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Execute&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;params&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now I can get the HTML version of my resume with &lt;code&gt;go run hack/template.go&lt;/code&gt; which will output a &lt;code&gt;resume.html&lt;/code&gt; file. I could then open this in chrome and print it from there, but that&#39;s so much effort 😉.&lt;/p&gt;
-&lt;h2 id=&#34;generating-multiple-formats-in-github-actions&#34;&gt;Generating Multiple Formats in GitHub Actions&lt;/h2&gt;
-&lt;p&gt;I already had a GitHub Actions workflow that would sync my resume from the resume repo to my personal-site repo, but I was manually pushing the HTML and PDF files to the resume repo. Now that I have the HTML generation working again, I decided to automate the entire process. That includes creating GitHub Releases.&lt;/p&gt;
-&lt;p&gt;My resume repo &lt;a href=&#34;https://github.com/kasuboski/resume&#34;&gt;kasuboski/resume&lt;/a&gt; now has a &lt;code&gt;create-release&lt;/code&gt; workflow. Pushing changes to &lt;code&gt;resume.json&lt;/code&gt; or tagging a commit will now do the below.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Generate the html with &lt;code&gt;go run hack/template.go&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Generate a PDF using &lt;a href=&#34;https://github.com/fifsky/html-to-pdf-action&#34;&gt;fifsky/html-to-pdf-action&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Add the html and pdf as a build artifact (so you can manually inspect before releasing)&lt;/li&gt;
-&lt;li&gt;Create a release for a tag with the files&lt;/li&gt;
-&lt;li&gt;Update my personal site with the new files if they&#39;ve changed&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Updating my resume now involves just updating &lt;code&gt;resume.json&lt;/code&gt; and the files are generated and pushed to my site.&lt;/p&gt;
-&lt;h2 id=&#34;future&#34;&gt;Future&lt;/h2&gt;
-&lt;p&gt;I&#39;d like to start managing more things like this. Maybe pushing to my LinkedIn profile or updating a GitHub profile README. It&#39;ll be like &lt;a href=&#34;https://www.weave.works/technologies/gitops/&#34;&gt;GitOps&lt;/a&gt; but more Git&amp;hellip;personal info.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>I Mounted My PC - Server Rack Update</title>
-      <link>https://www.joshkasuboski.com/posts/server-rack-2/</link>
-      <pubDate>Sun, 16 Aug 2020 13:33:52 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/server-rack-2/</guid>
-      <description>&lt;p&gt;I got my desktop mounted in the rack and added wheels. It&#39;s really moving 😏&lt;/p&gt;
-&lt;p&gt;You can see the previous server rack start &lt;a href=&#34;https://www.joshkasuboski.com/posts/server-rack-1/&#34;&gt;here&lt;/a&gt;, where I had just gotten it.&lt;/p&gt;
-&lt;h2 id=&#34;making-it-mobile&#34;&gt;Making it mobile&lt;/h2&gt;
-&lt;p&gt;Moving the rack back and forth was pretty rough. It was definitely scratching the concrete and since I was planning to put my desktop in, the rack was about to get much heavier.&lt;/p&gt;
-&lt;p&gt;The rack I purchased came with a piece of steel that sticks out and has 3/4&amp;rdquo; holes drilled in. I wanted to put casters there, but 3/4&amp;rdquo; stem casters don&#39;t seem to be a thing. I ended up getting 1/2&amp;rdquo; stem casters and some washers to make it fit the hole. It seems sturdy enough (I was able to stand on it without incident).&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;wheel-holes.jpg&#34;&gt;
-    &lt;img src=&#34;wheel-holes.jpg&#34;
-         alt=&#34;Steel piece to put the wheels&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;figure&gt;&lt;a href=&#34;caster.jpg&#34;&gt;
-    &lt;img src=&#34;caster.jpg&#34;
-         alt=&#34;Wheel attached with washer&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;Now that the rack is able to be rolled out I wanted to make sure I wouldn&#39;t always have to disconnect the internet when moving it. I made sure to plug the modem and router into a power strip that has enough slack to move with the rack.&lt;/p&gt;
-&lt;p&gt;Everything else plugs into a rack mountable &lt;a href=&#34;https://www.amazon.com/gp/product/B0781WS2M5&#34;&gt;power strip&lt;/a&gt; so nothing needs to be unplugged when rolling it forward.&lt;/p&gt;
-&lt;h2 id=&#34;adding-my-pc&#34;&gt;Adding my PC&lt;/h2&gt;
-&lt;p&gt;I moved my PC from a normal desktop case to a &lt;a href=&#34;https://www.newegg.com/black-rosewill-rsv-r4000/p/N82E16811147154?Item=N82E16811147154&#34;&gt;4U Rosewill Server Case&lt;/a&gt;. I was able to fit everything in without issue, including my graphics card and Blu-Ray drive. I ended up replacing all of the fans since the included ones had molex connectors with the fans running at full speed all the time.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;open-case.jpg&#34;&gt;
-    &lt;img src=&#34;open-case.jpg&#34;
-         alt=&#34;PC installed in server case&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;In the front, there are 8 tool-less hard drive bays. I am currently using none of them as I just have two SSDs sitting in there. I am planning to eventually add storage, but may get a separate enclosure.&lt;/p&gt;
-&lt;p&gt;I installed a rack mount &lt;a href=&#34;https://www.amazon.com/gp/product/B00XXDJASY&#34;&gt;shelf rail&lt;/a&gt; for the case to sit on. Unfortunately, that meant I had to take off the door of the Rosewill case since it didn&#39;t fit within the mount of the rails. I hope to be able to make something slimmer so it&#39;ll fit back on.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;assembled-rack.jpg&#34;&gt;
-    &lt;img src=&#34;assembled-rack.jpg&#34;
-         alt=&#34;Assembled server rack&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;The final rack looks a little better and is certainly more functional. It freed up some space under my desk where I now have a 12TB external hard drive.&lt;/p&gt;
-&lt;p&gt;I still want to mount the &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/&#34;&gt;Raspberry Pi cluster&lt;/a&gt; in the rack. I bought this &lt;a href=&#34;https://www.musicstore.de/de_DE/EUR/DAP-2-HE-Rackblende-f-Modulsystem-10-Segmente-MP-1/art-PAH0017160-000;pgid=WBtg67.syLdSRpoV6L_EAtys0000YDPT2oVh&#34;&gt;bracket&lt;/a&gt; in order to do something like these &lt;a href=&#34;https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/&#34;&gt;mounts&lt;/a&gt;, but it still hasn&#39;t arrived. I may have to call and see what happened (brushing up on my German I guess).&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Managing the Cluster with ArgoCD</title>
-      <link>https://www.joshkasuboski.com/posts/argocd-managed/</link>
-      <pubDate>Sun, 26 Jul 2020 14:24:26 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/argocd-managed/</guid>
-      <description>&lt;p&gt;I had to manually apply changes to my cluster, but now a lot of it is controlled from git thanks to ArgoCD.&lt;/p&gt;
-&lt;h2 id=&#34;managed-with-a-cluster-repo&#34;&gt;Managed with a cluster repo&lt;/h2&gt;
-&lt;p&gt;The cluster state is kept in &lt;a href=&#34;https://github.com/kasuboski/k8s-gitops&#34;&gt;kasuboski/k8s-gitops&lt;/a&gt;. Each folder is a different function for the cluster. The gitops folder is special. It has the &lt;a href=&#34;https://argoproj.github.io/projects/argo-cd&#34;&gt;ArgoCD&lt;/a&gt; manifests and the apps folder.&lt;/p&gt;
-&lt;p&gt;ArgoCD will sync manifests from a git repo to the cluster. It continuously watches to make sure the desired state (from git) matches the observed state (in the cluster). You configure ArgoCD using CRDs. Argo has Apps and Projects. A Project configures access for Apps and an App represents a repo that deploys Kubernetes objects.&lt;/p&gt;
-&lt;p&gt;You can see my apps at &lt;a href=&#34;https://github.com/kasuboski/k8s-gitops/tree/master/gitops/apps&#34;&gt;gitops/apps&lt;/a&gt;. I use an app of apps &lt;a href=&#34;https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/#app-of-apps-pattern&#34;&gt;pattern&lt;/a&gt; to deploy. I apply this root &amp;ldquo;apps&amp;rdquo; app that then deploys the other apps for the cluster.&lt;/p&gt;
-&lt;p&gt;ArgoCD also comes with a dashboard that shows the apps and their status. You can also get a badge to put in the repo to show overall status.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://argocd.joshcorp.co/api/badge?name=apps&amp;amp;revision=true&#34; alt=&#34;argocd-badge&#34;&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;argo-dashboard.png&#34;&gt;
-    &lt;img src=&#34;argo-dashboard.png&#34;
-         alt=&#34;The argo dashboard shows apps&#34; width=&#34;800px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;but-why&#34;&gt;But why&lt;/h2&gt;
-&lt;p&gt;Managing Kubernetes like this (once everything is automated) allows me to stand up a cluster with the same state simply by installing ArgoCD and applying an ArgoCD App.&lt;/p&gt;
-&lt;p&gt;It also keeps me from accidentally messing with the cluster since even if I delete a Deployment ArgoCD will reapply it.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>GitOpsing the cluster</title>
-      <link>https://www.joshkasuboski.com/posts/gitops-cluster-1/</link>
-      <pubDate>Sun, 12 Jul 2020 18:40:37 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/gitops-cluster-1/</guid>
-      <description>&lt;p&gt;I kept track of how I set up my &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/&#34;&gt;Raspberry Pi cluster&lt;/a&gt; along the way, but hadn&#39;t committed it to git. Today that changed.&lt;/p&gt;
-&lt;h2 id=&#34;gitops-and-the-repo&#34;&gt;GitOps and the repo&lt;/h2&gt;
-&lt;p&gt;If you&#39;re not familiar with GitOps, the people at weaveworks have a nice &lt;a href=&#34;https://www.weave.works/technologies/gitops/&#34;&gt;article&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I pushed my setup to &lt;a href=&#34;https://github.com/kasuboski/k8s-gitops&#34;&gt;kasuboski/k8s-gitops&lt;/a&gt;. It should have everything that&#39;s deployed on my cluster.&lt;/p&gt;
-&lt;p&gt;Each folder at the top level is basically a namespace currently. The ingress folder does contain the &lt;code&gt;ingress-nginx&lt;/code&gt; and &lt;code&gt;cert-manager&lt;/code&gt; namespaces.&lt;/p&gt;
-&lt;p&gt;I hadn&#39;t pushed it earlier because I still haven&#39;t figured out my strategy for secrets. For now, the only secret needed is for fathom. I used git-crypt to encrypt on push and decrypt on pull. That works fine for now. There&#39;s a nice walkthrough &lt;a href=&#34;https://buddy.works/guides/git-crypt&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I was looking to use &lt;a href=&#34;https://secrethub.io/&#34;&gt;secrethub.io&lt;/a&gt;, but would need to figure out how I want to interface with it. In the past, I&#39;ve made an operator similar to &lt;a href=&#34;https://github.com/godaddy/kubernetes-external-secrets&#34;&gt;kubernetes-external-secrets&lt;/a&gt;. That will authenticate a workload and fetch its credentials from outside the cluster. I wanted to use &lt;a href=&#34;https://spiffe.io/&#34;&gt;SPIFFE&lt;/a&gt; for workload identity, but it seemed &lt;a href=&#34;https://spiffe.io/spire/&#34;&gt;Spire&lt;/a&gt; doesn&#39;t publish ARM images.&lt;/p&gt;
-&lt;h2 id=&#34;fully-reconciling&#34;&gt;Fully reconciling&lt;/h2&gt;
-&lt;p&gt;My cluster is still managed manually, albeit from checked in manifests (it also &lt;a href=&#34;https://www.joshkasuboski.com/posts/k8s-auto-upgrades/&#34;&gt;upgrades&lt;/a&gt; automatically).&lt;/p&gt;
-&lt;p&gt;The next step is to use a GitOps Operator. I&#39;ve used &lt;a href=&#34;https://argoproj.github.io/projects/argo-cd&#34;&gt;ArgoCD&lt;/a&gt; before, but &lt;a href=&#34;https://fluxcd.io/&#34;&gt;flux&lt;/a&gt; has been seeming more lightweight. It may come down to which one supports ARM better.&lt;/p&gt;
-&lt;p&gt;I also want to make the yaml easier to manage. First, using &lt;a href=&#34;https://github.com/kubernetes-sigs/kustomize&#34;&gt;kustomize&lt;/a&gt; to tie it all together and then exploring &lt;a href=&#34;https://github.com/jkcfg/jk&#34;&gt;jk&lt;/a&gt; to make templates in Typescript.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Automated Upgrades for k3s</title>
-      <link>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</link>
-      <pubDate>Wed, 08 Jul 2020 18:50:17 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</guid>
-      <description>&lt;p&gt;My cluster was falling behind the latest k3s version. Time to upgrade.&lt;/p&gt;
-&lt;h2 id=&#34;enter-the-system-upgrade-controller&#34;&gt;Enter the System Upgrade Controller&lt;/h2&gt;
-&lt;p&gt;I basically just did the instructions linked &lt;a href=&#34;https://rancher.com/docs/k3s/latest/en/upgrades/automated/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;It deploys the system upgrade controller into its own namespace where it won&#39;t do anything yet.&lt;/p&gt;
-&lt;p&gt;You have to give it some plans.&lt;/p&gt;
-&lt;p&gt;It will read Plans in that same namespace and run the specified image. I used the plan linked above. Instead of tying it to a specific version I set it to the latest channel.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# Server plan
+&lt;span style="color:#a6e22e">tmpl&lt;/span>.&lt;span style="color:#a6e22e">Execute&lt;/span>(&lt;span style="color:#a6e22e">f&lt;/span>, &lt;span style="color:#a6e22e">params&lt;/span>)
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now I can get the HTML version of my resume with &lt;code>go run hack/template.go&lt;/code> which will output a &lt;code>resume.html&lt;/code> file. I could then open this in chrome and print it from there, but that's so much effort 😉.&lt;/p>
+&lt;h2 id="generating-multiple-formats-in-github-actions">Generating Multiple Formats in GitHub Actions&lt;/h2>
+&lt;p>I already had a GitHub Actions workflow that would sync my resume from the resume repo to my personal-site repo, but I was manually pushing the HTML and PDF files to the resume repo. Now that I have the HTML generation working again, I decided to automate the entire process. That includes creating GitHub Releases.&lt;/p>
+&lt;p>My resume repo &lt;a href="https://github.com/kasuboski/resume">kasuboski/resume&lt;/a> now has a &lt;code>create-release&lt;/code> workflow. Pushing changes to &lt;code>resume.json&lt;/code> or tagging a commit will now do the below.&lt;/p>
+&lt;ul>
+&lt;li>Generate the html with &lt;code>go run hack/template.go&lt;/code>&lt;/li>
+&lt;li>Generate a PDF using &lt;a href="https://github.com/fifsky/html-to-pdf-action">fifsky/html-to-pdf-action&lt;/a>&lt;/li>
+&lt;li>Add the html and pdf as a build artifact (so you can manually inspect before releasing)&lt;/li>
+&lt;li>Create a release for a tag with the files&lt;/li>
+&lt;li>Update my personal site with the new files if they've changed&lt;/li>
+&lt;/ul>
+&lt;p>Updating my resume now involves just updating &lt;code>resume.json&lt;/code> and the files are generated and pushed to my site.&lt;/p>
+&lt;h2 id="future">Future&lt;/h2>
+&lt;p>I'd like to start managing more things like this. Maybe pushing to my LinkedIn profile or updating a GitHub profile README. It'll be like &lt;a href="https://www.weave.works/technologies/gitops/">GitOps&lt;/a> but more Git&amp;hellip;personal info.&lt;/p></description></item><item><title>I Mounted My PC - Server Rack Update</title><link>https://www.joshkasuboski.com/posts/server-rack-2/</link><pubDate>Sun, 16 Aug 2020 13:33:52 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-2/</guid><description>&lt;p>I got my desktop mounted in the rack and added wheels. It's really moving 😏&lt;/p>
+&lt;p>You can see the previous server rack start &lt;a href="https://www.joshkasuboski.com/posts/server-rack-1/">here&lt;/a>, where I had just gotten it.&lt;/p>
+&lt;h2 id="making-it-mobile">Making it mobile&lt;/h2>
+&lt;p>Moving the rack back and forth was pretty rough. It was definitely scratching the concrete and since I was planning to put my desktop in, the rack was about to get much heavier.&lt;/p>
+&lt;p>The rack I purchased came with a piece of steel that sticks out and has 3/4&amp;rdquo; holes drilled in. I wanted to put casters there, but 3/4&amp;rdquo; stem casters don't seem to be a thing. I ended up getting 1/2&amp;rdquo; stem casters and some washers to make it fit the hole. It seems sturdy enough (I was able to stand on it without incident).&lt;/p>
+&lt;figure>&lt;a href="wheel-holes.jpg">
+&lt;img src="wheel-holes.jpg"
+alt="Steel piece to put the wheels" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;figure>&lt;a href="caster.jpg">
+&lt;img src="caster.jpg"
+alt="Wheel attached with washer" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>Now that the rack is able to be rolled out I wanted to make sure I wouldn't always have to disconnect the internet when moving it. I made sure to plug the modem and router into a power strip that has enough slack to move with the rack.&lt;/p>
+&lt;p>Everything else plugs into a rack mountable &lt;a href="https://www.amazon.com/gp/product/B0781WS2M5">power strip&lt;/a> so nothing needs to be unplugged when rolling it forward.&lt;/p>
+&lt;h2 id="adding-my-pc">Adding my PC&lt;/h2>
+&lt;p>I moved my PC from a normal desktop case to a &lt;a href="https://www.newegg.com/black-rosewill-rsv-r4000/p/N82E16811147154?Item=N82E16811147154">4U Rosewill Server Case&lt;/a>. I was able to fit everything in without issue, including my graphics card and Blu-Ray drive. I ended up replacing all of the fans since the included ones had molex connectors with the fans running at full speed all the time.&lt;/p>
+&lt;figure>&lt;a href="open-case.jpg">
+&lt;img src="open-case.jpg"
+alt="PC installed in server case" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>In the front, there are 8 tool-less hard drive bays. I am currently using none of them as I just have two SSDs sitting in there. I am planning to eventually add storage, but may get a separate enclosure.&lt;/p>
+&lt;p>I installed a rack mount &lt;a href="https://www.amazon.com/gp/product/B00XXDJASY">shelf rail&lt;/a> for the case to sit on. Unfortunately, that meant I had to take off the door of the Rosewill case since it didn't fit within the mount of the rails. I hope to be able to make something slimmer so it'll fit back on.&lt;/p>
+&lt;figure>&lt;a href="assembled-rack.jpg">
+&lt;img src="assembled-rack.jpg"
+alt="Assembled server rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>The final rack looks a little better and is certainly more functional. It freed up some space under my desk where I now have a 12TB external hard drive.&lt;/p>
+&lt;p>I still want to mount the &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi cluster&lt;/a> in the rack. I bought this &lt;a href="https://www.musicstore.de/de_DE/EUR/DAP-2-HE-Rackblende-f-Modulsystem-10-Segmente-MP-1/art-PAH0017160-000;pgid=WBtg67.syLdSRpoV6L_EAtys0000YDPT2oVh">bracket&lt;/a> in order to do something like these &lt;a href="https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/">mounts&lt;/a>, but it still hasn't arrived. I may have to call and see what happened (brushing up on my German I guess).&lt;/p></description></item><item><title>Managing the Cluster with ArgoCD</title><link>https://www.joshkasuboski.com/posts/argocd-managed/</link><pubDate>Sun, 26 Jul 2020 14:24:26 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/argocd-managed/</guid><description>&lt;p>I had to manually apply changes to my cluster, but now a lot of it is controlled from git thanks to ArgoCD.&lt;/p>
+&lt;h2 id="managed-with-a-cluster-repo">Managed with a cluster repo&lt;/h2>
+&lt;p>The cluster state is kept in &lt;a href="https://github.com/kasuboski/k8s-gitops">kasuboski/k8s-gitops&lt;/a>. Each folder is a different function for the cluster. The gitops folder is special. It has the &lt;a href="https://argoproj.github.io/projects/argo-cd">ArgoCD&lt;/a> manifests and the apps folder.&lt;/p>
+&lt;p>ArgoCD will sync manifests from a git repo to the cluster. It continuously watches to make sure the desired state (from git) matches the observed state (in the cluster). You configure ArgoCD using CRDs. Argo has Apps and Projects. A Project configures access for Apps and an App represents a repo that deploys Kubernetes objects.&lt;/p>
+&lt;p>You can see my apps at &lt;a href="https://github.com/kasuboski/k8s-gitops/tree/master/gitops/apps">gitops/apps&lt;/a>. I use an app of apps &lt;a href="https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/#app-of-apps-pattern">pattern&lt;/a> to deploy. I apply this root &amp;ldquo;apps&amp;rdquo; app that then deploys the other apps for the cluster.&lt;/p>
+&lt;p>ArgoCD also comes with a dashboard that shows the apps and their status. You can also get a badge to put in the repo to show overall status.&lt;/p>
+&lt;p>&lt;img src="https://argocd.joshcorp.co/api/badge?name=apps&amp;amp;revision=true" alt="argocd-badge">&lt;/p>
+&lt;figure>&lt;a href="argo-dashboard.png">
+&lt;img src="argo-dashboard.png"
+alt="The argo dashboard shows apps" width="800px"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="but-why">But why&lt;/h2>
+&lt;p>Managing Kubernetes like this (once everything is automated) allows me to stand up a cluster with the same state simply by installing ArgoCD and applying an ArgoCD App.&lt;/p>
+&lt;p>It also keeps me from accidentally messing with the cluster since even if I delete a Deployment ArgoCD will reapply it.&lt;/p></description></item><item><title>GitOpsing the cluster</title><link>https://www.joshkasuboski.com/posts/gitops-cluster-1/</link><pubDate>Sun, 12 Jul 2020 18:40:37 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/gitops-cluster-1/</guid><description>&lt;p>I kept track of how I set up my &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi cluster&lt;/a> along the way, but hadn't committed it to git. Today that changed.&lt;/p>
+&lt;h2 id="gitops-and-the-repo">GitOps and the repo&lt;/h2>
+&lt;p>If you're not familiar with GitOps, the people at weaveworks have a nice &lt;a href="https://www.weave.works/technologies/gitops/">article&lt;/a>.&lt;/p>
+&lt;p>I pushed my setup to &lt;a href="https://github.com/kasuboski/k8s-gitops">kasuboski/k8s-gitops&lt;/a>. It should have everything that's deployed on my cluster.&lt;/p>
+&lt;p>Each folder at the top level is basically a namespace currently. The ingress folder does contain the &lt;code>ingress-nginx&lt;/code> and &lt;code>cert-manager&lt;/code> namespaces.&lt;/p>
+&lt;p>I hadn't pushed it earlier because I still haven't figured out my strategy for secrets. For now, the only secret needed is for fathom. I used git-crypt to encrypt on push and decrypt on pull. That works fine for now. There's a nice walkthrough &lt;a href="https://buddy.works/guides/git-crypt">here&lt;/a>.&lt;/p>
+&lt;p>I was looking to use &lt;a href="https://secrethub.io/">secrethub.io&lt;/a>, but would need to figure out how I want to interface with it. In the past, I've made an operator similar to &lt;a href="https://github.com/godaddy/kubernetes-external-secrets">kubernetes-external-secrets&lt;/a>. That will authenticate a workload and fetch its credentials from outside the cluster. I wanted to use &lt;a href="https://spiffe.io/">SPIFFE&lt;/a> for workload identity, but it seemed &lt;a href="https://spiffe.io/spire/">Spire&lt;/a> doesn't publish ARM images.&lt;/p>
+&lt;h2 id="fully-reconciling">Fully reconciling&lt;/h2>
+&lt;p>My cluster is still managed manually, albeit from checked in manifests (it also &lt;a href="https://www.joshkasuboski.com/posts/k8s-auto-upgrades/">upgrades&lt;/a> automatically).&lt;/p>
+&lt;p>The next step is to use a GitOps Operator. I've used &lt;a href="https://argoproj.github.io/projects/argo-cd">ArgoCD&lt;/a> before, but &lt;a href="https://fluxcd.io/">flux&lt;/a> has been seeming more lightweight. It may come down to which one supports ARM better.&lt;/p>
+&lt;p>I also want to make the yaml easier to manage. First, using &lt;a href="https://github.com/kubernetes-sigs/kustomize">kustomize&lt;/a> to tie it all together and then exploring &lt;a href="https://github.com/jkcfg/jk">jk&lt;/a> to make templates in Typescript.&lt;/p></description></item><item><title>Automated Upgrades for k3s</title><link>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</link><pubDate>Wed, 08 Jul 2020 18:50:17 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/k8s-auto-upgrades/</guid><description>&lt;p>My cluster was falling behind the latest k3s version. Time to upgrade.&lt;/p>
+&lt;h2 id="enter-the-system-upgrade-controller">Enter the System Upgrade Controller&lt;/h2>
+&lt;p>I basically just did the instructions linked &lt;a href="https://rancher.com/docs/k3s/latest/en/upgrades/automated/">here&lt;/a>.&lt;/p>
+&lt;p>It deploys the system upgrade controller into its own namespace where it won't do anything yet.&lt;/p>
+&lt;p>You have to give it some plans.&lt;/p>
+&lt;p>It will read Plans in that same namespace and run the specified image. I used the plan linked above. Instead of tying it to a specific version I set it to the latest channel.&lt;/p>
+&lt;pre>&lt;code># Server plan
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
-  name: server-plan
-  namespace: system-upgrade
+name: server-plan
+namespace: system-upgrade
 spec:
-  concurrency: 1
-  cordon: true
-  nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/master
-      operator: In
-      values:
-      - &amp;quot;true&amp;quot;
-  serviceAccountName: system-upgrade
-  upgrade:
-    image: rancher/k3s-upgrade
-  channel: https://update.k3s.io/v1-release/channels/stable
+concurrency: 1
+cordon: true
+nodeSelector:
+matchExpressions:
+- key: node-role.kubernetes.io/master
+operator: In
+values:
+- &amp;quot;true&amp;quot;
+serviceAccountName: system-upgrade
+upgrade:
+image: rancher/k3s-upgrade
+channel: https://update.k3s.io/v1-release/channels/stable
 ---
 # Agent plan
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
-  name: agent-plan
-  namespace: system-upgrade
+name: agent-plan
+namespace: system-upgrade
 spec:
-  concurrency: 1
-  cordon: true
-  nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/master
-      operator: DoesNotExist
-  prepare:
-    args:
-    - prepare
-    - server-plan
-    image: rancher/k3s-upgrade:v1.17.4-k3s1
-  serviceAccountName: system-upgrade
-  upgrade:
-    image: rancher/k3s-upgrade
-  channel: https://update.k3s.io/v1-release/channels/stable
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You&#39;ll notice there are actually 2 plans. One applied to the master nodes and the other the worker nodes. This lets you upgrade the master node to the new version before the workers.&lt;/p&gt;
-&lt;p&gt;The entire process took maybe 5 minutes for my 3 node cluster. I was able to &lt;code&gt;kubectl get nodes&lt;/code&gt; periodically and watch the progress.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Server Rack Beginnings</title>
-      <link>https://www.joshkasuboski.com/posts/server-rack-1/</link>
-      <pubDate>Sun, 05 Jul 2020 13:58:33 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/server-rack-1/</guid>
-      <description>&lt;p&gt;My network setup was starting to be a mess of a corner. The natural thing to do is to get a server rack to contain everything 😉&lt;/p&gt;
-&lt;h2 id=&#34;the-mess&#34;&gt;The Mess&lt;/h2&gt;
-&lt;figure&gt;&lt;a href=&#34;network-mess.jpg&#34;&gt;
-    &lt;img src=&#34;network-mess.jpg&#34;
-         alt=&#34;A Jumbled mess of cables&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;The network corner was already a mess, but adding my &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/&#34;&gt;Raspberry Pi cluster&lt;/a&gt; definitely didn&#39;t help.&lt;/p&gt;
-&lt;p&gt;You can see the following items if you look closely:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Linksys Router&lt;/li&gt;
-&lt;li&gt;5-port switch for the Raspberry Pi cluster&lt;/li&gt;
-&lt;li&gt;Raspberry Pi Cluster&lt;/li&gt;
-&lt;li&gt;Raspberry Pi 3B+&lt;/li&gt;
-&lt;li&gt;Hue Hub&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Not pictured is my ISP modem and the USB power hub for the Pi cluster.&lt;/p&gt;
-&lt;h2 id=&#34;solution&#34;&gt;Solution?&lt;/h2&gt;
-&lt;p&gt;I have been following &lt;a href=&#34;https://www.reddit.com/r/selfhosted/&#34;&gt;r/selfhosted&lt;/a&gt; and &lt;a href=&#34;https://www.reddit.com/r/homelab/&#34;&gt;r/homelab&lt;/a&gt; for a while. It was perhaps a mistake.&lt;/p&gt;
-&lt;p&gt;I now aspire to the setups such as &lt;a href=&#34;https://hydn.dev/homelab/&#34;&gt;this&lt;/a&gt; and &lt;a href=&#34;https://tynick.com/blog/06-06-2019/my-humble-homelab-with-raspberry-pi-rack/&#34;&gt;this&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The first link has a nice monitor on top and the second has a rackmount Pi enclosure (which I have purchased the bracket for).&lt;/p&gt;
-&lt;p&gt;I bought a &lt;a href=&#34;https://www.ebay.com/itm/15U-4-Post-Open-Frame-Server-Rack-Enclosure-19-Adjustable-Depth/151584303195?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649&#34;&gt;15U open enclosure rack&lt;/a&gt;. It&#39;s maybe not the most efficient solution, but definitely feels &amp;hellip; cool.&lt;/p&gt;
-&lt;h2 id=&#34;setting-up-the-rack&#34;&gt;Setting up the Rack&lt;/h2&gt;
-&lt;p&gt;The rack arrived with some assembly required. It took me an hour to put it together with the help of a magnetic level.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;rack-box.jpg&#34;&gt;
-    &lt;img src=&#34;rack-box.jpg&#34;
-         alt=&#34;The server rack some assembly required&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;figure&gt;&lt;a href=&#34;assembled-rack.jpg&#34;&gt;
-    &lt;img src=&#34;assembled-rack.jpg&#34;
-         alt=&#34;Assembled rack&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;I got everything into a &lt;a href=&#34;https://www.ebay.com/itm/Cantilever-Server-Shelf-Vented-Black-Shelves-Rack-Mount-19-1U-12-300mm-Deep/152062041884?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649&#34;&gt;shelf&lt;/a&gt; and I&#39;m not convinced it looks all that much better. The messy desk obviously isn&#39;t helping 😢.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;completed-rack.jpg&#34;&gt;
-    &lt;img src=&#34;completed-rack.jpg&#34;
-         alt=&#34;Completed rack&#34; width=&#34;300px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;moving-forward&#34;&gt;Moving Forward&lt;/h2&gt;
-&lt;p&gt;The rack may not have immediately fixed my issues, but I&#39;m planning to either replace or augment my set up to be rackmountable.&lt;/p&gt;
-&lt;p&gt;My first thing to rackmount is the Pi Cluster. I&#39;m going to use something like &lt;a href=&#34;https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/&#34;&gt;these 3D printed mounts&lt;/a&gt; to put the Pis in the rack.&lt;/p&gt;
-&lt;p&gt;I&#39;m also looking at getting a 4U case to transfer my desktop to and switching to a rackmounted switch and router.&lt;/p&gt;
-&lt;p&gt;In the meantime the Pi cluster is pretty photogenic.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;artsy-pi.jpg&#34;&gt;
-    &lt;img src=&#34;artsy-pi.jpg&#34;
-         alt=&#34;Artsy Pi&#34; width=&#34;400px&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;</description>
-    </item>
-    
-    <item>
-      <title>Persistent Storage with OpenEBS</title>
-      <link>https://www.joshkasuboski.com/posts/openebs-homelab/</link>
-      <pubDate>Tue, 23 Jun 2020 18:18:22 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/openebs-homelab/</guid>
-      <description>&lt;p&gt;My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.&lt;/p&gt;
-&lt;p&gt;I did have the &lt;a href=&#34;https://github.com/rancher/local-path-provisioner&#34;&gt;local-path-provisioner&lt;/a&gt; running, but I didn&#39;t feel great about using the SD card for general storage.&lt;/p&gt;
-&lt;p&gt;I bought 2 &lt;a href=&#34;https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;amp;psc=1&#34;&gt;USB drives&lt;/a&gt; to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.&lt;/p&gt;
-&lt;p&gt;I decided to go with &lt;a href=&#34;https://openebs.io/&#34;&gt;OpenEBS&lt;/a&gt;. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.&lt;/p&gt;
-&lt;h2 id=&#34;prepare-the-cluster&#34;&gt;Prepare the cluster&lt;/h2&gt;
-&lt;p&gt;I found the OpenEBS docs a little hard to follow, but this is what I ended up doing.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Attach your USB drives to the workers (hopefully yours are labeled)&lt;/li&gt;
-&lt;li&gt;install iscsi on every node&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;sudo apt-get update
+concurrency: 1
+cordon: true
+nodeSelector:
+matchExpressions:
+- key: node-role.kubernetes.io/master
+operator: DoesNotExist
+prepare:
+args:
+- prepare
+- server-plan
+image: rancher/k3s-upgrade:v1.17.4-k3s1
+serviceAccountName: system-upgrade
+upgrade:
+image: rancher/k3s-upgrade
+channel: https://update.k3s.io/v1-release/channels/stable
+&lt;/code>&lt;/pre>&lt;p>You'll notice there are actually 2 plans. One applied to the master nodes and the other the worker nodes. This lets you upgrade the master node to the new version before the workers.&lt;/p>
+&lt;p>The entire process took maybe 5 minutes for my 3 node cluster. I was able to &lt;code>kubectl get nodes&lt;/code> periodically and watch the progress.&lt;/p></description></item><item><title>Server Rack Beginnings</title><link>https://www.joshkasuboski.com/posts/server-rack-1/</link><pubDate>Sun, 05 Jul 2020 13:58:33 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/server-rack-1/</guid><description>&lt;p>My network setup was starting to be a mess of a corner. The natural thing to do is to get a server rack to contain everything 😉&lt;/p>
+&lt;h2 id="the-mess">The Mess&lt;/h2>
+&lt;figure>&lt;a href="network-mess.jpg">
+&lt;img src="network-mess.jpg"
+alt="A Jumbled mess of cables" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>The network corner was already a mess, but adding my &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/">Raspberry Pi cluster&lt;/a> definitely didn't help.&lt;/p>
+&lt;p>You can see the following items if you look closely:&lt;/p>
+&lt;ul>
+&lt;li>Linksys Router&lt;/li>
+&lt;li>5-port switch for the Raspberry Pi cluster&lt;/li>
+&lt;li>Raspberry Pi Cluster&lt;/li>
+&lt;li>Raspberry Pi 3B+&lt;/li>
+&lt;li>Hue Hub&lt;/li>
+&lt;/ul>
+&lt;p>Not pictured is my ISP modem and the USB power hub for the Pi cluster.&lt;/p>
+&lt;h2 id="solution">Solution?&lt;/h2>
+&lt;p>I have been following &lt;a href="https://www.reddit.com/r/selfhosted/">r/selfhosted&lt;/a> and &lt;a href="https://www.reddit.com/r/homelab/">r/homelab&lt;/a> for a while. It was perhaps a mistake.&lt;/p>
+&lt;p>I now aspire to the setups such as &lt;a href="https://hydn.dev/homelab/">this&lt;/a> and &lt;a href="https://tynick.com/blog/06-06-2019/my-humble-homelab-with-raspberry-pi-rack/">this&lt;/a>.&lt;/p>
+&lt;p>The first link has a nice monitor on top and the second has a rackmount Pi enclosure (which I have purchased the bracket for).&lt;/p>
+&lt;p>I bought a &lt;a href="https://www.ebay.com/itm/15U-4-Post-Open-Frame-Server-Rack-Enclosure-19-Adjustable-Depth/151584303195?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649">15U open enclosure rack&lt;/a>. It's maybe not the most efficient solution, but definitely feels &amp;hellip; cool.&lt;/p>
+&lt;h2 id="setting-up-the-rack">Setting up the Rack&lt;/h2>
+&lt;p>The rack arrived with some assembly required. It took me an hour to put it together with the help of a magnetic level.&lt;/p>
+&lt;figure>&lt;a href="rack-box.jpg">
+&lt;img src="rack-box.jpg"
+alt="The server rack some assembly required" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;figure>&lt;a href="assembled-rack.jpg">
+&lt;img src="assembled-rack.jpg"
+alt="Assembled rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;p>I got everything into a &lt;a href="https://www.ebay.com/itm/Cantilever-Server-Shelf-Vented-Black-Shelves-Rack-Mount-19-1U-12-300mm-Deep/152062041884?ssPageName=STRK%3AMEBIDX%3AIT&amp;amp;_trksid=p2057872.m2749.l2649">shelf&lt;/a> and I'm not convinced it looks all that much better. The messy desk obviously isn't helping 😢.&lt;/p>
+&lt;figure>&lt;a href="completed-rack.jpg">
+&lt;img src="completed-rack.jpg"
+alt="Completed rack" width="300px"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="moving-forward">Moving Forward&lt;/h2>
+&lt;p>The rack may not have immediately fixed my issues, but I'm planning to either replace or augment my set up to be rackmountable.&lt;/p>
+&lt;p>My first thing to rackmount is the Pi Cluster. I'm going to use something like &lt;a href="https://www.kaibader.de/3d-printed-raspberry-pi-rack-mount-with-heat-sink-passive-cooling/">these 3D printed mounts&lt;/a> to put the Pis in the rack.&lt;/p>
+&lt;p>I'm also looking at getting a 4U case to transfer my desktop to and switching to a rackmounted switch and router.&lt;/p>
+&lt;p>In the meantime the Pi cluster is pretty photogenic.&lt;/p>
+&lt;figure>&lt;a href="artsy-pi.jpg">
+&lt;img src="artsy-pi.jpg"
+alt="Artsy Pi" width="400px"/> &lt;/a>
+&lt;/figure></description></item><item><title>Persistent Storage with OpenEBS</title><link>https://www.joshkasuboski.com/posts/openebs-homelab/</link><pubDate>Tue, 23 Jun 2020 18:18:22 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/openebs-homelab/</guid><description>&lt;p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.&lt;/p>
+&lt;p>I did have the &lt;a href="https://github.com/rancher/local-path-provisioner">local-path-provisioner&lt;/a> running, but I didn't feel great about using the SD card for general storage.&lt;/p>
+&lt;p>I bought 2 &lt;a href="https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;amp;psc=1">USB drives&lt;/a> to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.&lt;/p>
+&lt;p>I decided to go with &lt;a href="https://openebs.io/">OpenEBS&lt;/a>. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.&lt;/p>
+&lt;h2 id="prepare-the-cluster">Prepare the cluster&lt;/h2>
+&lt;p>I found the OpenEBS docs a little hard to follow, but this is what I ended up doing.&lt;/p>
+&lt;ul>
+&lt;li>Attach your USB drives to the workers (hopefully yours are labeled)&lt;/li>
+&lt;li>install iscsi on every node&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code>sudo apt-get update
 sudo apt-get install -y open-iscsi
 sudo systemctl enable --now iscsid
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;install-openebs&#34;&gt;Install OpenEBS&lt;/h2&gt;
-&lt;p&gt;I installed using the helm chart. The only changes with the values file below is basically changing all images to the arm64 version. It seems they don&#39;t have great support for a mixed architecture cluster.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;kubectl create ns openebs
+&lt;/code>&lt;/pre>&lt;h2 id="install-openebs">Install OpenEBS&lt;/h2>
+&lt;p>I installed using the helm chart. The only changes with the values file below is basically changing all images to the arm64 version. It seems they don't have great support for a mixed architecture cluster.&lt;/p>
+&lt;pre>&lt;code>kubectl create ns openebs
 helm repo add openebs https://openebs.github.io/charts
 helm install openebs openebs/openebs --namespace openebs --version 1.11.1 -f openebs-values.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;ndm:
-  image: &#39;openebs/node-disk-manager-arm64&#39;
+&lt;/code>&lt;/pre>&lt;pre>&lt;code>ndm:
+image: 'openebs/node-disk-manager-arm64'
 ndmOperator:
-  image: &#39;openebs/node-disk-operator-arm64&#39;
+image: 'openebs/node-disk-operator-arm64'
 webhook:
-  image: &#39;openebs/admission-server-arm64&#39;
+image: 'openebs/admission-server-arm64'
 apiserver:
-  image: &#39;openebs/m-apiserver-arm64&#39;
+image: 'openebs/m-apiserver-arm64'
 localprovisioner:
-  image: &#39;openebs/provisioner-localpv-arm64&#39;
+image: 'openebs/provisioner-localpv-arm64'
 snapshotOperator:
-  controller:
-    image: &#39;openebs/snapshot-controller-arm64&#39;
-  provisioner:
-    image: &#39;openebs/snapshot-provisioner-arm64&#39;
+controller:
+image: 'openebs/snapshot-controller-arm64'
 provisioner:
-  image: &#39;openebs/openebs-k8s-provisioner-arm64&#39;
+image: 'openebs/snapshot-provisioner-arm64'
+provisioner:
+image: 'openebs/openebs-k8s-provisioner-arm64'
 helper:
-  image: &#39;openebs/linux-utils-arm64&#39;
+image: 'openebs/linux-utils-arm64'
 cstor:
-  pool:
-    image: &#39;openebs/cstor-pool-arm64&#39;
-  poolMgmt:
-    image: &#39;openebs/cstor-pool-mgmt-arm64&#39;
-  target:
-    image: &#39;openebs/cstor-istgt-arm64&#39;
-  volumeMgmt:
-    image: &#39;openebs/cstor-volume-mgmt-arm64&#39;
+pool:
+image: 'openebs/cstor-pool-arm64'
+poolMgmt:
+image: 'openebs/cstor-pool-mgmt-arm64'
+target:
+image: 'openebs/cstor-istgt-arm64'
+volumeMgmt:
+image: 'openebs/cstor-volume-mgmt-arm64'
 policies:
-  monitoring:
-    image: &#39;openebs/m-exporter-arm64&#39;
+monitoring:
+image: 'openebs/m-exporter-arm64'
 analytics:
-  enabled: false
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If all is well you should see the pods in the openebs namespace as healthy. My usb drives automatically showed up as block devices as well.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;kubectl get pods -n openebs&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;kubectl get sc&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;kubectl get blockdevice -n openebs&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure&gt;&lt;a href=&#34;storage-class-block-devices.png&#34;&gt;
-    &lt;img src=&#34;storage-class-block-devices.png&#34;
-         alt=&#34;Block devices detected&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;configure-openebs&#34;&gt;Configure OpenEBS&lt;/h2&gt;
-&lt;p&gt;I differed from the quickstart a little bit here. It was a little confusing to me what I should do with only 2 devices.&lt;/p&gt;
-&lt;p&gt;I eventually found this &lt;a href=&#34;https://github.com/openebs/openebs-docs/issues/486&#34;&gt;issue&lt;/a&gt; talking about configuring volumes with a single replica and made it use 2 pools instead of 1.&lt;/p&gt;
-&lt;p&gt;The below yaml will set up a StoragePoolClaim with a maxPools of 2 (which will just use both of my nodes with a drive) and a StorageClass configured to use a single replica. I went with striped because it seemed more flexible and since each node only has 1 disk right now it didn&#39;t seem too important.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;---
+enabled: false
+&lt;/code>&lt;/pre>&lt;p>If all is well you should see the pods in the openebs namespace as healthy. My usb drives automatically showed up as block devices as well.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>kubectl get pods -n openebs&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get sc&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get blockdevice -n openebs&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;figure>&lt;a href="storage-class-block-devices.png">
+&lt;img src="storage-class-block-devices.png"
+alt="Block devices detected"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="configure-openebs">Configure OpenEBS&lt;/h2>
+&lt;p>I differed from the quickstart a little bit here. It was a little confusing to me what I should do with only 2 devices.&lt;/p>
+&lt;p>I eventually found this &lt;a href="https://github.com/openebs/openebs-docs/issues/486">issue&lt;/a> talking about configuring volumes with a single replica and made it use 2 pools instead of 1.&lt;/p>
+&lt;p>The below yaml will set up a StoragePoolClaim with a maxPools of 2 (which will just use both of my nodes with a drive) and a StorageClass configured to use a single replica. I went with striped because it seemed more flexible and since each node only has 1 disk right now it didn't seem too important.&lt;/p>
+&lt;pre>&lt;code>---
 apiVersion: openebs.io/v1alpha1
 kind: StoragePoolClaim
 metadata:
-  name: cstor-disk
+name: cstor-disk
 spec:
-  name: cstor-disk
-  type: disk
-  maxPools: 2
-  poolSpec:
-    poolType: striped
+name: cstor-disk
+type: disk
+maxPools: 2
+poolSpec:
+poolType: striped
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: openebs-cstor-1-replica-disk
-  annotations:
-    openebs.io/cas-type: cstor
-    cas.openebs.io/config: |
-      - name: StoragePoolClaim
-        value: &amp;quot;cstor-disk&amp;quot;
-      - name: ReplicaCount
-        value: &amp;quot;1&amp;quot;
+name: openebs-cstor-1-replica-disk
+annotations:
+openebs.io/cas-type: cstor
+cas.openebs.io/config: |
+- name: StoragePoolClaim
+value: &amp;quot;cstor-disk&amp;quot;
+- name: ReplicaCount
+value: &amp;quot;1&amp;quot;
 provisioner: openebs.io/provisioner-iscsi
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After this is applied, you should be able to see the claims and corresponding pods.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;claimed-storage-pool.png&#34;&gt;
-    &lt;img src=&#34;claimed-storage-pool.png&#34;
-         alt=&#34;Storage Pool&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;persistent-prometheus&#34;&gt;Persistent Prometheus&lt;/h2&gt;
-&lt;p&gt;I used this StorageClass for my cluster Prometheus. It took awhile for the PersistentVolumeClaim pod to start so the initial mount timed out. After around 5 minutes, it sorted itself out. I was able to delete the Prometheus pod and still retained data.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Kubectl List All Resources With Label</title>
-      <link>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</link>
-      <pubDate>Sun, 24 May 2020 22:19:00 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</guid>
-      <description>&lt;p&gt;I recently had to remove a long gone helm release that left behind a bunch of resources. This conflicted when reinstalling, so I needed to find them.&lt;/p&gt;
-&lt;h2 id=&#34;a-magic-command&#34;&gt;A magic command&lt;/h2&gt;
-&lt;p&gt;I&#39;m mainly putting this here because it seemed non obvious to me.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;kubectl api-resources --verbs=list -o name | xargs -n 1 kubectl get -o name -l release=prometheus-operator
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;That will find all &lt;code&gt;api-resources&lt;/code&gt; that have the label &lt;code&gt;release=prometheus-operator&lt;/code&gt;. I had tried to use &lt;code&gt;kubectl get all -A&lt;/code&gt;, but this seemed to only return built-in types.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building Multiarch Images</title>
-      <link>https://www.joshkasuboski.com/posts/build-multiarch-image/</link>
-      <pubDate>Sun, 17 May 2020 17:28:55 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/build-multiarch-image/</guid>
-      <description>&lt;p&gt;I wanted to use &lt;a href=&#34;https://github.com/usefathom/fathom&#34;&gt;fathom&lt;/a&gt; on my Raspberry Pi k3s cluster, but they didn&#39;t publish a compatible ARM image. Not to be deterred I forked the repo and built my own.&lt;/p&gt;
-&lt;h2 id=&#34;how-does-one-build-for-multiple-architectures-easily&#34;&gt;How does one build for multiple architectures easily&lt;/h2&gt;
-&lt;p&gt;Docker has a tool called buildx. It acts as a frontend to buildkit and allows building images for multiple platforms at once.&lt;/p&gt;
-&lt;p&gt;I followed &lt;a href=&#34;https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/&#34;&gt;this&lt;/a&gt; guide to create a GitHub Actions workflow to build it.&lt;/p&gt;
-&lt;h2 id=&#34;github-actions-it-up&#34;&gt;GitHub Actions it up&lt;/h2&gt;
-&lt;p&gt;You can skip ahead and look at my final workflow &lt;a href=&#34;https://github.com/kasuboski/fathom/blob/master/.github/workflows/docker.yml&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;There was already a buildx action. The workflow ends up seemingly simple.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Checkout the repo&lt;/li&gt;
-&lt;li&gt;Set up buildx&lt;/li&gt;
-&lt;li&gt;Login to DockerHub&lt;/li&gt;
-&lt;li&gt;Build for linux/amd64,linux/arm/v7,linux/arm64&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;That last part includes the platforms I would care about (for now). amd64 is for your run of the mill computer, arm/v7 being what is on my Pi thanks to 32-bit Raspbian, and arm64 being a potential if I switch the OS on my Pi.&lt;/p&gt;
-&lt;p&gt;I did have to make a change to the repo other than just adding the workflow. The build step had the &lt;code&gt;GOARCH&lt;/code&gt; variable set to &lt;code&gt;amd64&lt;/code&gt;. This caused the build to always output an &lt;code&gt;amd64&lt;/code&gt; binary, unsurprisingly. I realized this after two 16 minute builds&amp;hellip;&lt;/p&gt;
-&lt;p&gt;The workflow works well, but every run so far was between 14mins and 30mins&amp;hellip; not exactly fast.&lt;/p&gt;
-&lt;h2 id=&#34;moving-forward&#34;&gt;Moving Forward&lt;/h2&gt;
-&lt;p&gt;There have been a number of images that aren&#39;t multi-arch that I want to run. I may look into forking and building those, but it would be nice to have a simpler solution with me not managing it.&lt;/p&gt;
-&lt;p&gt;I could contribute to &lt;a href=&#34;https://github.com/raspbernetes/multi-arch-images&#34;&gt;multi-arch-images&lt;/a&gt; instead. They seem to be doing something similar but just copying the Dockerfiles needed.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Homelab Raspberry Pi Kubernetes Cluster Current State</title>
-      <link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</link>
-      <pubDate>Sun, 10 May 2020 12:20:48 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</guid>
-      <description>&lt;p&gt;The cluster is alive and well and exposed to the internet 😱&lt;/p&gt;
-&lt;p&gt;In a previous &lt;a href=&#34;https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/&#34;&gt;post&lt;/a&gt;, I put out my plan for the cluster. I mostly followed along, but did end up getting &lt;a href=&#34;https://www.amazon.com/gp/product/B00A128S24&#34;&gt;this&lt;/a&gt; switch and &lt;a href=&#34;https://www.amazon.com/gp/product/B003L1AET2&#34;&gt;these&lt;/a&gt; ethernet cables.&lt;/p&gt;
-&lt;p&gt;I ended up with this set-up which is described in more detail below.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;traffic-diagram.png&#34;&gt;
-    &lt;img src=&#34;traffic-diagram.png&#34;
-         alt=&#34;Traffic Diagram&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;hardware-and-monitoring&#34;&gt;Hardware and Monitoring&lt;/h2&gt;
-&lt;p&gt;The cluster is set up with Raspbian Lite on 3 Raspberry Pi 4 4gb boards. Raspbian Lite seems to not support 64bit (yet) so I may be changing the operating system. The cluster has the monitoring stack from carlosedp&#39;s &lt;a href=&#34;https://github.com/carlosedp/cluster-monitoring&#34;&gt;repo&lt;/a&gt;. I changed some things (mainly the ingress) in my forked &lt;a href=&#34;https://github.com/kasuboski/cluster-monitoring&#34;&gt;repo&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This deploys some nice Grafana dashboards to see the state of the cluster as seen below. &lt;code&gt;blueberry&lt;/code&gt; is the master node so hovers around 768m cpu cores and 1285Mi memory usage.&lt;/p&gt;
-&lt;figure&gt;&lt;a href=&#34;cluster-metrics.png&#34;&gt;
-    &lt;img src=&#34;cluster-metrics.png&#34;
-         alt=&#34;Cluster Metrics&#34;/&gt; &lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;ingress&#34;&gt;Ingress&lt;/h2&gt;
-&lt;p&gt;This dashboard is exposed outside the cluster using &lt;a href=&#34;https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#over-a-nodeport-service&#34;&gt;ingress-nginx&lt;/a&gt; with NodePorts. These nodeports are load balanced by an haproxy running in a container on my existing Raspberry Pi 3B+. This is a single point of failure for ingress 😰, but should be good enough for now.&lt;/p&gt;
-&lt;p&gt;The Ingress is secured using &lt;a href=&#34;https://github.com/vouch/vouch-proxy&#34;&gt;vouch-proxy&lt;/a&gt; with the ingress-nginx auth &lt;a href=&#34;https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/&#34;&gt;annotations&lt;/a&gt;. It uses the &lt;a href=&#34;https://indieauth.net/&#34;&gt;IndieAuth&lt;/a&gt; backend so I can login using this site as an identity.&lt;/p&gt;
-&lt;h2 id=&#34;expose-to-the-world&#34;&gt;Expose to the world&lt;/h2&gt;
-&lt;p&gt;The final piece of the puzzle to expose cluster services to the internet is a Linode &lt;a href=&#34;https://www.linode.com/products/nanodes/&#34;&gt;nanode&lt;/a&gt;. I chose Linode largely because I had a credit&amp;hellip; It&#39;s really just providing a public ip address that can forward to my network. I didn&#39;t set up port forwarding to my network instead the haproxy Raspberry Pi and the Linode VM are running &lt;a href=&#34;https://tailscale.com/&#34;&gt;tailscale&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Tailscale allows the nanode to connect to my Raspberry Pi with a WireGuard connection through my crazy NAT situation. The nanode is also running an haproxy on ports 80 and 443 on the public ip interface and then proxying that to the tailscale ip of the Raspberry Pi.&lt;/p&gt;
-&lt;p&gt;I changed the DNS of &lt;code&gt;*.joshcorp.co&lt;/code&gt; to point to the nanode. Now that &lt;code&gt;*.joshcorp.co&lt;/code&gt; resolves to my cluster on the internet, I can easily use &lt;a href=&#34;https://cert-manager.io/docs/&#34;&gt;cert-manager&lt;/a&gt; to get a certificate from LetsEncrypt.&lt;/p&gt;
-&lt;p&gt;After all of that, I can access &lt;code&gt;grafana.joshcorp.co&lt;/code&gt; outside of my network while authenticating using &lt;a href=&#34;https://www.joshkasuboski.com&#34;&gt;www.joshkasuboski.com&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;whats-next&#34;&gt;What&#39;s Next&lt;/h2&gt;
-&lt;p&gt;I&#39;m pretty happy with the current state. My next move will be making sure everything is tracked in git and can be reproduced. From there I can start deploying.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Homelab Raspberry Pi Kubernetes Cluster</title>
-      <link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/</link>
-      <pubDate>Sat, 02 May 2020 16:17:39 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/</guid>
-      <description>&lt;p&gt;A platform to deploy my self-hosted services onto with almost $0 recurring costs.&lt;/p&gt;
-&lt;p&gt;Previously, I was running a few things on a Raspberry Pi 3B+. Mainly, &lt;a href=&#34;https://github.com/0xERR0R/blocky&#34;&gt;Blocky&lt;/a&gt; as an ad-blocking local dns cache and some adventures with &lt;a href=&#34;https://www.home-assistant.io/&#34;&gt;Home Assistant&lt;/a&gt;. A Kubernetes cluster will enable me to easily set up new things and have proper monitoring as well.&lt;/p&gt;
-&lt;h2 id=&#34;hardware-acquisition&#34;&gt;Hardware Acquisition&lt;/h2&gt;
-&lt;p&gt;I bought 3 &lt;a href=&#34;https://www.canakit.com/raspberry-pi-4-4gb.html&#34;&gt;Raspberry Pi 4 4GB&lt;/a&gt; boards from Canakit. I also bought a pack of 5 &lt;a href=&#34;https://www.amazon.com/gp/product/B07NP96DX5&#34;&gt;SD cards&lt;/a&gt;. I got a &lt;a href=&#34;https://www.amazon.com/gp/product/B01NAG3V8E&#34;&gt;6 port usb charging station&lt;/a&gt; and USB-A to USB-C &lt;a href=&#34;https://www.amazon.com/gp/product/B01JRY0VE4&#34;&gt;cables&lt;/a&gt; to power them.&lt;/p&gt;
-&lt;p&gt;I have 3 spare ethernet ports on my router so I will be using that directly for now. In the future, I may get a switch for them to connect to.&lt;/p&gt;
-&lt;h2 id=&#34;setup&#34;&gt;Setup&lt;/h2&gt;
-&lt;p&gt;I&#39;m planning to install Raspian Lite and use &lt;a href=&#34;https://github.com/alexellis/k3sup&#34;&gt;k3sup&lt;/a&gt; to install k3s. I looked into using &lt;a href=&#34;https://github.com/rancher/k3os&#34;&gt;k3os&lt;/a&gt; directly, but it seems it&#39;s still not the easiest for a Raspberry Pi &lt;a href=&#34;https://github.com/rancher/k3os/issues/309&#34;&gt;issue&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I will try to manage the cluster in a &lt;a href=&#34;https://www.weave.works/technologies/gitops/&#34;&gt;GitOps&lt;/a&gt; style. As such, I will disable installing the Traefik Ingress Controller and Service Load Balancer by default and instead install them separately (or choose a different option).&lt;/p&gt;
-&lt;h2 id=&#34;networking&#34;&gt;Networking&lt;/h2&gt;
-&lt;p&gt;I will start out with the default flannel with vxlan, but am considering the wireguard backend. I would like to be able to access some services in the cluster using something like &lt;a href=&#34;https://tailscale.com/&#34;&gt;Tailscale&lt;/a&gt; as well.&lt;/p&gt;
-&lt;p&gt;This might involve running separate ingress controllers like &lt;a href=&#34;https://medium.com/@carlosedp/multiple-traefik-ingresses-with-letsencrypt-https-certificates-on-kubernetes-b590550280cf&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;monitoring&#34;&gt;Monitoring&lt;/h2&gt;
-&lt;p&gt;I&#39;m going to deploy the standard &lt;code&gt;kube-prometheus&lt;/code&gt; set up with the Prometheus Operator using this &lt;a href=&#34;https://github.com/carlosedp/cluster-monitoring&#34;&gt;repo&lt;/a&gt;. It has k3s specific settings.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Deploying this site with GitHub Actions</title>
-      <link>https://www.joshkasuboski.com/posts/deploy-site-github-actions/</link>
-      <pubDate>Sun, 05 Apr 2020 16:18:12 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/deploy-site-github-actions/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub pages&lt;/a&gt; is a free static hosting provider that unsurprisingly works well with a git workflow. It enables &lt;code&gt;git push&lt;/code&gt; to deploy type workflows. This site itself is a static site built with &lt;a href=&#34;https://gohugo.io/&#34;&gt;hugo&lt;/a&gt; and deployed to GitHub Pages using GitHub Actions.&lt;/p&gt;
-&lt;h2 id=&#34;github-pages-repo&#34;&gt;GitHub Pages Repo&lt;/h2&gt;
-&lt;p&gt;GitHub Pages expects that you have a repo named something like &lt;code&gt;user.github.io&lt;/code&gt; that has static files you want deployed. However, if your site requires any sort of building this doesn&#39;t really work for you (at least if you want to automate the build step).&lt;/p&gt;
-&lt;p&gt;One way around this is to treat your GitHub Pages Repo as the output for your build. You create a separate repo that just has the built static files. You can see the repo for this site at &lt;a href=&#34;https://github.com/kasuboski/kasuboski.github.io&#34;&gt;kasuboski/kasuboski.github.io&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;You&#39;ll notice it just has static html, css, etc. I write the content for this site in markdown however, using Hugo.&lt;/p&gt;
-&lt;h2 id=&#34;code-repo&#34;&gt;Code Repo&lt;/h2&gt;
-&lt;p&gt;The actual content is stored in a separate repo that I&#39;m referring to as the code repo. The repo for this site is &lt;a href=&#34;https://github.com/kasuboski/personal-site&#34;&gt;kasuboski/personal-site&lt;/a&gt;. This repo should look a little more familiar to anyone who has used Hugo.&lt;/p&gt;
-&lt;p&gt;The content is under &lt;code&gt;content/posts&lt;/code&gt; and is written in markdown. This is the repo that I actually modify and have checked out locally. If I wanted to create a new release of it manually I would build the site and push it to the GitHub Pages Repo with the commands below.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;hugo --minify
+&lt;/code>&lt;/pre>&lt;p>After this is applied, you should be able to see the claims and corresponding pods.&lt;/p>
+&lt;figure>&lt;a href="claimed-storage-pool.png">
+&lt;img src="claimed-storage-pool.png"
+alt="Storage Pool"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="persistent-prometheus">Persistent Prometheus&lt;/h2>
+&lt;p>I used this StorageClass for my cluster Prometheus. It took awhile for the PersistentVolumeClaim pod to start so the initial mount timed out. After around 5 minutes, it sorted itself out. I was able to delete the Prometheus pod and still retained data.&lt;/p></description></item><item><title>Kubectl List All Resources With Label</title><link>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</link><pubDate>Sun, 24 May 2020 22:19:00 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/list-all-resource-with-label/</guid><description>&lt;p>I recently had to remove a long gone helm release that left behind a bunch of resources. This conflicted when reinstalling, so I needed to find them.&lt;/p>
+&lt;h2 id="a-magic-command">A magic command&lt;/h2>
+&lt;p>I'm mainly putting this here because it seemed non obvious to me.&lt;/p>
+&lt;pre>&lt;code>kubectl api-resources --verbs=list -o name | xargs -n 1 kubectl get -o name -l release=prometheus-operator
+&lt;/code>&lt;/pre>&lt;p>That will find all &lt;code>api-resources&lt;/code> that have the label &lt;code>release=prometheus-operator&lt;/code>. I had tried to use &lt;code>kubectl get all -A&lt;/code>, but this seemed to only return built-in types.&lt;/p></description></item><item><title>Building Multiarch Images</title><link>https://www.joshkasuboski.com/posts/build-multiarch-image/</link><pubDate>Sun, 17 May 2020 17:28:55 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/build-multiarch-image/</guid><description>&lt;p>I wanted to use &lt;a href="https://github.com/usefathom/fathom">fathom&lt;/a> on my Raspberry Pi k3s cluster, but they didn't publish a compatible ARM image. Not to be deterred I forked the repo and built my own.&lt;/p>
+&lt;h2 id="how-does-one-build-for-multiple-architectures-easily">How does one build for multiple architectures easily&lt;/h2>
+&lt;p>Docker has a tool called buildx. It acts as a frontend to buildkit and allows building images for multiple platforms at once.&lt;/p>
+&lt;p>I followed &lt;a href="https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/">this&lt;/a> guide to create a GitHub Actions workflow to build it.&lt;/p>
+&lt;h2 id="github-actions-it-up">GitHub Actions it up&lt;/h2>
+&lt;p>You can skip ahead and look at my final workflow &lt;a href="https://github.com/kasuboski/fathom/blob/master/.github/workflows/docker.yml">here&lt;/a>.&lt;/p>
+&lt;p>There was already a buildx action. The workflow ends up seemingly simple.&lt;/p>
+&lt;ul>
+&lt;li>Checkout the repo&lt;/li>
+&lt;li>Set up buildx&lt;/li>
+&lt;li>Login to DockerHub&lt;/li>
+&lt;li>Build for linux/amd64,linux/arm/v7,linux/arm64&lt;/li>
+&lt;/ul>
+&lt;p>That last part includes the platforms I would care about (for now). amd64 is for your run of the mill computer, arm/v7 being what is on my Pi thanks to 32-bit Raspbian, and arm64 being a potential if I switch the OS on my Pi.&lt;/p>
+&lt;p>I did have to make a change to the repo other than just adding the workflow. The build step had the &lt;code>GOARCH&lt;/code> variable set to &lt;code>amd64&lt;/code>. This caused the build to always output an &lt;code>amd64&lt;/code> binary, unsurprisingly. I realized this after two 16 minute builds&amp;hellip;&lt;/p>
+&lt;p>The workflow works well, but every run so far was between 14mins and 30mins&amp;hellip; not exactly fast.&lt;/p>
+&lt;h2 id="moving-forward">Moving Forward&lt;/h2>
+&lt;p>There have been a number of images that aren't multi-arch that I want to run. I may look into forking and building those, but it would be nice to have a simpler solution with me not managing it.&lt;/p>
+&lt;p>I could contribute to &lt;a href="https://github.com/raspbernetes/multi-arch-images">multi-arch-images&lt;/a> instead. They seem to be doing something similar but just copying the Dockerfiles needed.&lt;/p></description></item><item><title>Homelab Raspberry Pi Kubernetes Cluster Current State</title><link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</link><pubDate>Sun, 10 May 2020 12:20:48 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</guid><description>&lt;p>The cluster is alive and well and exposed to the internet 😱&lt;/p>
+&lt;p>In a previous &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/">post&lt;/a>, I put out my plan for the cluster. I mostly followed along, but did end up getting &lt;a href="https://www.amazon.com/gp/product/B00A128S24">this&lt;/a> switch and &lt;a href="https://www.amazon.com/gp/product/B003L1AET2">these&lt;/a> ethernet cables.&lt;/p>
+&lt;p>I ended up with this set-up which is described in more detail below.&lt;/p>
+&lt;figure>&lt;a href="traffic-diagram.png">
+&lt;img src="traffic-diagram.png"
+alt="Traffic Diagram"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="hardware-and-monitoring">Hardware and Monitoring&lt;/h2>
+&lt;p>The cluster is set up with Raspbian Lite on 3 Raspberry Pi 4 4gb boards. Raspbian Lite seems to not support 64bit (yet) so I may be changing the operating system. The cluster has the monitoring stack from carlosedp's &lt;a href="https://github.com/carlosedp/cluster-monitoring">repo&lt;/a>. I changed some things (mainly the ingress) in my forked &lt;a href="https://github.com/kasuboski/cluster-monitoring">repo&lt;/a>.&lt;/p>
+&lt;p>This deploys some nice Grafana dashboards to see the state of the cluster as seen below. &lt;code>blueberry&lt;/code> is the master node so hovers around 768m cpu cores and 1285Mi memory usage.&lt;/p>
+&lt;figure>&lt;a href="cluster-metrics.png">
+&lt;img src="cluster-metrics.png"
+alt="Cluster Metrics"/> &lt;/a>
+&lt;/figure>
+&lt;h2 id="ingress">Ingress&lt;/h2>
+&lt;p>This dashboard is exposed outside the cluster using &lt;a href="https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#over-a-nodeport-service">ingress-nginx&lt;/a> with NodePorts. These nodeports are load balanced by an haproxy running in a container on my existing Raspberry Pi 3B+. This is a single point of failure for ingress 😰, but should be good enough for now.&lt;/p>
+&lt;p>The Ingress is secured using &lt;a href="https://github.com/vouch/vouch-proxy">vouch-proxy&lt;/a> with the ingress-nginx auth &lt;a href="https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/">annotations&lt;/a>. It uses the &lt;a href="https://indieauth.net/">IndieAuth&lt;/a> backend so I can login using this site as an identity.&lt;/p>
+&lt;h2 id="expose-to-the-world">Expose to the world&lt;/h2>
+&lt;p>The final piece of the puzzle to expose cluster services to the internet is a Linode &lt;a href="https://www.linode.com/products/nanodes/">nanode&lt;/a>. I chose Linode largely because I had a credit&amp;hellip; It's really just providing a public ip address that can forward to my network. I didn't set up port forwarding to my network instead the haproxy Raspberry Pi and the Linode VM are running &lt;a href="https://tailscale.com/">tailscale&lt;/a>.&lt;/p>
+&lt;p>Tailscale allows the nanode to connect to my Raspberry Pi with a WireGuard connection through my crazy NAT situation. The nanode is also running an haproxy on ports 80 and 443 on the public ip interface and then proxying that to the tailscale ip of the Raspberry Pi.&lt;/p>
+&lt;p>I changed the DNS of &lt;code>*.joshcorp.co&lt;/code> to point to the nanode. Now that &lt;code>*.joshcorp.co&lt;/code> resolves to my cluster on the internet, I can easily use &lt;a href="https://cert-manager.io/docs/">cert-manager&lt;/a> to get a certificate from LetsEncrypt.&lt;/p>
+&lt;p>After all of that, I can access &lt;code>grafana.joshcorp.co&lt;/code> outside of my network while authenticating using &lt;a href="https://www.joshkasuboski.com">www.joshkasuboski.com&lt;/a>.&lt;/p>
+&lt;h2 id="whats-next">What's Next&lt;/h2>
+&lt;p>I'm pretty happy with the current state. My next move will be making sure everything is tracked in git and can be reproduced. From there I can start deploying.&lt;/p></description></item><item><title>Homelab Raspberry Pi Kubernetes Cluster</title><link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/</link><pubDate>Sat, 02 May 2020 16:17:39 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/</guid><description>&lt;p>A platform to deploy my self-hosted services onto with almost $0 recurring costs.&lt;/p>
+&lt;p>Previously, I was running a few things on a Raspberry Pi 3B+. Mainly, &lt;a href="https://github.com/0xERR0R/blocky">Blocky&lt;/a> as an ad-blocking local dns cache and some adventures with &lt;a href="https://www.home-assistant.io/">Home Assistant&lt;/a>. A Kubernetes cluster will enable me to easily set up new things and have proper monitoring as well.&lt;/p>
+&lt;h2 id="hardware-acquisition">Hardware Acquisition&lt;/h2>
+&lt;p>I bought 3 &lt;a href="https://www.canakit.com/raspberry-pi-4-4gb.html">Raspberry Pi 4 4GB&lt;/a> boards from Canakit. I also bought a pack of 5 &lt;a href="https://www.amazon.com/gp/product/B07NP96DX5">SD cards&lt;/a>. I got a &lt;a href="https://www.amazon.com/gp/product/B01NAG3V8E">6 port usb charging station&lt;/a> and USB-A to USB-C &lt;a href="https://www.amazon.com/gp/product/B01JRY0VE4">cables&lt;/a> to power them.&lt;/p>
+&lt;p>I have 3 spare ethernet ports on my router so I will be using that directly for now. In the future, I may get a switch for them to connect to.&lt;/p>
+&lt;h2 id="setup">Setup&lt;/h2>
+&lt;p>I'm planning to install Raspian Lite and use &lt;a href="https://github.com/alexellis/k3sup">k3sup&lt;/a> to install k3s. I looked into using &lt;a href="https://github.com/rancher/k3os">k3os&lt;/a> directly, but it seems it's still not the easiest for a Raspberry Pi &lt;a href="https://github.com/rancher/k3os/issues/309">issue&lt;/a>.&lt;/p>
+&lt;p>I will try to manage the cluster in a &lt;a href="https://www.weave.works/technologies/gitops/">GitOps&lt;/a> style. As such, I will disable installing the Traefik Ingress Controller and Service Load Balancer by default and instead install them separately (or choose a different option).&lt;/p>
+&lt;h2 id="networking">Networking&lt;/h2>
+&lt;p>I will start out with the default flannel with vxlan, but am considering the wireguard backend. I would like to be able to access some services in the cluster using something like &lt;a href="https://tailscale.com/">Tailscale&lt;/a> as well.&lt;/p>
+&lt;p>This might involve running separate ingress controllers like &lt;a href="https://medium.com/@carlosedp/multiple-traefik-ingresses-with-letsencrypt-https-certificates-on-kubernetes-b590550280cf">here&lt;/a>.&lt;/p>
+&lt;h2 id="monitoring">Monitoring&lt;/h2>
+&lt;p>I'm going to deploy the standard &lt;code>kube-prometheus&lt;/code> set up with the Prometheus Operator using this &lt;a href="https://github.com/carlosedp/cluster-monitoring">repo&lt;/a>. It has k3s specific settings.&lt;/p></description></item><item><title>Deploying this site with GitHub Actions</title><link>https://www.joshkasuboski.com/posts/deploy-site-github-actions/</link><pubDate>Sun, 05 Apr 2020 16:18:12 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/deploy-site-github-actions/</guid><description>&lt;p>&lt;a href="https://pages.github.com/">GitHub pages&lt;/a> is a free static hosting provider that unsurprisingly works well with a git workflow. It enables &lt;code>git push&lt;/code> to deploy type workflows. This site itself is a static site built with &lt;a href="https://gohugo.io/">hugo&lt;/a> and deployed to GitHub Pages using GitHub Actions.&lt;/p>
+&lt;h2 id="github-pages-repo">GitHub Pages Repo&lt;/h2>
+&lt;p>GitHub Pages expects that you have a repo named something like &lt;code>user.github.io&lt;/code> that has static files you want deployed. However, if your site requires any sort of building this doesn't really work for you (at least if you want to automate the build step).&lt;/p>
+&lt;p>One way around this is to treat your GitHub Pages Repo as the output for your build. You create a separate repo that just has the built static files. You can see the repo for this site at &lt;a href="https://github.com/kasuboski/kasuboski.github.io">kasuboski/kasuboski.github.io&lt;/a>.&lt;/p>
+&lt;p>You'll notice it just has static html, css, etc. I write the content for this site in markdown however, using Hugo.&lt;/p>
+&lt;h2 id="code-repo">Code Repo&lt;/h2>
+&lt;p>The actual content is stored in a separate repo that I'm referring to as the code repo. The repo for this site is &lt;a href="https://github.com/kasuboski/personal-site">kasuboski/personal-site&lt;/a>. This repo should look a little more familiar to anyone who has used Hugo.&lt;/p>
+&lt;p>The content is under &lt;code>content/posts&lt;/code> and is written in markdown. This is the repo that I actually modify and have checked out locally. If I wanted to create a new release of it manually I would build the site and push it to the GitHub Pages Repo with the commands below.&lt;/p>
+&lt;pre>&lt;code>hugo --minify
 cp ./public ../kasuboski.github.io/
 cd ../kasuboski.github.io
 git commit -am &amp;quot;cool new post&amp;quot;
 git push origin master
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;automatic-deploy-with-github-actions&#34;&gt;Automatic Deploy with GitHub Actions&lt;/h2&gt;
-&lt;p&gt;I don&#39;t really want to mess with multiple repositories locally, especially when one of them is essentially machine generated. GitHub Actions can build the site with Hugo and then push it to the GitHub Pages Repo for me.&lt;/p&gt;
-&lt;p&gt;The workflow file for this can be found &lt;a href=&#34;https://github.com/kasuboski/personal-site/blob/master/.github/workflows/gh-pages.yaml&#34;&gt;here&lt;/a&gt; if you just want to copy it.&lt;/p&gt;
-&lt;p&gt;The basic steps are: check out the code repo, build the site with hugo, push the files to the GitHub Pages Repo, and notify me of the status using &lt;a href=&#34;https://pushover.net&#34;&gt;Pushover&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;It relies heavily on already available actions. The only prerequisite setup is to make a deploy key for the GitHub Pages Repo and to register an app with Pushover.&lt;/p&gt;
-&lt;p&gt;You can find a walkthrough of creating a deploy key &lt;a href=&#34;https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-create-ssh-deploy-key&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Configuring a Pushover app is &lt;a href=&#34;https://pushover.net/apps/build&#34;&gt;here&lt;/a&gt;. You&#39;ll need the app token and user token. I added both as secrets on the Code Repo.&lt;/p&gt;
-&lt;p&gt;Now anytime I push a change to the code repo, GitHub Actions will generate the files, update the GitHub Pages repo and send me a push notification with the status.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Weather Data after Dark Sky Shutdown</title>
-      <link>https://www.joshkasuboski.com/posts/dark-sky-shutdown/</link>
-      <pubDate>Sun, 05 Apr 2020 15:03:48 -0500</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/dark-sky-shutdown/</guid>
-      <description>&lt;p&gt;Dark Sky is discontinuing their API and Android app after &lt;a href=&#34;https://blog.darksky.net/dark-sky-has-a-new-home/&#34;&gt;joining Apple&lt;/a&gt;. It was my favorite weather app, both from a data and UX perspective. They apparently aggregate from many different sources to have the best predictions and world wide coverage. I&#39;m not sure I actually need all of that and am curious to make my own solution.&lt;/p&gt;
-&lt;h2 id=&#34;making-my-own-app&#34;&gt;Making my own app&lt;/h2&gt;
-&lt;p&gt;This seems like a great opportunity to learn &lt;a href=&#34;https://flutter.dev/&#34;&gt;Flutter&lt;/a&gt;. It&#39;s been a while since I&#39;ve done mobile development. I did both native Android and iOS as well as React Native. I&#39;m not too keen to be building two of everything and React Native was a tooling nightmare for me.&lt;/p&gt;
-&lt;p&gt;Flutter seems like a great solution especially with its component driven concepts. However, in order to make a weather app you actually need the forecast data.&lt;/p&gt;
-&lt;h2 id=&#34;getting-the-forecast&#34;&gt;Getting the forecast&lt;/h2&gt;
-&lt;p&gt;I looked at using the National Weather Service API at &lt;a href=&#34;https://www.weather.gov/documentation/services-web-api&#34;&gt;weather.gov&lt;/a&gt;, but it seems it only has data for a specific Kansas station at the moment. This kind of kills the project for the time being, but I hope to find the info elsewhere.&lt;/p&gt;
-&lt;p&gt;I saw &lt;a href=&#34;https://aaronparecki.com/&#34;&gt;Aaron Parecki&lt;/a&gt; seems to use &lt;a href=&#34;https://www.wunderground.com/&#34;&gt;Wunderground&lt;/a&gt; to get current weather for &lt;a href=&#34;https://aaronparecki.com/2018/07/03/7/&#34;&gt;his posts&lt;/a&gt;. I&#39;ll have to see what their API is like and if there are agreeable terms.&lt;/p&gt;
-&lt;p&gt;I believe the National Weather Service also publishes the data in a not so convenient format. I could look into downloading that periodically and exposing it myself. Maybe I could use my phone location to only download the info that I&#39;m most likely to care about.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Exporting Google Saved Places</title>
-      <link>https://www.joshkasuboski.com/posts/export-google-saved-places/</link>
-      <pubDate>Sat, 25 Jan 2020 12:40:00 -0600</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/export-google-saved-places/</guid>
-      <description>&lt;p&gt;I&#39;ve made use of Google Saved Places for a while now. I have the standard ⭐ &amp;ldquo;Starred&amp;rdquo;, 🚩 &amp;ldquo;Want to go&amp;rdquo;, and ❤ &amp;ldquo;Favorites&amp;rdquo; lists as well as some specific to cities. Saved places is really convenient when you&#39;re deciding where to go. My want to go list helps me remember the places I want to try and the favorites list often helps me find a place if I can&#39;t quite remember the name of it.&lt;/p&gt;
-&lt;p&gt;It&#39;s not all rosy though&amp;hellip;when searching for anything in Google Maps it inexplicably doesn&#39;t show you if the places returned are in any of your lists. They also recently made the interface better for adding places to multiple lists, but you can&#39;t search your places by city let alone type (say coffee shops I love). This could be accomplished by having many lists, however I&#39;m not looking to manually manage a growing list of lists.&lt;/p&gt;
-&lt;h2 id=&#34;what-to-do-about-it&#34;&gt;What to do about it&lt;/h2&gt;
-&lt;p&gt;What I really want is a list of places with their name, address, and general categories such as restaurant or coffee shop. Then I can tag those places with things like starred, favorite, want to go, etc.&lt;/p&gt;
-&lt;p&gt;Once I have that, I will be able to search my places by location, tag, and/or category. I&#39;ll want to be able to see them on a map similarly to how you can navigate around a city in Google Maps and see your saved places.&lt;/p&gt;
-&lt;p&gt;I&#39;m going to start with all of my data from Google Saved Places and then add the info I want. Since I don&#39;t plan to stop using the Google Saved Places just yet, I&#39;ll need to be able to run the import multiple times. I&#39;ll make a &lt;a href=&#34;https://en.wikipedia.org/wiki/Command-line_interface&#34;&gt;cli&lt;/a&gt; to help with importing the data.&lt;/p&gt;
-&lt;h2 id=&#34;getting-the-data&#34;&gt;Getting the data&lt;/h2&gt;
-&lt;p&gt;There doesn&#39;t seem to be an API to access your saved places. I had to resort to using &lt;a href=&#34;https://takeout.google.com&#34;&gt;Google Takeout&lt;/a&gt;, which if you haven&#39;t used before is quite interesting to see everything Google knows about you.&lt;/p&gt;
-&lt;p&gt;Getting the data I wanted out of Takeout was a bit of trial and error. There are two options for Maps data as seen below, Maps and Maps (your places). Maps (your places) includes lists that aren&#39;t the starred list. Apparently, Google treats starred separately. I&#39;m guessing this is because historically starred was the only option and was called saved. Another fun fact is that those starred places also show up at &lt;a href=&#34;https://www.google.com/bookmarks&#34;&gt;Google Bookmarks&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://www.joshkasuboski.com/img/maps-export-products.png&#34; alt=&#34;export products&#34;&gt;&lt;/p&gt;
-&lt;p&gt;If you only want your starred places from Maps you&#39;ll want to select &amp;ldquo;All Maps data included&amp;rdquo; and select only &amp;ldquo;My labeled places&amp;rdquo;. Running the export with the two maps options will get you a link to download a &lt;code&gt;.zip&lt;/code&gt; file. Once extracted, you&#39;ll have a variety of folders. The important files are &lt;code&gt;Saved Places.json&lt;/code&gt; and &lt;code&gt;*.csv&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The Saved Places file will have your starred list in &lt;a href=&#34;https://en.wikipedia.org/wiki/GeoJSON&#34;&gt;GeoJSON&lt;/a&gt; format. This format provides a fair amount of info like place name, location, and general categories. The csv files are a lot less useful by themselves. For me, it was just place name and a URL. However, the URL didn&#39;t seem to be parsable so this data wasn&#39;t super useful. Still, I was able to get all of the place names that I had saved.&lt;/p&gt;
-&lt;h2 id=&#34;enhance&#34;&gt;Enhance!&lt;/h2&gt;
-&lt;p&gt;I want the name, address, and categories of my places. The geojson file has everything, but the csv files only provide a name. Enter the &lt;a href=&#34;https://developers.google.com/places/web-service/intro&#34;&gt;Google Places API&lt;/a&gt; 💥. This API let&#39;s you lookup place data from Google, including all of the fields I want (besides user defined tags).&lt;/p&gt;
-&lt;p&gt;Unfortunately, neither of the formats I exported from Google gave me the &lt;a href=&#34;https://developers.google.com/places/web-service/place-id&#34;&gt;Place ID&lt;/a&gt;, which would make it easy to find a specific place. The json file gave me a place name and address though so it&#39;s fairly simple to do a &lt;a href=&#34;https://developers.google.com/places/web-service/search&#34;&gt;Place Search&lt;/a&gt; using the name and address as the input. The csv files providing only the place name and obscure URL is a little more difficult.&lt;/p&gt;
-&lt;p&gt;I ended up scraping the URL that was included for a string that looked like a Place ID. This definitely isn&#39;t perfect&amp;hellip;especially since I only look for one of at least two possible formats, but it seemed to work for my data.&lt;/p&gt;
-&lt;h2 id=&#34;next-steps&#34;&gt;Next steps&lt;/h2&gt;
-&lt;p&gt;So, I was able to get my saved places out of Google and tag them with the list they were on. I&#39;m pretty much at the exact point I was at with Google Places minus the Google Maps integration. 😒&lt;/p&gt;
-&lt;p&gt;I want to build up an interface to add more tags easily. I also need to build the search and visualization aspects for discovering my places.&lt;/p&gt;
-&lt;p&gt;I&#39;d also like to set up the ability to post this info to my site using &lt;a href=&#34;https://indieweb.org/Micropub&#34;&gt;micropub&lt;/a&gt;, but that presumes I have micropub set up here at all.&lt;/p&gt;
-&lt;p&gt;The code I used to parse and save my data is on GitHub. It&#39;s a &lt;a href=&#34;https://en.wikipedia.org/wiki/Command-line_interface&#34;&gt;cli&lt;/a&gt; called &lt;a href=&#34;https://github.com/kasuboski/neptune&#34;&gt;neptune&lt;/a&gt;. At this time, it let&#39;s you import and tag places and it will export each place to a json file in a folder.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Replacing Feedly with Microsub?</title>
-      <link>https://www.joshkasuboski.com/posts/replacing-feedly/</link>
-      <pubDate>Wed, 15 Jan 2020 18:48:10 -0600</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/replacing-feedly/</guid>
-      <description>&lt;p&gt;I use &lt;a href=&#34;https://feedly.com&#34;&gt;Feedly&lt;/a&gt; to manage my content subscriptions, which include a number of bigger sites and personal blogs. Feedly is nice, but I would like to be able to save and use the data from there in other ways. So, I&#39;ve been looking for an open source setup that I can tweak.&lt;/p&gt;
-&lt;p&gt;I&#39;ve been trying to utilize &lt;a href=&#34;https://indieweb.org&#34;&gt;IndieWeb&lt;/a&gt; pieces more and more. Their &lt;a href=&#34;https://indieweb.org/why&#34;&gt;why&lt;/a&gt; really resonates with some of my frustrations with the current web (mainly auth and data ownership/portability). This site supports &lt;a href=&#34;https://indieauth.com/&#34;&gt;IndieAuth&lt;/a&gt; so I can login at supporting websites by giving my URL. The posts and contact card are also marked up with &lt;a href=&#34;http://microformats.org/&#34;&gt;microformat&lt;/a&gt; to be parseable.&lt;/p&gt;
-&lt;h2 id=&#34;experimenting-with-aperture-and-monocle&#34;&gt;Experimenting with Aperture and Monocle&lt;/h2&gt;
-&lt;p&gt;I decided to use &lt;a href=&#34;https://aperture.p3k.io/&#34;&gt;Aperture&lt;/a&gt; for now as my &lt;a href=&#34;https://indieweb.org/Microsub&#34;&gt;microsub&lt;/a&gt; server. A microsub server is responsible for fetching the content you subscribe to and making it available in a common format for a microsub reader.&lt;/p&gt;
-&lt;p&gt;I was able to login and subscribe to &lt;a href=&#34;https://aaronparecki.com/&#34;&gt;Aaron Parecki&#39;s&lt;/a&gt; personal site, which immediately loaded some 1600 entries for me. After adding a &lt;code&gt;rel=microsub&lt;/code&gt; link to my homepage, I was able to log into &lt;a href=&#34;https://monocle.p3k.io/&#34;&gt;Monocle&lt;/a&gt; and view that feed in my home channel. The default view for Monocle seems to be to show everything. There is an option to only show unread, but it&#39;s not what you get by default.&lt;/p&gt;
-&lt;h2 id=&#34;moving-forward&#34;&gt;Moving forward&lt;/h2&gt;
-&lt;p&gt;Monocle doesn&#39;t quite fit how I want to view updates, but it did help me understand the concepts better. The free hosted Aperture only saves your data for 7 days so I probably need to either host it myself or find a different microsub server.&lt;/p&gt;
-&lt;p&gt;I&#39;ve been looking at &lt;a href=&#34;https://github.com/pstuifzand/ekster&#34;&gt;ekster&lt;/a&gt;. I like that it&#39;s a go binary and comes with a CLI. It has the option of importing an opml feed, which Feedly would export. It seems all of your channels and feeds are stored in a config file (that you can generate with the opml import) and redis is really meant to be a cache.&lt;/p&gt;
-&lt;p&gt;It does seem to support the &lt;a href=&#34;https://indieweb.org/Microsub-spec#Following&#34;&gt;follow action&lt;/a&gt; however and it doesn&#39;t look like that updates the file. In the future, I&#39;ll probably just try to run it and see what happens.&lt;/p&gt;
-&lt;p&gt;Ekster also has a reader associated with it, but there are a number of &lt;a href=&#34;https://indieweb.org/Microsub#Clients&#34;&gt;others&lt;/a&gt; to try including mobile apps.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Now</title>
-      <link>https://www.joshkasuboski.com/now/</link>
-      <pubDate>Mon, 23 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/now/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;A now page inspired by &lt;a href=&#34;https://sivers.org/nowff&#34;&gt;Derek Sivers&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Currently working on developer productivity tools at PNC.&lt;/p&gt;
-&lt;p&gt;In my free time, I try to continue learning about things.&lt;/p&gt;
-&lt;p&gt;My current interests are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Decentralized Services&lt;/li&gt;
-&lt;li&gt;Self Hosting&lt;/li&gt;
-&lt;li&gt;Quantified Self&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://indieweb.org/&#34;&gt;IndieWeb&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;My Tech Setup is:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Pixel 3a&lt;/li&gt;
-&lt;li&gt;2012 Macbook Pro Retina&lt;/li&gt;
-&lt;li&gt;Custom Desktop (Ryzen 5 1600, 16gb, 1060)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;You can find more on my &lt;a href=&#34;https://kit.co/kasuboski&#34;&gt;kit.co profile&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Cheap Managed Kubernetes with Terraform</title>
-      <link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link>
-      <pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid>
-      <description>&lt;p&gt;Kubernetes is a great way to deploy your services in a scalable and reliable way. However, it&#39;s a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p&gt;
-&lt;p&gt;We&#39;ll use &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/&#34;&gt;GKE&lt;/a&gt;, Google&#39;s managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p&gt;
-&lt;p&gt;We&#39;ll use &lt;a href=&#34;https://www.terraform.io/&#34;&gt;Terraform&lt;/a&gt; to make sure we have a repeatable deployment process.&lt;/p&gt;
-&lt;p&gt;If you just want to skip to the code it&#39;s on &lt;a href=&#34;https://github.com/kasuboski/cheap-managed-kubernetes&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;what-well-do&#34;&gt;What we&#39;ll do&lt;/h2&gt;
-&lt;p&gt;The resources we&#39;ll deploy use the Google Cloud &lt;a href=&#34;https://cloud.google.com/free/&#34;&gt;free-tier&lt;/a&gt; extensively. If you leave it running, it should cost a little over $5 a month.&lt;/p&gt;
-&lt;p&gt;If you&#39;re not familiar with Terraform or haven&#39;t used the Google Provider, you can get started &lt;a href=&#34;https://www.terraform.io/docs/providers/google/getting_started.html&#34;&gt;here&lt;/a&gt;. All of the resources it deploys will be in the free tier.&lt;/p&gt;
-&lt;p&gt;Terraform has a concept of remote backends which allow you to save the state of your deployments (not just on your machine). This is especially helpful if you have multiple team members.&lt;/p&gt;
-&lt;p&gt;Since we&#39;re already using Google Cloud we can use Google Cloud Storage to house our state. After changing some defaults we can run a few commands and have our cluster running.&lt;/p&gt;
-&lt;h2 id=&#34;actually-do-it&#34;&gt;Actually do it&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Create a Google Cloud Storage Bucket following these &lt;a href=&#34;https://cloud.google.com/storage/docs/creating-buckets&#34;&gt;instructions&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Clone the cheap-managed-kubernetes &lt;a href=&#34;https://github.com/kasuboski/cheap-managed-kubernetes&#34;&gt;repo&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Modify &lt;code&gt;terraform.tfvars.example&lt;/code&gt; with your gcp project and rename to &lt;code&gt;terraform.tfvars&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Modify &lt;code&gt;backend.hcl.example&lt;/code&gt; with the gcs bucket you created above and rename to &lt;code&gt;backend.hcl.example&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;You should now be set up to deploy with Terraform. We&#39;ll initialize Terraform with our remote backend and run a plan. This plan will output what will be created (or destroyed). You can verify the output of the plan is correct and then run the apply.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;terraform init -backend-config=backend.hcl&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;terraform plan&lt;/code&gt; This should say it will create a cluster and node pool.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;terraform apply&lt;/code&gt; This will actually create the cluster and node pool.&lt;/li&gt;
-&lt;li&gt;When you&#39;re done &lt;code&gt;terraform destroy&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;using-your-cluster&#34;&gt;Using your cluster&lt;/h2&gt;
-&lt;p&gt;The output of the apply will give you the info you need to create a &lt;code&gt;kubeconfig&lt;/code&gt; to be able to connect to your cluster. Since we&#39;re using GKE though, I find it easier to just use the &lt;code&gt;gcloud&lt;/code&gt; command that will set your &lt;code&gt;kubeconfig&lt;/code&gt; for you.&lt;/p&gt;
-&lt;p&gt;It should look something like &lt;code&gt;gcloud container clusters get-credentials my-poor-gke-cluster&lt;/code&gt; where &lt;code&gt;my-poor-gke-cluster&lt;/code&gt; is the name of the cluster resource in &lt;code&gt;main.tf&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Once you have your &lt;code&gt;kubeconfig&lt;/code&gt; set up, you can access your cluster like you normally would. Maybe try running &lt;code&gt;kubectl get pods --all-namespaces&lt;/code&gt;. You should see the pods that make up &lt;code&gt;kube-system&lt;/code&gt;.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://www.joshkasuboski.com/about/</link>
-      <pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/about/</guid>
-      <description>&lt;h1 id=&#34;hi-there&#34;&gt;Hi there&lt;/h1&gt;
-&lt;p&gt;My name is Josh and I&#39;m a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p&gt;
-&lt;p&gt;Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p&gt;
-&lt;p&gt;This involves making pipelines, eliminating boilerplate, and sending messages to make sure it&#39;s painless to deploy your code.&lt;/p&gt;
-&lt;p&gt;You can find me on &lt;a href=&#34;https://github.com/kasuboski&#34;&gt;Github&lt;/a&gt; or &lt;a href=&#34;https://www.linkedin.com/in/joshkasuboski/&#34;&gt;LinkedIn&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Here is a &lt;a href=&#34;https://www.joshkasuboski.com/resume.html&#34;&gt;resume&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Success</title>
-      <link>https://www.joshkasuboski.com/success/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/success/</guid>
-      <description>&lt;h2 id=&#34;thanks-for-the-contribution&#34;&gt;Thanks for the contribution&lt;/h2&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Uh Oh</title>
-      <link>https://www.joshkasuboski.com/canceled/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.joshkasuboski.com/canceled/</guid>
-      <description>&lt;h2 id=&#34;uh-oh-looks-like-that-didnt-work&#34;&gt;Uh oh looks like that didn&#39;t work&lt;/h2&gt;
-</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;/code>&lt;/pre>&lt;h2 id="automatic-deploy-with-github-actions">Automatic Deploy with GitHub Actions&lt;/h2>
+&lt;p>I don't really want to mess with multiple repositories locally, especially when one of them is essentially machine generated. GitHub Actions can build the site with Hugo and then push it to the GitHub Pages Repo for me.&lt;/p>
+&lt;p>The workflow file for this can be found &lt;a href="https://github.com/kasuboski/personal-site/blob/master/.github/workflows/gh-pages.yaml">here&lt;/a> if you just want to copy it.&lt;/p>
+&lt;p>The basic steps are: check out the code repo, build the site with hugo, push the files to the GitHub Pages Repo, and notify me of the status using &lt;a href="https://pushover.net">Pushover&lt;/a>.&lt;/p>
+&lt;p>It relies heavily on already available actions. The only prerequisite setup is to make a deploy key for the GitHub Pages Repo and to register an app with Pushover.&lt;/p>
+&lt;p>You can find a walkthrough of creating a deploy key &lt;a href="https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-create-ssh-deploy-key">here&lt;/a>.&lt;/p>
+&lt;p>Configuring a Pushover app is &lt;a href="https://pushover.net/apps/build">here&lt;/a>. You'll need the app token and user token. I added both as secrets on the Code Repo.&lt;/p>
+&lt;p>Now anytime I push a change to the code repo, GitHub Actions will generate the files, update the GitHub Pages repo and send me a push notification with the status.&lt;/p></description></item><item><title>Weather Data after Dark Sky Shutdown</title><link>https://www.joshkasuboski.com/posts/dark-sky-shutdown/</link><pubDate>Sun, 05 Apr 2020 15:03:48 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/dark-sky-shutdown/</guid><description>&lt;p>Dark Sky is discontinuing their API and Android app after &lt;a href="https://blog.darksky.net/dark-sky-has-a-new-home/">joining Apple&lt;/a>. It was my favorite weather app, both from a data and UX perspective. They apparently aggregate from many different sources to have the best predictions and world wide coverage. I'm not sure I actually need all of that and am curious to make my own solution.&lt;/p>
+&lt;h2 id="making-my-own-app">Making my own app&lt;/h2>
+&lt;p>This seems like a great opportunity to learn &lt;a href="https://flutter.dev/">Flutter&lt;/a>. It's been a while since I've done mobile development. I did both native Android and iOS as well as React Native. I'm not too keen to be building two of everything and React Native was a tooling nightmare for me.&lt;/p>
+&lt;p>Flutter seems like a great solution especially with its component driven concepts. However, in order to make a weather app you actually need the forecast data.&lt;/p>
+&lt;h2 id="getting-the-forecast">Getting the forecast&lt;/h2>
+&lt;p>I looked at using the National Weather Service API at &lt;a href="https://www.weather.gov/documentation/services-web-api">weather.gov&lt;/a>, but it seems it only has data for a specific Kansas station at the moment. This kind of kills the project for the time being, but I hope to find the info elsewhere.&lt;/p>
+&lt;p>I saw &lt;a href="https://aaronparecki.com/">Aaron Parecki&lt;/a> seems to use &lt;a href="https://www.wunderground.com/">Wunderground&lt;/a> to get current weather for &lt;a href="https://aaronparecki.com/2018/07/03/7/">his posts&lt;/a>. I'll have to see what their API is like and if there are agreeable terms.&lt;/p>
+&lt;p>I believe the National Weather Service also publishes the data in a not so convenient format. I could look into downloading that periodically and exposing it myself. Maybe I could use my phone location to only download the info that I'm most likely to care about.&lt;/p></description></item><item><title>Exporting Google Saved Places</title><link>https://www.joshkasuboski.com/posts/export-google-saved-places/</link><pubDate>Sat, 25 Jan 2020 12:40:00 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/export-google-saved-places/</guid><description>&lt;p>I've made use of Google Saved Places for a while now. I have the standard ⭐ &amp;ldquo;Starred&amp;rdquo;, 🚩 &amp;ldquo;Want to go&amp;rdquo;, and ❤ &amp;ldquo;Favorites&amp;rdquo; lists as well as some specific to cities. Saved places is really convenient when you're deciding where to go. My want to go list helps me remember the places I want to try and the favorites list often helps me find a place if I can't quite remember the name of it.&lt;/p>
+&lt;p>It's not all rosy though&amp;hellip;when searching for anything in Google Maps it inexplicably doesn't show you if the places returned are in any of your lists. They also recently made the interface better for adding places to multiple lists, but you can't search your places by city let alone type (say coffee shops I love). This could be accomplished by having many lists, however I'm not looking to manually manage a growing list of lists.&lt;/p>
+&lt;h2 id="what-to-do-about-it">What to do about it&lt;/h2>
+&lt;p>What I really want is a list of places with their name, address, and general categories such as restaurant or coffee shop. Then I can tag those places with things like starred, favorite, want to go, etc.&lt;/p>
+&lt;p>Once I have that, I will be able to search my places by location, tag, and/or category. I'll want to be able to see them on a map similarly to how you can navigate around a city in Google Maps and see your saved places.&lt;/p>
+&lt;p>I'm going to start with all of my data from Google Saved Places and then add the info I want. Since I don't plan to stop using the Google Saved Places just yet, I'll need to be able to run the import multiple times. I'll make a &lt;a href="https://en.wikipedia.org/wiki/Command-line_interface">cli&lt;/a> to help with importing the data.&lt;/p>
+&lt;h2 id="getting-the-data">Getting the data&lt;/h2>
+&lt;p>There doesn't seem to be an API to access your saved places. I had to resort to using &lt;a href="https://takeout.google.com">Google Takeout&lt;/a>, which if you haven't used before is quite interesting to see everything Google knows about you.&lt;/p>
+&lt;p>Getting the data I wanted out of Takeout was a bit of trial and error. There are two options for Maps data as seen below, Maps and Maps (your places). Maps (your places) includes lists that aren't the starred list. Apparently, Google treats starred separately. I'm guessing this is because historically starred was the only option and was called saved. Another fun fact is that those starred places also show up at &lt;a href="https://www.google.com/bookmarks">Google Bookmarks&lt;/a>.&lt;/p>
+&lt;p>&lt;img src="https://www.joshkasuboski.com/img/maps-export-products.png" alt="export products">&lt;/p>
+&lt;p>If you only want your starred places from Maps you'll want to select &amp;ldquo;All Maps data included&amp;rdquo; and select only &amp;ldquo;My labeled places&amp;rdquo;. Running the export with the two maps options will get you a link to download a &lt;code>.zip&lt;/code> file. Once extracted, you'll have a variety of folders. The important files are &lt;code>Saved Places.json&lt;/code> and &lt;code>*.csv&lt;/code>.&lt;/p>
+&lt;p>The Saved Places file will have your starred list in &lt;a href="https://en.wikipedia.org/wiki/GeoJSON">GeoJSON&lt;/a> format. This format provides a fair amount of info like place name, location, and general categories. The csv files are a lot less useful by themselves. For me, it was just place name and a URL. However, the URL didn't seem to be parsable so this data wasn't super useful. Still, I was able to get all of the place names that I had saved.&lt;/p>
+&lt;h2 id="enhance">Enhance!&lt;/h2>
+&lt;p>I want the name, address, and categories of my places. The geojson file has everything, but the csv files only provide a name. Enter the &lt;a href="https://developers.google.com/places/web-service/intro">Google Places API&lt;/a> 💥. This API let's you lookup place data from Google, including all of the fields I want (besides user defined tags).&lt;/p>
+&lt;p>Unfortunately, neither of the formats I exported from Google gave me the &lt;a href="https://developers.google.com/places/web-service/place-id">Place ID&lt;/a>, which would make it easy to find a specific place. The json file gave me a place name and address though so it's fairly simple to do a &lt;a href="https://developers.google.com/places/web-service/search">Place Search&lt;/a> using the name and address as the input. The csv files providing only the place name and obscure URL is a little more difficult.&lt;/p>
+&lt;p>I ended up scraping the URL that was included for a string that looked like a Place ID. This definitely isn't perfect&amp;hellip;especially since I only look for one of at least two possible formats, but it seemed to work for my data.&lt;/p>
+&lt;h2 id="next-steps">Next steps&lt;/h2>
+&lt;p>So, I was able to get my saved places out of Google and tag them with the list they were on. I'm pretty much at the exact point I was at with Google Places minus the Google Maps integration. 😒&lt;/p>
+&lt;p>I want to build up an interface to add more tags easily. I also need to build the search and visualization aspects for discovering my places.&lt;/p>
+&lt;p>I'd also like to set up the ability to post this info to my site using &lt;a href="https://indieweb.org/Micropub">micropub&lt;/a>, but that presumes I have micropub set up here at all.&lt;/p>
+&lt;p>The code I used to parse and save my data is on GitHub. It's a &lt;a href="https://en.wikipedia.org/wiki/Command-line_interface">cli&lt;/a> called &lt;a href="https://github.com/kasuboski/neptune">neptune&lt;/a>. At this time, it let's you import and tag places and it will export each place to a json file in a folder.&lt;/p></description></item><item><title>Replacing Feedly with Microsub?</title><link>https://www.joshkasuboski.com/posts/replacing-feedly/</link><pubDate>Wed, 15 Jan 2020 18:48:10 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/replacing-feedly/</guid><description>&lt;p>I use &lt;a href="https://feedly.com">Feedly&lt;/a> to manage my content subscriptions, which include a number of bigger sites and personal blogs. Feedly is nice, but I would like to be able to save and use the data from there in other ways. So, I've been looking for an open source setup that I can tweak.&lt;/p>
+&lt;p>I've been trying to utilize &lt;a href="https://indieweb.org">IndieWeb&lt;/a> pieces more and more. Their &lt;a href="https://indieweb.org/why">why&lt;/a> really resonates with some of my frustrations with the current web (mainly auth and data ownership/portability). This site supports &lt;a href="https://indieauth.com/">IndieAuth&lt;/a> so I can login at supporting websites by giving my URL. The posts and contact card are also marked up with &lt;a href="http://microformats.org/">microformat&lt;/a> to be parseable.&lt;/p>
+&lt;h2 id="experimenting-with-aperture-and-monocle">Experimenting with Aperture and Monocle&lt;/h2>
+&lt;p>I decided to use &lt;a href="https://aperture.p3k.io/">Aperture&lt;/a> for now as my &lt;a href="https://indieweb.org/Microsub">microsub&lt;/a> server. A microsub server is responsible for fetching the content you subscribe to and making it available in a common format for a microsub reader.&lt;/p>
+&lt;p>I was able to login and subscribe to &lt;a href="https://aaronparecki.com/">Aaron Parecki's&lt;/a> personal site, which immediately loaded some 1600 entries for me. After adding a &lt;code>rel=microsub&lt;/code> link to my homepage, I was able to log into &lt;a href="https://monocle.p3k.io/">Monocle&lt;/a> and view that feed in my home channel. The default view for Monocle seems to be to show everything. There is an option to only show unread, but it's not what you get by default.&lt;/p>
+&lt;h2 id="moving-forward">Moving forward&lt;/h2>
+&lt;p>Monocle doesn't quite fit how I want to view updates, but it did help me understand the concepts better. The free hosted Aperture only saves your data for 7 days so I probably need to either host it myself or find a different microsub server.&lt;/p>
+&lt;p>I've been looking at &lt;a href="https://github.com/pstuifzand/ekster">ekster&lt;/a>. I like that it's a go binary and comes with a CLI. It has the option of importing an opml feed, which Feedly would export. It seems all of your channels and feeds are stored in a config file (that you can generate with the opml import) and redis is really meant to be a cache.&lt;/p>
+&lt;p>It does seem to support the &lt;a href="https://indieweb.org/Microsub-spec#Following">follow action&lt;/a> however and it doesn't look like that updates the file. In the future, I'll probably just try to run it and see what happens.&lt;/p>
+&lt;p>Ekster also has a reader associated with it, but there are a number of &lt;a href="https://indieweb.org/Microsub#Clients">others&lt;/a> to try including mobile apps.&lt;/p></description></item><item><title>Now</title><link>https://www.joshkasuboski.com/now/</link><pubDate>Mon, 23 Dec 2019 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/now/</guid><description>&lt;blockquote>
+&lt;p>A now page inspired by &lt;a href="https://sivers.org/nowff">Derek Sivers&amp;rsquo;&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>Currently working on developer productivity tools at PNC.&lt;/p>
+&lt;p>In my free time, I try to continue learning about things.&lt;/p>
+&lt;p>My current interests are:&lt;/p>
+&lt;ul>
+&lt;li>Decentralized Services&lt;/li>
+&lt;li>Self Hosting&lt;/li>
+&lt;li>Quantified Self&lt;/li>
+&lt;li>&lt;a href="https://indieweb.org/">IndieWeb&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>My Tech Setup is:&lt;/p>
+&lt;ul>
+&lt;li>Pixel 3a&lt;/li>
+&lt;li>2012 Macbook Pro Retina&lt;/li>
+&lt;li>Custom Desktop (Ryzen 5 1600, 16gb, 1060)&lt;/li>
+&lt;/ul>
+&lt;p>You can find more on my &lt;a href="https://kit.co/kasuboski">kit.co profile&lt;/a>&lt;/p></description></item><item><title>Cheap Managed Kubernetes with Terraform</title><link>https://www.joshkasuboski.com/posts/cheap-managed-kube/</link><pubDate>Thu, 18 Apr 2019 14:15:59 -0600</pubDate><guid>https://www.joshkasuboski.com/posts/cheap-managed-kube/</guid><description>&lt;p>Kubernetes is a great way to deploy your services in a scalable and reliable way. However, it's a pretty complex system to manage yourself. Thankfully, cloud providers are offering managed versions where you only pay for the worker nodes.&lt;/p>
+&lt;p>We'll use &lt;a href="https://cloud.google.com/kubernetes-engine/">GKE&lt;/a>, Google's managed kubernetes offering, to deploy a cluster so we can test out kubernetes.&lt;/p>
+&lt;p>We'll use &lt;a href="https://www.terraform.io/">Terraform&lt;/a> to make sure we have a repeatable deployment process.&lt;/p>
+&lt;p>If you just want to skip to the code it's on &lt;a href="https://github.com/kasuboski/cheap-managed-kubernetes">GitHub&lt;/a>.&lt;/p>
+&lt;h2 id="what-well-do">What we'll do&lt;/h2>
+&lt;p>The resources we'll deploy use the Google Cloud &lt;a href="https://cloud.google.com/free/">free-tier&lt;/a> extensively. If you leave it running, it should cost a little over $5 a month.&lt;/p>
+&lt;p>If you're not familiar with Terraform or haven't used the Google Provider, you can get started &lt;a href="https://www.terraform.io/docs/providers/google/getting_started.html">here&lt;/a>. All of the resources it deploys will be in the free tier.&lt;/p>
+&lt;p>Terraform has a concept of remote backends which allow you to save the state of your deployments (not just on your machine). This is especially helpful if you have multiple team members.&lt;/p>
+&lt;p>Since we're already using Google Cloud we can use Google Cloud Storage to house our state. After changing some defaults we can run a few commands and have our cluster running.&lt;/p>
+&lt;h2 id="actually-do-it">Actually do it&lt;/h2>
+&lt;ul>
+&lt;li>Create a Google Cloud Storage Bucket following these &lt;a href="https://cloud.google.com/storage/docs/creating-buckets">instructions&lt;/a>&lt;/li>
+&lt;li>Clone the cheap-managed-kubernetes &lt;a href="https://github.com/kasuboski/cheap-managed-kubernetes">repo&lt;/a>&lt;/li>
+&lt;li>Modify &lt;code>terraform.tfvars.example&lt;/code> with your gcp project and rename to &lt;code>terraform.tfvars&lt;/code>&lt;/li>
+&lt;li>Modify &lt;code>backend.hcl.example&lt;/code> with the gcs bucket you created above and rename to &lt;code>backend.hcl.example&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>You should now be set up to deploy with Terraform. We'll initialize Terraform with our remote backend and run a plan. This plan will output what will be created (or destroyed). You can verify the output of the plan is correct and then run the apply.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>terraform init -backend-config=backend.hcl&lt;/code>&lt;/li>
+&lt;li>&lt;code>terraform plan&lt;/code> This should say it will create a cluster and node pool.&lt;/li>
+&lt;li>&lt;code>terraform apply&lt;/code> This will actually create the cluster and node pool.&lt;/li>
+&lt;li>When you're done &lt;code>terraform destroy&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="using-your-cluster">Using your cluster&lt;/h2>
+&lt;p>The output of the apply will give you the info you need to create a &lt;code>kubeconfig&lt;/code> to be able to connect to your cluster. Since we're using GKE though, I find it easier to just use the &lt;code>gcloud&lt;/code> command that will set your &lt;code>kubeconfig&lt;/code> for you.&lt;/p>
+&lt;p>It should look something like &lt;code>gcloud container clusters get-credentials my-poor-gke-cluster&lt;/code> where &lt;code>my-poor-gke-cluster&lt;/code> is the name of the cluster resource in &lt;code>main.tf&lt;/code>&lt;/p>
+&lt;p>Once you have your &lt;code>kubeconfig&lt;/code> set up, you can access your cluster like you normally would. Maybe try running &lt;code>kubectl get pods --all-namespaces&lt;/code>. You should see the pods that make up &lt;code>kube-system&lt;/code>.&lt;/p></description></item><item><title>About</title><link>https://www.joshkasuboski.com/about/</link><pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/about/</guid><description>&lt;h1 id="hi-there">Hi there&lt;/h1>
+&lt;p>My name is Josh and I'm a software engineer. I work on all manner of things across mobile, web, and backend apps.&lt;/p>
+&lt;p>Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p>
+&lt;p>This involves making pipelines, eliminating boilerplate, and sending messages to make sure it's painless to deploy your code.&lt;/p>
+&lt;p>You can find me on &lt;a href="https://github.com/kasuboski">Github&lt;/a> or &lt;a href="https://www.linkedin.com/in/joshkasuboski/">LinkedIn&lt;/a>&lt;/p>
+&lt;p>Here is a &lt;a href="https://www.joshkasuboski.com/resume.html">resume&lt;/a>&lt;/p></description></item><item><title>Success</title><link>https://www.joshkasuboski.com/success/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/success/</guid><description>&lt;h2 id="thanks-for-the-contribution">Thanks for the contribution&lt;/h2></description></item><item><title>Uh Oh</title><link>https://www.joshkasuboski.com/canceled/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/canceled/</guid><description>&lt;h2 id="uh-oh-looks-like-that-didnt-work">Uh oh looks like that didn't work&lt;/h2></description></item></channel></rss>
