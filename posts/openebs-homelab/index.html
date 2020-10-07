@@ -1,8 +1,118 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><title>Persistent Storage with OpenEBS | Josh Kasuboski</title><meta name=description content="Josh Kasuboski's personal site"><meta name=author content><link rel=me href=mailto:josh.kasuboski@gmail.com><link rel=me href=https://github.com/kasuboski><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=microsub href=https://microsub.joshcorp.co/microsub><link rel=alternate type=application/rss+xml href=https://www.joshkasuboski.com/index.xml><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://unpkg.com/turretcss/dist/turretcss.min.css crossorigin=anonymous><style>@media only screen and (min-width:768px){:root{font-size:18px}}body{background-color:#faf9fa}pre{background-color:#d4f2e1}a{text-decoration-color:#5965f9}#site-header{box-shadow:0 4px 12px 0 rgba(0,0,0,.05)}#intro{background-color:#e6e8fe}#social a{color:transparent;text-decoration:none}</style></head><body><div class=padding-bottom-s><header id=site-header><div class="container max-width-l flex-justify-center padding-vertical-xs"><h1 class=no-margin-bottom><a class="text-decoration-none flex align-items-center" href=https://www.joshkasuboski.com/><img alt="jk logo" class="icon-s margin-right-xs" src=https://www.joshkasuboski.com/images/jk-logo.svg><small>Josh Kasuboski</small></a></h1><nav class=nav-inline><ul><li><a href=/about/>About</a></li><li><a href=/now/>Now</a></li></ul></nav></div></header><main class="container max-width-l margin-top-l"><article class=h-entry><header><h1 class="display-title-xl no-margin-bottom post-title p-name">Persistent Storage with OpenEBS</h1><p class="post-date no-margin-top">Posted on
-<time class=dt-published datetime=2020-06-23T18:18:22-05:00>23 June, 2020</time> by <a href=https://www.joshkasuboski.com/ class="p-author h-card" rel=author>Josh Kasuboski</a> · 3min read</p></header><section class="content e-content margin-top-l"><p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.</p><p>I did have the <a href=https://github.com/rancher/local-path-provisioner>local-path-provisioner</a> running, but I didn't feel great about using the SD card for general storage.</p><p>I bought 2 <a href="https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1">USB drives</a> to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.</p><p>I decided to go with <a href=https://openebs.io/>OpenEBS</a>. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.</p><h2 id=prepare-the-cluster>Prepare the cluster</h2><p>I found the OpenEBS docs a little hard to follow, but this is what I ended up doing.</p><ul><li>Attach your USB drives to the workers (hopefully yours are labeled)</li><li>install iscsi on every node</li></ul><pre><code>sudo apt-get update
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Persistent Storage with OpenEBS | Josh Kasuboski</title>
+  <meta name="description" content="Josh Kasuboski&#39;s personal site">
+  <meta name="author" content="">
+  
+  
+  <link rel="me" href="mailto:josh.kasuboski@gmail.com">
+  
+  <link rel="me" href="https://github.com/kasuboski">
+  
+  
+  
+  <link data-proofer-ignore rel="authorization_endpoint" href="https://indieauth.com/auth">
+  <link rel="token_endpoint" href=https://tokens.indieauth.com/token />
+  
+  <link data-proofer-ignore rel="microsub" href="https://microsub.joshcorp.co/microsub" />
+  <link rel="alternate" type="application/rss+xml" href=https://www.joshkasuboski.com/index.xml />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+  <link rel="stylesheet" href="https://unpkg.com/turretcss/dist/turretcss.min.css" crossorigin="anonymous">
+
+  <style>
+     
+    @media only screen and (min-width: 768px) {
+      :root {
+        font-size: 18px;
+      }
+    }
+
+    body {
+      background-color: #FAF9FA;
+    }
+
+    pre {
+      background-color: rgba(212, 242, 225, 1);
+    }
+
+    a {
+      text-decoration-color: rgba(89, 101, 249, 1);
+    }
+
+    #site-header {
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    #intro {
+      background-color: rgba(230, 232, 254, 1);
+    }
+
+    #social a {
+      color: transparent;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="padding-bottom-s">
+    <header id="site-header">
+      <div class="container max-width-l flex-justify-center padding-vertical-xs">
+        <h1 class="no-margin-bottom"><a class="text-decoration-none flex align-items-center" href="https://www.joshkasuboski.com/"><img alt="jk logo" class="icon-s margin-right-xs" src=https://www.joshkasuboski.com/images/jk-logo.svg /><small>Josh Kasuboski</small></a></h1>
+        <nav class="nav-inline">
+  
+  <ul>
+    
+    <li>
+      <a href="/about/">About</a>
+    </li>
+    
+    <li>
+      <a href="/now/">Now</a>
+    </li>
+    
+  </ul>
+</nav>
+      </div>
+    </header>
+    <main class="container max-width-l margin-top-l">
+
+
+
+    <article class="h-entry">
+        <header>
+            <h1 class="display-title-xl no-margin-bottom post-title p-name">Persistent Storage with OpenEBS</h1>
+            
+            <p class="post-date no-margin-top">Posted on
+                <time class="dt-published" datetime="2020-06-23T18:18:22-05:00">
+                23 June, 2020
+                </time>  by <a href="https://www.joshkasuboski.com/" class="p-author h-card" rel="author">Josh Kasuboski</a> · 3min read
+            </p>
+            
+            
+        </header>
+        <section class="content e-content margin-top-l">
+            <p>My cluster monitoring prometheus kept falling over because it was running out of disk space. After finally getting annoyed having to restart it, I decided it was time for persistent storage.</p>
+<p>I did have the <a href="https://github.com/rancher/local-path-provisioner">local-path-provisioner</a> running, but I didn't feel great about using the SD card for general storage.</p>
+<p>I bought 2 <a href="https://www.amazon.com/gp/product/B07T5XGWZY/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;psc=1">USB drives</a> to add to my workers. In hindsight, I probably should have gotten 3 for better redundancy.</p>
+<p>I decided to go with <a href="https://openebs.io/">OpenEBS</a>. It works as Container Attached Storage and seemed more lightweight and flexible than other options. They also publish arm64 images which is always a plus.</p>
+<h2 id="prepare-the-cluster">Prepare the cluster</h2>
+<p>I found the OpenEBS docs a little hard to follow, but this is what I ended up doing.</p>
+<ul>
+<li>Attach your USB drives to the workers (hopefully yours are labeled)</li>
+<li>install iscsi on every node</li>
+</ul>
+<pre><code>sudo apt-get update
 sudo apt-get install -y open-iscsi
 sudo systemctl enable --now iscsid
-</code></pre><h2 id=install-openebs>Install OpenEBS</h2><p>I installed using the helm chart. The only changes with the values file below is basically changing all images to the arm64 version. It seems they don't have great support for a mixed architecture cluster.</p><pre><code>kubectl create ns openebs
+</code></pre><h2 id="install-openebs">Install OpenEBS</h2>
+<p>I installed using the helm chart. The only changes with the values file below is basically changing all images to the arm64 version. It seems they don't have great support for a mixed architecture cluster.</p>
+<pre><code>kubectl create ns openebs
 helm repo add openebs https://openebs.github.io/charts
 helm install openebs openebs/openebs --namespace openebs --version 1.11.1 -f openebs-values.yaml
 </code></pre><pre><code>ndm:
@@ -38,7 +148,22 @@ policies:
     image: 'openebs/m-exporter-arm64'
 analytics:
   enabled: false
-</code></pre><p>If all is well you should see the pods in the openebs namespace as healthy. My usb drives automatically showed up as block devices as well.</p><ul><li><code>kubectl get pods -n openebs</code></li><li><code>kubectl get sc</code></li><li><code>kubectl get blockdevice -n openebs</code></li></ul><figure><a href=storage-class-block-devices.png><img src=storage-class-block-devices.png alt="Block devices detected"></a></figure><h2 id=configure-openebs>Configure OpenEBS</h2><p>I differed from the quickstart a little bit here. It was a little confusing to me what I should do with only 2 devices.</p><p>I eventually found this <a href=https://github.com/openebs/openebs-docs/issues/486>issue</a> talking about configuring volumes with a single replica and made it use 2 pools instead of 1.</p><p>The below yaml will set up a StoragePoolClaim with a maxPools of 2 (which will just use both of my nodes with a drive) and a StorageClass configured to use a single replica. I went with striped because it seemed more flexible and since each node only has 1 disk right now it didn't seem too important.</p><pre><code>---
+</code></pre><p>If all is well you should see the pods in the openebs namespace as healthy. My usb drives automatically showed up as block devices as well.</p>
+<ul>
+<li><code>kubectl get pods -n openebs</code></li>
+<li><code>kubectl get sc</code></li>
+<li><code>kubectl get blockdevice -n openebs</code></li>
+</ul>
+<figure><a href="storage-class-block-devices.png">
+    <img src="storage-class-block-devices.png"
+         alt="Block devices detected"/> </a>
+</figure>
+
+<h2 id="configure-openebs">Configure OpenEBS</h2>
+<p>I differed from the quickstart a little bit here. It was a little confusing to me what I should do with only 2 devices.</p>
+<p>I eventually found this <a href="https://github.com/openebs/openebs-docs/issues/486">issue</a> talking about configuring volumes with a single replica and made it use 2 pools instead of 1.</p>
+<p>The below yaml will set up a StoragePoolClaim with a maxPools of 2 (which will just use both of my nodes with a drive) and a StorageClass configured to use a single replica. I went with striped because it seemed more flexible and since each node only has 1 disk right now it didn't seem too important.</p>
+<pre><code>---
 apiVersion: openebs.io/v1alpha1
 kind: StoragePoolClaim
 metadata:
@@ -62,8 +187,126 @@ metadata:
       - name: ReplicaCount
         value: &quot;1&quot;
 provisioner: openebs.io/provisioner-iscsi
-</code></pre><p>After this is applied, you should be able to see the claims and corresponding pods.</p><figure><a href=claimed-storage-pool.png><img src=claimed-storage-pool.png alt="Storage Pool"></a></figure><h2 id=persistent-prometheus>Persistent Prometheus</h2><p>I used this StorageClass for my cluster Prometheus. It took awhile for the PersistentVolumeClaim pod to start so the initial mount timed out. After around 5 minutes, it sorted itself out. I was able to delete the Prometheus pod and still retained data.</p></section><footer class=margin-top-m><a class="permalink u-url text-decoration-none" href=https://www.joshkasuboski.com/posts/openebs-homelab/>🔗</a></footer></article><nav class="margin-top-l flex justify-content-space-around"><div><a alt="Newer article" href=https://www.joshkasuboski.com/posts/server-rack-1/>&larr; Server Rack Beginnings</a></div><div class=show-s-up><a alt="Top of page" href=#>Top</a></div><div><a alt="Older article" href=https://www.joshkasuboski.com/posts/list-all-resource-with-label/>Kubectl List All Resources With Label &rarr;</a></div></nav></main><footer class="container max-width-l margin-top-xl"><div class="box-shadow-l padding-m"><div class="h-card flex align-content-center"><figure class=icon-xxl><img alt="profile photo" class=u-photo src=https://www.joshkasuboski.com/img/josh-scotland.jpg></figure><div class=margin-left-m><h3 class=display-title><a class="u-url p-name text-decoration-none" href=https://www.joshkasuboski.com/>Josh Kasuboski</a></h3><p>Living in Austin <img class=icon-xs style=vertical-align:middle alt=texas src=https://www.joshkasuboski.com/img/tx-fill.png> from <img class=icon-xs style=vertical-align:middle alt=wisconsin src=https://www.joshkasuboski.com/img/wi-fill.png></p><p id=social><a rel=me class="u-url margin-right-xs" href=https://github.com/kasuboski><img class=icon-xs src=https://www.joshkasuboski.com/icons/github.svg alt=github></a>
-<a class=margin-right-xs href=https://linkedin.com/kasuboski><img class=icon-xs src=https://www.joshkasuboski.com/icons/linkedin.svg alt=linkedin></a>
-<a href=mailto:josh.kasuboski@gmail.com class="u-email margin-right-xxs" rel=me><img class=icon-xs src=https://www.joshkasuboski.com/icons/envelope.svg alt=email></a>
-<button class="button button-icon button-xs" style=background-color:transparent;padding:0;border:0 id=checkout-button-beermoney role=link type=button>
-<img class=icon-xs src=https://www.joshkasuboski.com/icons/beer-money-icon.svg alt=beermoney></button></p></div></div></div></footer></div><script>(function(f,a,t,h,o,m){a[h]=a[h]||function(){(a[h].q=a[h].q||[]).push(arguments)};o=f.createElement('script'),m=f.getElementsByTagName('script')[0];o.async=1;o.src=t;o.id='fathom-script';m.parentNode.insertBefore(o,m)})(document,window,'https://fathom.joshcorp.co/tracker.js','fathom');fathom('set','siteId','XFQVM');fathom('trackPageview');</script><script src=https://js.stripe.com/v3></script><script>(function(){var DOMAIN='https://www.joshkasuboski.com/';var key='pk_live_51HJtKkASjDZJS9C9Ja9g6zTFbaTEdW7uCK2OTK1dq741RisoSBtSIac1QEMphVCEEkA7hTeuopkUsajAyWuyH7kT00cU4iVGfX';var price='price_1HJtUTASjDZJS9C90kJjztUq';var stripe=Stripe(key);var checkoutButton=document.getElementById('checkout-button-beermoney');checkoutButton.addEventListener('click',function(){stripe.redirectToCheckout({lineItems:[{price:price,quantity:1}],mode:'payment',successUrl:DOMAIN+'success',cancelUrl:DOMAIN+'canceled',}).then(function(result){if(result.error){var displayError=document.getElementById('error-message');displayError.textContent=result.error.message;}});});})();</script></body></html>
+</code></pre><p>After this is applied, you should be able to see the claims and corresponding pods.</p>
+<figure><a href="claimed-storage-pool.png">
+    <img src="claimed-storage-pool.png"
+         alt="Storage Pool"/> </a>
+</figure>
+
+<h2 id="persistent-prometheus">Persistent Prometheus</h2>
+<p>I used this StorageClass for my cluster Prometheus. It took awhile for the PersistentVolumeClaim pod to start so the initial mount timed out. After around 5 minutes, it sorted itself out. I was able to delete the Prometheus pod and still retained data.</p>
+        </section>
+        <footer class="margin-top-m">
+            <a class="permalink u-url text-decoration-none" href="https://www.joshkasuboski.com/posts/openebs-homelab/">🔗</a>
+            
+        </footer>
+    </article>
+    
+    <nav class="margin-top-l flex justify-content-space-around">
+        <div>
+            
+                
+                <a alt="Newer article" href="https://www.joshkasuboski.com/posts/server-rack-1/">&larr; Server Rack Beginnings</a>
+                
+            
+            
+        </div>
+        <div class="show-s-up">
+            <a data-proofer-ignore alt="Top of page" href="#">Top</a>
+        </div>
+        <div>
+            
+                
+                <a alt="Older article" href="https://www.joshkasuboski.com/posts/list-all-resource-with-label/">Kubectl List All Resources With Label &rarr;</a>
+                
+            
+            
+        </div>
+    </nav>
+    
+</main>
+<footer class="container max-width-l margin-top-xl">
+  <div class="box-shadow-l padding-m">
+    <div class="h-card flex align-content-center">
+      <figure class="icon-xxl">
+        <img alt="profile photo" class="u-photo" src="https://www.joshkasuboski.com/img/josh-scotland.jpg" />
+      </figure>
+      <div class="margin-left-m">
+        <h3 class="display-title"><a class="u-url p-name text-decoration-none" href="https://www.joshkasuboski.com/">Josh Kasuboski</a></h3>
+        <p>Living in Austin <img class="icon-xs" style="vertical-align: middle;" alt="texas" src=https://www.joshkasuboski.com/img/tx-fill.png /> from <img class="icon-xs" style="vertical-align: middle;"
+            alt="wisconsin" src=https://www.joshkasuboski.com/img/wi-fill.png /></p>
+        <p id="social">
+          <a rel="me" class="u-url margin-right-xs" href="https://github.com/kasuboski">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/github.svg alt="github" />
+          </a>
+          <a class="margin-right-xs" href="https://linkedin.com/in/joshkasuboski/">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/linkedin.svg alt="linkedin" />
+          </a>
+          <a href="mailto:josh.kasuboski@gmail.com" class="u-email margin-right-xxs" rel="me">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/envelope.svg alt="email" />
+          </a>
+
+          <button class="button button-icon button-xs" style="background-color:transparent;padding:0;border:0;"
+            id="checkout-button-beermoney" role="link" type="button">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/beer-money-icon.svg alt="beermoney" />
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+  (function (f, a, t, h, o, m) {
+    a[h] = a[h] || function () {
+      (a[h].q = a[h].q || []).push(arguments)
+    };
+    o = f.createElement('script'),
+      m = f.getElementsByTagName('script')[0];
+    o.async = 1; o.src = t; o.id = 'fathom-script';
+    m.parentNode.insertBefore(o, m)
+  })(document, window, 'https://fathom.joshcorp.co/tracker.js', 'fathom');
+  fathom('set', 'siteId', 'XFQVM');
+  fathom('trackPageview');
+</script>
+
+<script src="https://js.stripe.com/v3"></script>
+<script>
+  (function () {
+    var DOMAIN = 'https://www.joshkasuboski.com/';
+    var key = 'pk_live_51HJtKkASjDZJS9C9Ja9g6zTFbaTEdW7uCK2OTK1dq741RisoSBtSIac1QEMphVCEEkA7hTeuopkUsajAyWuyH7kT00cU4iVGfX';
+    var price = 'price_1HJtUTASjDZJS9C90kJjztUq';
+    
+    
+    var stripe = Stripe(key);
+
+    var checkoutButton = document.getElementById('checkout-button-beermoney');
+    checkoutButton.addEventListener('click', function () {
+      
+      
+      stripe.redirectToCheckout({
+        lineItems: [{ price: price, quantity: 1 }],
+        mode: 'payment',
+        
+        
+        
+        
+        
+        successUrl: DOMAIN + 'success',
+        cancelUrl: DOMAIN + 'canceled',
+      })
+        .then(function (result) {
+          if (result.error) {
+            
+            
+            var displayError = document.getElementById('error-message');
+            displayError.textContent = result.error.message;
+          }
+        });
+    });
+  })();
+</script>
+</body>
+
+</html>

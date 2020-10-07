@@ -1,5 +1,109 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><title>Automated Upgrades for k3s | Josh Kasuboski</title><meta name=description content="Josh Kasuboski's personal site"><meta name=author content><link rel=me href=mailto:josh.kasuboski@gmail.com><link rel=me href=https://github.com/kasuboski><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=microsub href=https://microsub.joshcorp.co/microsub><link rel=alternate type=application/rss+xml href=https://www.joshkasuboski.com/index.xml><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://unpkg.com/turretcss/dist/turretcss.min.css crossorigin=anonymous><style>@media only screen and (min-width:768px){:root{font-size:18px}}body{background-color:#faf9fa}pre{background-color:#d4f2e1}a{text-decoration-color:#5965f9}#site-header{box-shadow:0 4px 12px 0 rgba(0,0,0,.05)}#intro{background-color:#e6e8fe}#social a{color:transparent;text-decoration:none}</style></head><body><div class=padding-bottom-s><header id=site-header><div class="container max-width-l flex-justify-center padding-vertical-xs"><h1 class=no-margin-bottom><a class="text-decoration-none flex align-items-center" href=https://www.joshkasuboski.com/><img alt="jk logo" class="icon-s margin-right-xs" src=https://www.joshkasuboski.com/images/jk-logo.svg><small>Josh Kasuboski</small></a></h1><nav class=nav-inline><ul><li><a href=/about/>About</a></li><li><a href=/now/>Now</a></li></ul></nav></div></header><main class="container max-width-l margin-top-l"><article class=h-entry><header><h1 class="display-title-xl no-margin-bottom post-title p-name">Automated Upgrades for k3s</h1><p class="post-date no-margin-top">Posted on
-<time class=dt-published datetime=2020-07-08T18:50:17-05:00>8 July, 2020</time> by <a href=https://www.joshkasuboski.com/ class="p-author h-card" rel=author>Josh Kasuboski</a> · 1min read</p></header><section class="content e-content margin-top-l"><p>My cluster was falling behind the latest k3s version. Time to upgrade.</p><h2 id=enter-the-system-upgrade-controller>Enter the System Upgrade Controller</h2><p>I basically just did the instructions linked <a href=https://rancher.com/docs/k3s/latest/en/upgrades/automated/>here</a>.</p><p>It deploys the system upgrade controller into its own namespace where it won't do anything yet.</p><p>You have to give it some plans.</p><p>It will read Plans in that same namespace and run the specified image. I used the plan linked above. Instead of tying it to a specific version I set it to the latest channel.</p><pre><code># Server plan
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Automated Upgrades for k3s | Josh Kasuboski</title>
+  <meta name="description" content="Josh Kasuboski&#39;s personal site">
+  <meta name="author" content="">
+  
+  
+  <link rel="me" href="mailto:josh.kasuboski@gmail.com">
+  
+  <link rel="me" href="https://github.com/kasuboski">
+  
+  
+  
+  <link data-proofer-ignore rel="authorization_endpoint" href="https://indieauth.com/auth">
+  <link rel="token_endpoint" href=https://tokens.indieauth.com/token />
+  
+  <link data-proofer-ignore rel="microsub" href="https://microsub.joshcorp.co/microsub" />
+  <link rel="alternate" type="application/rss+xml" href=https://www.joshkasuboski.com/index.xml />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+  <link rel="stylesheet" href="https://unpkg.com/turretcss/dist/turretcss.min.css" crossorigin="anonymous">
+
+  <style>
+     
+    @media only screen and (min-width: 768px) {
+      :root {
+        font-size: 18px;
+      }
+    }
+
+    body {
+      background-color: #FAF9FA;
+    }
+
+    pre {
+      background-color: rgba(212, 242, 225, 1);
+    }
+
+    a {
+      text-decoration-color: rgba(89, 101, 249, 1);
+    }
+
+    #site-header {
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    #intro {
+      background-color: rgba(230, 232, 254, 1);
+    }
+
+    #social a {
+      color: transparent;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="padding-bottom-s">
+    <header id="site-header">
+      <div class="container max-width-l flex-justify-center padding-vertical-xs">
+        <h1 class="no-margin-bottom"><a class="text-decoration-none flex align-items-center" href="https://www.joshkasuboski.com/"><img alt="jk logo" class="icon-s margin-right-xs" src=https://www.joshkasuboski.com/images/jk-logo.svg /><small>Josh Kasuboski</small></a></h1>
+        <nav class="nav-inline">
+  
+  <ul>
+    
+    <li>
+      <a href="/about/">About</a>
+    </li>
+    
+    <li>
+      <a href="/now/">Now</a>
+    </li>
+    
+  </ul>
+</nav>
+      </div>
+    </header>
+    <main class="container max-width-l margin-top-l">
+
+
+
+    <article class="h-entry">
+        <header>
+            <h1 class="display-title-xl no-margin-bottom post-title p-name">Automated Upgrades for k3s</h1>
+            
+            <p class="post-date no-margin-top">Posted on
+                <time class="dt-published" datetime="2020-07-08T18:50:17-05:00">
+                8 July, 2020
+                </time>  by <a href="https://www.joshkasuboski.com/" class="p-author h-card" rel="author">Josh Kasuboski</a> · 1min read
+            </p>
+            
+            
+        </header>
+        <section class="content e-content margin-top-l">
+            <p>My cluster was falling behind the latest k3s version. Time to upgrade.</p>
+<h2 id="enter-the-system-upgrade-controller">Enter the System Upgrade Controller</h2>
+<p>I basically just did the instructions linked <a href="https://rancher.com/docs/k3s/latest/en/upgrades/automated/">here</a>.</p>
+<p>It deploys the system upgrade controller into its own namespace where it won't do anything yet.</p>
+<p>You have to give it some plans.</p>
+<p>It will read Plans in that same namespace and run the specified image. I used the plan linked above. Instead of tying it to a specific version I set it to the latest channel.</p>
+<pre><code># Server plan
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
@@ -41,8 +145,120 @@ spec:
   upgrade:
     image: rancher/k3s-upgrade
   channel: https://update.k3s.io/v1-release/channels/stable
-</code></pre><p>You'll notice there are actually 2 plans. One applied to the master nodes and the other the worker nodes. This lets you upgrade the master node to the new version before the workers.</p><p>The entire process took maybe 5 minutes for my 3 node cluster. I was able to <code>kubectl get nodes</code> periodically and watch the progress.</p></section><footer class=margin-top-m><a class="permalink u-url text-decoration-none" href=https://www.joshkasuboski.com/posts/k8s-auto-upgrades/>🔗</a></footer></article><nav class="margin-top-l flex justify-content-space-around"><div><a alt="Newer article" href=https://www.joshkasuboski.com/posts/gitops-cluster-1/>&larr; GitOpsing the cluster</a></div><div class=show-s-up><a alt="Top of page" href=#>Top</a></div><div><a alt="Older article" href=https://www.joshkasuboski.com/posts/server-rack-1/>Server Rack Beginnings &rarr;</a></div></nav></main><footer class="container max-width-l margin-top-xl"><div class="box-shadow-l padding-m"><div class="h-card flex align-content-center"><figure class=icon-xxl><img alt="profile photo" class=u-photo src=https://www.joshkasuboski.com/img/josh-scotland.jpg></figure><div class=margin-left-m><h3 class=display-title><a class="u-url p-name text-decoration-none" href=https://www.joshkasuboski.com/>Josh Kasuboski</a></h3><p>Living in Austin <img class=icon-xs style=vertical-align:middle alt=texas src=https://www.joshkasuboski.com/img/tx-fill.png> from <img class=icon-xs style=vertical-align:middle alt=wisconsin src=https://www.joshkasuboski.com/img/wi-fill.png></p><p id=social><a rel=me class="u-url margin-right-xs" href=https://github.com/kasuboski><img class=icon-xs src=https://www.joshkasuboski.com/icons/github.svg alt=github></a>
-<a class=margin-right-xs href=https://linkedin.com/kasuboski><img class=icon-xs src=https://www.joshkasuboski.com/icons/linkedin.svg alt=linkedin></a>
-<a href=mailto:josh.kasuboski@gmail.com class="u-email margin-right-xxs" rel=me><img class=icon-xs src=https://www.joshkasuboski.com/icons/envelope.svg alt=email></a>
-<button class="button button-icon button-xs" style=background-color:transparent;padding:0;border:0 id=checkout-button-beermoney role=link type=button>
-<img class=icon-xs src=https://www.joshkasuboski.com/icons/beer-money-icon.svg alt=beermoney></button></p></div></div></div></footer></div><script>(function(f,a,t,h,o,m){a[h]=a[h]||function(){(a[h].q=a[h].q||[]).push(arguments)};o=f.createElement('script'),m=f.getElementsByTagName('script')[0];o.async=1;o.src=t;o.id='fathom-script';m.parentNode.insertBefore(o,m)})(document,window,'https://fathom.joshcorp.co/tracker.js','fathom');fathom('set','siteId','XFQVM');fathom('trackPageview');</script><script src=https://js.stripe.com/v3></script><script>(function(){var DOMAIN='https://www.joshkasuboski.com/';var key='pk_live_51HJtKkASjDZJS9C9Ja9g6zTFbaTEdW7uCK2OTK1dq741RisoSBtSIac1QEMphVCEEkA7hTeuopkUsajAyWuyH7kT00cU4iVGfX';var price='price_1HJtUTASjDZJS9C90kJjztUq';var stripe=Stripe(key);var checkoutButton=document.getElementById('checkout-button-beermoney');checkoutButton.addEventListener('click',function(){stripe.redirectToCheckout({lineItems:[{price:price,quantity:1}],mode:'payment',successUrl:DOMAIN+'success',cancelUrl:DOMAIN+'canceled',}).then(function(result){if(result.error){var displayError=document.getElementById('error-message');displayError.textContent=result.error.message;}});});})();</script></body></html>
+</code></pre><p>You'll notice there are actually 2 plans. One applied to the master nodes and the other the worker nodes. This lets you upgrade the master node to the new version before the workers.</p>
+<p>The entire process took maybe 5 minutes for my 3 node cluster. I was able to <code>kubectl get nodes</code> periodically and watch the progress.</p>
+        </section>
+        <footer class="margin-top-m">
+            <a class="permalink u-url text-decoration-none" href="https://www.joshkasuboski.com/posts/k8s-auto-upgrades/">🔗</a>
+            
+        </footer>
+    </article>
+    
+    <nav class="margin-top-l flex justify-content-space-around">
+        <div>
+            
+                
+                <a alt="Newer article" href="https://www.joshkasuboski.com/posts/gitops-cluster-1/">&larr; GitOpsing the cluster</a>
+                
+            
+            
+        </div>
+        <div class="show-s-up">
+            <a data-proofer-ignore alt="Top of page" href="#">Top</a>
+        </div>
+        <div>
+            
+                
+                <a alt="Older article" href="https://www.joshkasuboski.com/posts/server-rack-1/">Server Rack Beginnings &rarr;</a>
+                
+            
+            
+        </div>
+    </nav>
+    
+</main>
+<footer class="container max-width-l margin-top-xl">
+  <div class="box-shadow-l padding-m">
+    <div class="h-card flex align-content-center">
+      <figure class="icon-xxl">
+        <img alt="profile photo" class="u-photo" src="https://www.joshkasuboski.com/img/josh-scotland.jpg" />
+      </figure>
+      <div class="margin-left-m">
+        <h3 class="display-title"><a class="u-url p-name text-decoration-none" href="https://www.joshkasuboski.com/">Josh Kasuboski</a></h3>
+        <p>Living in Austin <img class="icon-xs" style="vertical-align: middle;" alt="texas" src=https://www.joshkasuboski.com/img/tx-fill.png /> from <img class="icon-xs" style="vertical-align: middle;"
+            alt="wisconsin" src=https://www.joshkasuboski.com/img/wi-fill.png /></p>
+        <p id="social">
+          <a rel="me" class="u-url margin-right-xs" href="https://github.com/kasuboski">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/github.svg alt="github" />
+          </a>
+          <a class="margin-right-xs" href="https://linkedin.com/in/joshkasuboski/">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/linkedin.svg alt="linkedin" />
+          </a>
+          <a href="mailto:josh.kasuboski@gmail.com" class="u-email margin-right-xxs" rel="me">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/envelope.svg alt="email" />
+          </a>
+
+          <button class="button button-icon button-xs" style="background-color:transparent;padding:0;border:0;"
+            id="checkout-button-beermoney" role="link" type="button">
+            <img class="icon-xs" src=https://www.joshkasuboski.com/icons/beer-money-icon.svg alt="beermoney" />
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+  (function (f, a, t, h, o, m) {
+    a[h] = a[h] || function () {
+      (a[h].q = a[h].q || []).push(arguments)
+    };
+    o = f.createElement('script'),
+      m = f.getElementsByTagName('script')[0];
+    o.async = 1; o.src = t; o.id = 'fathom-script';
+    m.parentNode.insertBefore(o, m)
+  })(document, window, 'https://fathom.joshcorp.co/tracker.js', 'fathom');
+  fathom('set', 'siteId', 'XFQVM');
+  fathom('trackPageview');
+</script>
+
+<script src="https://js.stripe.com/v3"></script>
+<script>
+  (function () {
+    var DOMAIN = 'https://www.joshkasuboski.com/';
+    var key = 'pk_live_51HJtKkASjDZJS9C9Ja9g6zTFbaTEdW7uCK2OTK1dq741RisoSBtSIac1QEMphVCEEkA7hTeuopkUsajAyWuyH7kT00cU4iVGfX';
+    var price = 'price_1HJtUTASjDZJS9C90kJjztUq';
+    
+    
+    var stripe = Stripe(key);
+
+    var checkoutButton = document.getElementById('checkout-button-beermoney');
+    checkoutButton.addEventListener('click', function () {
+      
+      
+      stripe.redirectToCheckout({
+        lineItems: [{ price: price, quantity: 1 }],
+        mode: 'payment',
+        
+        
+        
+        
+        
+        successUrl: DOMAIN + 'success',
+        cancelUrl: DOMAIN + 'canceled',
+      })
+        .then(function (result) {
+          if (result.error) {
+            
+            
+            var displayError = document.getElementById('error-message');
+            displayError.textContent = result.error.message;
+          }
+        });
+    });
+  })();
+</script>
+</body>
+
+</html>
