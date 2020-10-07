@@ -163,7 +163,7 @@ alt="Assembled server rack" width="300px"/> &lt;/a>
 &lt;p>ArgoCD will sync manifests from a git repo to the cluster. It continuously watches to make sure the desired state (from git) matches the observed state (in the cluster). You configure ArgoCD using CRDs. Argo has Apps and Projects. A Project configures access for Apps and an App represents a repo that deploys Kubernetes objects.&lt;/p>
 &lt;p>You can see my apps at &lt;a href="https://github.com/kasuboski/k8s-gitops/tree/master/gitops/apps">gitops/apps&lt;/a>. I use an app of apps &lt;a href="https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/#app-of-apps-pattern">pattern&lt;/a> to deploy. I apply this root &amp;ldquo;apps&amp;rdquo; app that then deploys the other apps for the cluster.&lt;/p>
 &lt;p>ArgoCD also comes with a dashboard that shows the apps and their status. You can also get a badge to put in the repo to show overall status.&lt;/p>
-&lt;p>&lt;img src="https://argocd.joshcorp.co/api/badge?name=apps&amp;amp;revision=true" alt="">&lt;/p>
+&lt;p>&lt;img src="https://argocd.joshcorp.co/api/badge?name=apps&amp;amp;revision=true" alt="argocd-badge">&lt;/p>
 &lt;figure>&lt;a href="argo-dashboard.png">
 &lt;img src="argo-dashboard.png"
 alt="The argo dashboard shows apps" width="800px"/> &lt;/a>
@@ -393,7 +393,7 @@ alt="Storage Pool"/> &lt;/a>
 &lt;p>I could contribute to &lt;a href="https://github.com/raspbernetes/multi-arch-images">multi-arch-images&lt;/a> instead. They seem to be doing something similar but just copying the Dockerfiles needed.&lt;/p></description></item><item><title>Homelab Raspberry Pi Kubernetes Cluster Current State</title><link>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</link><pubDate>Sun, 10 May 2020 12:20:48 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/</guid><description>&lt;p>The cluster is alive and well and exposed to the internet 😱&lt;/p>
 &lt;p>In a previous &lt;a href="https://www.joshkasuboski.com/posts/home-k8s-raspberry-pi/">post&lt;/a>, I put out my plan for the cluster. I mostly followed along, but did end up getting &lt;a href="https://www.amazon.com/gp/product/B00A128S24">this&lt;/a> switch and &lt;a href="https://www.amazon.com/gp/product/B003L1AET2">these&lt;/a> ethernet cables.&lt;/p>
 &lt;p>I ended up with this set-up which is described in more detail below.&lt;/p>
-&lt;figure>&lt;a href="traffic-diagram.svg">
+&lt;figure>&lt;a href="traffic-diagram.png">
 &lt;img src="traffic-diagram.png"
 alt="Traffic Diagram"/> &lt;/a>
 &lt;/figure>
@@ -461,7 +461,7 @@ git push origin master
 &lt;h2 id="getting-the-data">Getting the data&lt;/h2>
 &lt;p>There doesn't seem to be an API to access your saved places. I had to resort to using &lt;a href="https://takeout.google.com">Google Takeout&lt;/a>, which if you haven't used before is quite interesting to see everything Google knows about you.&lt;/p>
 &lt;p>Getting the data I wanted out of Takeout was a bit of trial and error. There are two options for Maps data as seen below, Maps and Maps (your places). Maps (your places) includes lists that aren't the starred list. Apparently, Google treats starred separately. I'm guessing this is because historically starred was the only option and was called saved. Another fun fact is that those starred places also show up at &lt;a href="https://www.google.com/bookmarks">Google Bookmarks&lt;/a>.&lt;/p>
-&lt;p>&lt;img src="https://www.joshkasuboski.com/img/maps-export-products.png" alt="">&lt;/p>
+&lt;p>&lt;img src="https://www.joshkasuboski.com/img/maps-export-products.png" alt="export products">&lt;/p>
 &lt;p>If you only want your starred places from Maps you'll want to select &amp;ldquo;All Maps data included&amp;rdquo; and select only &amp;ldquo;My labeled places&amp;rdquo;. Running the export with the two maps options will get you a link to download a &lt;code>.zip&lt;/code> file. Once extracted, you'll have a variety of folders. The important files are &lt;code>Saved Places.json&lt;/code> and &lt;code>*.csv&lt;/code>.&lt;/p>
 &lt;p>The Saved Places file will have your starred list in &lt;a href="https://en.wikipedia.org/wiki/GeoJSON">GeoJSON&lt;/a> format. This format provides a fair amount of info like place name, location, and general categories. The csv files are a lot less useful by themselves. For me, it was just place name and a URL. However, the URL didn't seem to be parsable so this data wasn't super useful. Still, I was able to get all of the place names that I had saved.&lt;/p>
 &lt;h2 id="enhance">Enhance!&lt;/h2>
