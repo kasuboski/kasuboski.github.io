@@ -1,4 +1,52 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Wed, 07 Oct 2020 16:08:40 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Test HTML in GitHub Actions</title><link>https://www.joshkasuboski.com/posts/htmltest-githubactions/</link><pubDate>Wed, 07 Oct 2020 16:08:40 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/htmltest-githubactions/</guid><description>&lt;p>I want to start adding tests for this site so that I don't break it 😢. &lt;code>htmltest&lt;/code> is first.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Thu, 15 Oct 2020 10:51:52 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Accept Beer Money with Stripe - Sans Server</title><link>https://www.joshkasuboski.com/posts/stripe-beer-money/</link><pubDate>Thu, 15 Oct 2020 10:51:52 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/stripe-beer-money/</guid><description>&lt;p>I wanted to explore Stripe Payments, but didn't want to mess with a server. You can see the result as the little beer can in the footer 😉.&lt;/p>
+&lt;h2 id="how-it-works">How It Works&lt;/h2>
+&lt;p>Stripe has a Checkout option where you redirect to their page and it has your product and a payment form. This means you don't have to deal with &lt;a href="https://www.pcisecuritystandards.org/">PCI&lt;/a> anything and basically just have to redirect correctly. They have a library to handle the redirect as well, so it's fairly easy.&lt;/p>
+&lt;p>You need to place a button that when clicked calls the Stripe Javascript library. Since I'm &amp;ldquo;selling&amp;rdquo; beer money, I put a little beer can in my site footer.&lt;/p>
+&lt;p>&lt;img src="footer-beercan.png" alt="footer-beercan">&lt;/p>
+&lt;h2 id="adding-to-your-site">Adding to Your Site&lt;/h2>
+&lt;p>I followed this &lt;a href="https://stripe.com/docs/payments/checkout/client">guide&lt;/a> from Stripe. It was a little difficult to find navigating the Stripe Docs, but searching Stripe Checkout without server brought me there.&lt;/p>
+&lt;p>I won't reiterate the guide, but basically you use the Stripe Dashboard to make a Product that has a Price. That price will then have an ID that you need. The dashboard will also generate the code snippet with the price ID and your API ID filled in. My edited snipped is below.&lt;/p>
+&lt;p>You'll notice it also expects a success and cancel URL. I added two pages that just say success, and uh oh respectively.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-html" data-lang="html">&amp;lt;&lt;span style="color:#f92672">script&lt;/span> &lt;span style="color:#a6e22e">src&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;https://js.stripe.com/v3&amp;#34;&lt;/span>&amp;gt;&amp;lt;/&lt;span style="color:#f92672">script&lt;/span>&amp;gt;
+&amp;lt;&lt;span style="color:#f92672">script&lt;/span>&amp;gt;
+(&lt;span style="color:#66d9ef">function&lt;/span> () {
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">DOMAIN&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;https://www.joshkasuboski.com/&amp;#39;&lt;/span>;
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">key&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;&amp;lt;pk_livekey&amp;gt;&amp;#39;&lt;/span>;
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">price&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#39;&amp;lt;price_key&amp;gt;&amp;#39;&lt;/span>;
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">stripe&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">Stripe&lt;/span>(&lt;span style="color:#a6e22e">key&lt;/span>);
+&lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">checkoutButton&lt;/span> &lt;span style="color:#f92672">=&lt;/span> document.&lt;span style="color:#a6e22e">getElementById&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;checkout-button-beermoney&amp;#39;&lt;/span>);
+&lt;span style="color:#a6e22e">checkoutButton&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;click&amp;#39;&lt;/span>, &lt;span style="color:#66d9ef">function&lt;/span> () {
+&lt;span style="color:#75715e">// When the customer clicks on the button, redirect
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// them to Checkout.
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">stripe&lt;/span>.&lt;span style="color:#a6e22e">redirectToCheckout&lt;/span>({
+&lt;span style="color:#a6e22e">lineItems&lt;/span>&lt;span style="color:#f92672">:&lt;/span> [{ &lt;span style="color:#a6e22e">price&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#a6e22e">price&lt;/span>, &lt;span style="color:#a6e22e">quantity&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span> }],
+&lt;span style="color:#a6e22e">mode&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#e6db74">&amp;#39;payment&amp;#39;&lt;/span>,
+&lt;span style="color:#75715e">// Do not rely on the redirect to the successUrl for fulfilling
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// purchases, customers may not always reach the success_url after
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// a successful payment.
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// Instead use one of the strategies described in
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// https://stripe.com/docs/payments/checkout/fulfillment
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">successUrl&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#a6e22e">DOMAIN&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#39;success&amp;#39;&lt;/span>,
+&lt;span style="color:#a6e22e">cancelUrl&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#a6e22e">DOMAIN&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#e6db74">&amp;#39;canceled&amp;#39;&lt;/span>,
+})
+.&lt;span style="color:#a6e22e">then&lt;/span>(&lt;span style="color:#66d9ef">function&lt;/span> (&lt;span style="color:#a6e22e">result&lt;/span>) {
+&lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#a6e22e">result&lt;/span>.&lt;span style="color:#a6e22e">error&lt;/span>) {
+&lt;span style="color:#75715e">// If `redirectToCheckout` fails due to a browser or network
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// error, display the localized error message to your customer.
+&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">displayError&lt;/span> &lt;span style="color:#f92672">=&lt;/span> document.&lt;span style="color:#a6e22e">getElementById&lt;/span>(&lt;span style="color:#e6db74">&amp;#39;error-message&amp;#39;&lt;/span>);
+&lt;span style="color:#a6e22e">displayError&lt;/span>.&lt;span style="color:#a6e22e">textContent&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">result&lt;/span>.&lt;span style="color:#a6e22e">error&lt;/span>.&lt;span style="color:#a6e22e">message&lt;/span>;
+}
+});
+});
+})();
+&amp;lt;/&lt;span style="color:#f92672">script&lt;/span>&amp;gt;
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>That snippet and the button were all that I needed. Stripe will also provide testing keys for both price and API. So you can test with that first to make sure it is working.&lt;/p>
+&lt;p>After I set that up, I can click my beer can and end up at a page like below.&lt;/p>
+&lt;p>&lt;img src="beermoney-checkout.png" alt="beer can checkout">&lt;/p>
+&lt;p>💰💰💰 &lt;strong>Profit&lt;/strong> 💰💰💰&lt;/p>
+&lt;h2 id="other-cases">Other Cases&lt;/h2>
+&lt;p>This works pretty well if someone would only buy one item at a time. You could probably make a cart entirely on the frontend, keeping track of items a user wants and then when a user clicks &lt;code>checkout&lt;/code>, you would send multiple &lt;code>lineItems&lt;/code> in the Stripe Redirect.&lt;/p>
+&lt;p>This may not be good enough for a real store, but it's pretty convenient to have a fully client-side storefront.&lt;/p></description></item><item><title>Test HTML in GitHub Actions</title><link>https://www.joshkasuboski.com/posts/htmltest-githubactions/</link><pubDate>Wed, 07 Oct 2020 16:08:40 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/htmltest-githubactions/</guid><description>&lt;p>I want to start adding tests for this site so that I don't break it 😢. &lt;code>htmltest&lt;/code> is first.&lt;/p>
 &lt;h2 id="setup-htmltest">Setup htmltest&lt;/h2>
 &lt;p>I went with &lt;a href="https://github.com/wjdp/htmltest">htmltest&lt;/a> mainly because it's just a go binary. I've seen other options in the past that required a Ruby environment and generally don't like dealing with that.&lt;/p>
 &lt;p>Installing &lt;code>htmltest&lt;/code> into the current directory can be as simple as &lt;code>curl https://htmltest.wjdp.uk | bash&lt;/code>. I installed it system-wide but 🤷‍♂️.&lt;/p>
