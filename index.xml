@@ -730,4 +730,29 @@ git push origin master
 &lt;p>Right now, my main interest is improving the developer experience and making development more accessible to take code from laptop to production.&lt;/p>
 &lt;p>This involves making pipelines, eliminating boilerplate, and sending messages to make sure it's painless to deploy your code.&lt;/p>
 &lt;p>You can find me on &lt;a href="https://github.com/kasuboski">Github&lt;/a> or &lt;a href="https://www.linkedin.com/in/joshkasuboski/">LinkedIn&lt;/a>&lt;/p>
-&lt;p>Here is a &lt;a href="https://www.joshkasuboski.com/resume.html">resume&lt;/a>&lt;/p></description></item><item><title>Success</title><link>https://www.joshkasuboski.com/success/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/success/</guid><description>&lt;h2 id="thanks-for-the-contribution">Thanks for the contribution&lt;/h2></description></item><item><title>Uh Oh</title><link>https://www.joshkasuboski.com/canceled/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/canceled/</guid><description>&lt;h2 id="uh-oh-looks-like-that-didnt-work">Uh oh looks like that didn't work&lt;/h2></description></item></channel></rss>
+&lt;p>Here is a &lt;a href="https://www.joshkasuboski.com/resume.html">resume&lt;/a>&lt;/p></description></item><item><title>Buy Me a Beer</title><link>https://www.joshkasuboski.com/payments/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/payments/</guid><description>&lt;p>If you liked something you saw on the site and feel like spending $5, I've got the button for you below.&lt;/p>
+&lt;button id="stripe-checkout-button" class="button" role="link">Buy Me a Beer 🍺&lt;/button>
+&lt;script src="https://js.stripe.com/v3">&lt;/script>
+&lt;script>
+(function () {
+var DOMAIN = 'https://www.joshkasuboski.com/';
+var key = 'pk_live_51HJtKkASjDZJS9C9Ja9g6zTFbaTEdW7uCK2OTK1dq741RisoSBtSIac1QEMphVCEEkA7hTeuopkUsajAyWuyH7kT00cU4iVGfX';
+var price = 'price_1HJtUTASjDZJS9C90kJjztUq';
+var stripe = Stripe(key);
+var checkoutButton = document.getElementById('stripe-checkout-button');
+checkoutButton.addEventListener('click', function () {
+stripe.redirectToCheckout({
+lineItems: [{ price: price, quantity: 1 }],
+mode: 'payment',
+successUrl: DOMAIN + 'success',
+cancelUrl: DOMAIN + 'canceled',
+})
+.then(function (result) {
+if (result.error) {
+var displayError = document.getElementById('error-message');
+displayError.textContent = result.error.message;
+}
+});
+});
+})();
+&lt;/script></description></item><item><title>Success</title><link>https://www.joshkasuboski.com/success/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/success/</guid><description>&lt;h2 id="thanks-for-the-contribution">Thanks for the contribution&lt;/h2></description></item><item><title>Uh Oh</title><link>https://www.joshkasuboski.com/canceled/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.joshkasuboski.com/canceled/</guid><description>&lt;h2 id="looks-like-that-didnt-work">Looks like that didn't work&lt;/h2></description></item></channel></rss>
