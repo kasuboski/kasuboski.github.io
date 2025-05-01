@@ -1,4 +1,65 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Fri, 21 Mar 2025 14:22:05 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>I Just Wanted Pretty Spans: A Rust OpenTelemetry Story</title><link>https://www.joshkasuboski.com/posts/rust-opentelemetry-tracing/</link><pubDate>Fri, 21 Mar 2025 14:22:05 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/rust-opentelemetry-tracing/</guid><description>&lt;p>Seriously give me the spans.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Josh Kasuboski</title><link>https://www.joshkasuboski.com/</link><description>Recent content on Josh Kasuboski</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>Copyright © 2020, Josh Kasuboski</copyright><lastBuildDate>Thu, 01 May 2025 18:23:59 -0500</lastBuildDate><atom:link href="https://www.joshkasuboski.com/index.xml" rel="self" type="application/rss+xml"/><item><title>One API to Rule Them All: Building an OpenAI Gateway</title><link>https://www.joshkasuboski.com/posts/openai-gateway/</link><pubDate>Thu, 01 May 2025 18:23:59 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/openai-gateway/</guid><description>&lt;p>I only speak OpenAI API now. Plus with logging.&lt;/p>
+&lt;h2 id="why-i-needed-this">Why I Needed This&lt;/h2>
+&lt;p>I&amp;rsquo;ve been using different AI providers&amp;rsquo; APIs for various projects, but I faced two main challenges:&lt;/p>
+&lt;ol>
+&lt;li>Each provider has their own SDK and API format, requiring different code paths in my applications&lt;/li>
+&lt;li>I wanted better visibility into what was happening with my requests across all providers&lt;/li>
+&lt;/ol>
+&lt;p>Cloudflare&amp;rsquo;s AI Gateway provides great logging out of the box, but I still had the problem of juggling multiple SDKs and API formats. I wanted a single, consistent interface that would work with any AI provider while giving me all the logging benefits.&lt;/p>
+&lt;p>That&amp;rsquo;s why I created &lt;a href="https://github.com/kasuboski/openai-gateway">openai-gateway&lt;/a> - a service that exposes an OpenAI-compatible API but can route to different AI providers behind the scenes.&lt;/p>
+&lt;h2 id="how-it-works">How It Works&lt;/h2>
+&lt;p>The concept is straightforward:&lt;/p>
+&lt;ol>
+&lt;li>Your application sends requests to my gateway using the OpenAI API format&lt;/li>
+&lt;li>The gateway authenticates your request with a simple API key&lt;/li>
+&lt;li>It translates the request if needed and forwards it through Cloudflare AI Gateway to the appropriate provider (currently supporting Gemini)&lt;/li>
+&lt;li>The response comes back, gets converted to OpenAI format if necessary, and returns to your application&lt;/li>
+&lt;li>Cloudflare logs everything along the way&lt;/li>
+&lt;/ol>
+&lt;p>The whole thing runs as a Cloudflare Worker using Hono, making it lightweight and globally distributed.&lt;/p>
+&lt;h2 id="getting-started">Getting Started&lt;/h2>
+&lt;p>Using it is as simple as changing your base URL. If you&amp;rsquo;re using the OpenAI SDK, it&amp;rsquo;s just:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-javascript" data-lang="javascript">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#a6e22e">openai&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#a6e22e">OpenAI&lt;/span>({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">apiKey&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#e6db74">&amp;#34;your-api-key&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">baseURL&lt;/span>&lt;span style="color:#f92672">:&lt;/span> &lt;span style="color:#e6db74">&amp;#34;https://your-gateway-url/v1&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>});
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or with curl:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>curl https://your-gateway-url/v1/chat/completions &lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span> -H &lt;span style="color:#e6db74">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> &lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span> -H &lt;span style="color:#e6db74">&amp;#34;Authorization: Bearer your-api-key&amp;#34;&lt;/span> &lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span> -d &lt;span style="color:#e6db74">&amp;#39;{
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;model&amp;#34;: &amp;#34;gemini/gemini-pro&amp;#34;,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> &amp;#34;messages&amp;#34;: [{ &amp;#34;role&amp;#34;: &amp;#34;user&amp;#34;, &amp;#34;content&amp;#34;: &amp;#34;Hello!&amp;#34; }]
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74"> }&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Notice that even though we&amp;rsquo;re using Gemini as the provider, we&amp;rsquo;re still using the OpenAI SDK and API format. The model name &lt;code>gemini/gemini-pro&lt;/code> tells the gateway which provider and model to use.&lt;/p>
+&lt;h2 id="what-you-see-in-cloudflare">What You See in Cloudflare&lt;/h2>
+&lt;p>This is where the magic happens. The Cloudflare dashboard gives you:&lt;/p>
+&lt;ul>
+&lt;li>Complete request and response logging&lt;/li>
+&lt;li>Token counts for each request&lt;/li>
+&lt;li>Cost estimates based on your usage (I was using a free tier key in the screenshot)&lt;/li>
+&lt;li>Response times and error rates&lt;/li>
+&lt;/ul>
+&lt;p>All without changing how your application works or adding any custom logging code.&lt;/p>
+&lt;p>&lt;img src="cloudflare-dashboard.png" alt="cloudflare-dashboard">&lt;/p>
+&lt;h2 id="lessons-learned">Lessons Learned&lt;/h2>
+&lt;p>Building this was surprisingly simple. The entire project is just a few hundred lines of code, but it solves a real problem I was having.&lt;/p>
+&lt;p>I&amp;rsquo;ve liked making these small &amp;ldquo;glue&amp;rdquo; projects. They don&amp;rsquo;t need to be complex to be useful. Many small tools also makes it easier for the AI coders to work on them.&lt;/p>
+&lt;h2 id="whats-next">What&amp;rsquo;s Next&lt;/h2>
+&lt;p>I&amp;rsquo;ve already implemented Gemini as the first provider, and I&amp;rsquo;m planning to expand support to include:&lt;/p>
+&lt;ul>
+&lt;li>More AI providers like Anthropic&lt;/li>
+&lt;li>Enable more of the Cloudflare AI Gateway features like caching&lt;/li>
+&lt;li>Add request fallbacks, try another model if the first fails&lt;/li>
+&lt;/ul>
+&lt;p>Eventually it could become something more like OpenRouter.&lt;/p>
+&lt;p>But for now, it does exactly what I need - gives me visibility without complexity.&lt;/p>
+&lt;h2 id="try-it-yourself">Try It Yourself&lt;/h2>
+&lt;p>If you want to set up your own gateway try it out on cloudflare:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git clone https://github.com/kasuboski/openai-gateway.git
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>npm install
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>npm run dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or just star the repo and follow along as I add more features!&lt;/p></description></item><item><title>I Just Wanted Pretty Spans: A Rust OpenTelemetry Story</title><link>https://www.joshkasuboski.com/posts/rust-opentelemetry-tracing/</link><pubDate>Fri, 21 Mar 2025 14:22:05 -0500</pubDate><guid>https://www.joshkasuboski.com/posts/rust-opentelemetry-tracing/</guid><description>&lt;p>Seriously give me the spans.&lt;/p>
 &lt;h2 id="a-waht">A waht?&lt;/h2>
 &lt;p>I&amp;rsquo;ve been working on a rust project to mess with LLMs. Both using LLM APIs and exploring using various AI coders (Cursor, Trae, Gemini). Since the AI writes a lot of the code, I needed an easy way to debug it. I also want to get structured input I can give back to the AI and berate it for mistakes.&lt;/p>
 &lt;p>Tracing seems like a nice way to get exactly what&amp;rsquo;s happening while filtering out some noise.&lt;/p>
